@@ -15,9 +15,9 @@ libraries:
   - com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0
   - com.google.http-client:google-http-client-jackson2:1.39.2
   - com.google.api-client:google-api-client:1.33.0
-  - net.kyori:adventure-text-minimessage:4.17.0
-  - net.kyori:adventure-platform-bukkit:4.3.4
-  - net.kyori:adventure-text-serializer-plain:4.17.0
+  - net.kyori:adventure-text-minimessage:4.22.0
+  - net.kyori:adventure-platform-bukkit:4.4.0
+  - net.kyori:adventure-text-serializer-plain:4.22.0
 
 permissions:
   apo.onair.*:
