@@ -9,23 +9,22 @@ version = "1.0"
 
 repositories {
     mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/") {
-        name = "papermc-repo"
-    }
-    maven("https://oss.sonatype.org/content/groups/public/") {
-        name = "sonatype"
-    }
-    maven("https://jitpack.io") {
-        name = "jitpack"
-    }
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://oss.sonatype.org/content/groups/public/")
+    maven("https://jitpack.io")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.codemc.io/repository/maven-snapshots/")
+    maven("https://repo.skriptlang.org/releases")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
-    implementation("net.wesjd:anvilgui:1.10.6-SNAPSHOT")
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    implementation("net.wesjd:anvilgui:1.10.6-SNAPSHOT")
+    implementation("org.bstats","bstats-bukkit","3.1.0")
+    implementation("com.github.SkriptLang:Skript:2.11.2")
+    implementation("me.clip:placeholderapi:2.11.6")
 
     implementation(files("libs/chzzk4j-0.1.1.jar"))
     implementation(files("libs/ToontaionLiv-1.1.jar"))
@@ -36,8 +35,6 @@ dependencies {
 
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
-
-    implementation("me.clip:placeholderapi:2.11.6")
 
     implementation("io.socket:socket.io-client:2.0.1")
     implementation("io.reactivex.rxjava2:rxjava:2.1.16")
