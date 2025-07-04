@@ -66,25 +66,19 @@ class OnAir : JavaPlugin() {
         val naverPw=config.getString("chzzk.naver.pw") ?: ""
 
         if (apiToken!="" && apiRefresh!="") {
-            data.addAdapter(
-                ChzzkSimpleUserLoginAdapter(
+            data.addAdapter(ChzzkSimpleUserLoginAdapter(
                     apiToken, apiRefresh
-                )
-            )
+            ))
         }
         if (cookieSes != "" && cookieAut != "") {
-            data.addAdapter(
-                ChzzkLegacyLoginAdapter(
+            data.addAdapter(ChzzkLegacyLoginAdapter(
                     cookieAut, cookieSes
-                )
-            )
+            ))
         }
         if (naverId!="" && naverPw!="") {
-            data.addAdapter(
-                NaverAutologinAdapter(
+            data.addAdapter(NaverAutologinAdapter(
                     naverId, naverPw
-                )
-            )
+            ))
         }
     }
 
