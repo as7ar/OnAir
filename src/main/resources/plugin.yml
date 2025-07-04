@@ -1,0 +1,34 @@
+name: OnAir
+version: ${version}
+main: kr.apo2073.onAir.OnAir
+api-version: '1.20'
+authors: [ APO2073 ]
+
+commands:
+  oa:
+    description: OnAir 메인 커맨드
+
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.0
+  - com.squareup.okhttp3:okhttp:4.9.3
+  - org.java-websocket:Java-WebSocket:1.5.2
+  - com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0
+  - com.google.http-client:google-http-client-jackson2:1.39.2
+  - com.google.api-client:google-api-client:1.33.0
+  - net.kyori:adventure-text-minimessage:4.17.0
+  - net.kyori:adventure-platform-bukkit:4.3.4
+  - net.kyori:adventure-text-serializer-plain:4.17.0
+
+permissions:
+  apo.onair.*:
+    children:
+      apo.onair.channel: true
+      apo.onair.donation: true
+      apo.onair.admin: true
+
+    apo.onair.channel:
+      default: op
+    apo.onair.donation:
+      default: op
+    apo.onair.admin:
+      default: op

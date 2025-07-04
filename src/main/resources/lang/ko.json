@@ -1,0 +1,12 @@
+{
+  "alert.already.con": "이미 다른 플레이어가 연결한 채널 입니다",
+  "alert.already.u": "이미 해당 채널에 연결했습니다",
+
+  "alert.not.exist.channel": "해당 채널이 존재하지 않습니다",
+
+  "alert.connection.chzzk": "채널 {name}( {fol} 팔로워 )에 연결했습니다",
+  "alert.connection.youtube": "채널 {name}( {fol} 구독자 )에 연결했습니다",
+
+  "command.got.problems": "&c해당 명령어를 처리하는데 문제가 발생했습니다. {err}",
+  "system.boom": "&c플러그인 내부에서 문제가 발생했습니다. {err}"
+}
