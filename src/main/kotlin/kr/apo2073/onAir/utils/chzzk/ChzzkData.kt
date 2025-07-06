@@ -1,4 +1,4 @@
-package kr.apo2073.onAir.chzzk
+package kr.apo2073.onAir.utils.chzzk
 
 import xyz.r2turntrue.chzzk4j.auth.ChzzkLoginAdapter
 

@@ -11,7 +11,6 @@ import kr.apo2073.ytliv.YouTubeInfo
 import org.bukkit.entity.Player
 
 class YtConnect {
-    private val plugin= OnAir.plugin
     companion object {
         lateinit var youtubeInfo: YouTubeInfo
         @JvmStatic

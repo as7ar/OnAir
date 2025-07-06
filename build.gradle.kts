@@ -30,6 +30,7 @@ dependencies {
     implementation(files("libs/ToontaionLiv-1.1.jar"))
     implementation(files("libs/AfreecatvLib-master-1.0.3.jar"))
     implementation(files("libs/YouTubeLiv-1.1.1.jar"))
+    implementation("com.github.twitch4j:twitch4j:1.25.0")
 
     implementation("org.slf4j:slf4j-api:2.0.7")
 

@@ -1,7 +1,7 @@
 package kr.apo2073.onAir
 
 import kr.apo2073.Toonation
-import kr.apo2073.onAir.chzzk.ChzzkData
+import kr.apo2073.onAir.utils.chzzk.ChzzkData
 import kr.apo2073.ytliv.Youtube
 import org.bukkit.plugin.java.JavaPlugin
 import xyz.r2turntrue.chzzk4j.ChzzkClient
