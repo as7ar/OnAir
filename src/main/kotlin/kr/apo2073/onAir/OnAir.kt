@@ -1,7 +1,10 @@
 package kr.apo2073.onAir
 
 import kr.apo2073.Toonation
+import kr.apo2073.onAir.cmds.OACommand
 import kr.apo2073.onAir.data.UserData
+import kr.apo2073.onAir.listeners.BukkitListener
+import kr.apo2073.onAir.listeners.ChzzkListener
 import kr.apo2073.onAir.utils.chzzk.ChzzkData
 import kr.apo2073.ytliv.Youtube
 import org.bukkit.plugin.java.JavaPlugin
@@ -16,7 +19,7 @@ import java.util.*
 class OnAir : JavaPlugin() {
     companion object {
         @JvmStatic
-        lateinit var plugin: JavaPlugin
+        lateinit var plugin: OnAir
         lateinit var chzzkData: ChzzkData
 
         lateinit var chzzkClient: ChzzkClient
@@ -27,16 +30,10 @@ class OnAir : JavaPlugin() {
     }
     override fun onEnable() {
         plugin =this
-        chzzkData =ChzzkData()
+
         saveDefaultConfig()
 
-        cht = mutableMapOf()
-        tn = mutableMapOf()
-//        af = mutableMapOf()
-        yt = mutableMapOf()
-    }
-
-    override fun onLoad() {
+        chzzkData =ChzzkData()
         chzzkData.setClientKey(
             config.getString("chzzk.client.id") ?: "",
             config.getString("chzzk.client.secret") ?: ""
@@ -51,6 +48,18 @@ class OnAir : JavaPlugin() {
                     withLoginAdapter(it)
                 }
             }.build()
+
+        cht = mutableMapOf()
+        tn = mutableMapOf()
+//        af = mutableMapOf()
+        yt = mutableMapOf()
+
+        server.pluginManager.registerEvents(ChzzkListener(), this)
+        server.pluginManager.registerEvents(BukkitListener(), this)
+        getCommand("oa")?.apply {
+            setExecutor(OACommand())
+            tabCompleter= OACommand()
+        }
     }
 
     private fun setAut() { reloadConfig()
@@ -88,7 +97,9 @@ class OnAir : JavaPlugin() {
             val connections=userData.getConnections()
                 .map { it.name.lowercase() }
             connections.forEach {
-                userData.getConfig().set("user.connection.${it}", false)
+                userData.getConfig().apply {
+                    set("user.connection.${it}", false)
+                }.save(userData.getFile())
             }
         }
     }
