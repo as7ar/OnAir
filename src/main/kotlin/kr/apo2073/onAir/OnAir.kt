@@ -1,6 +1,7 @@
 package kr.apo2073.onAir
 
 import kr.apo2073.Toonation
+import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.utils.chzzk.ChzzkData
 import kr.apo2073.ytliv.Youtube
 import org.bukkit.plugin.java.JavaPlugin
@@ -11,7 +12,6 @@ import xyz.r2turntrue.chzzk4j.auth.ChzzkSimpleUserLoginAdapter
 import xyz.r2turntrue.chzzk4j.chat.ChzzkChat
 import xyz.r2turntrue.chzzk4j.naver.NaverAutologinAdapter
 import java.util.*
-
 
 class OnAir : JavaPlugin() {
     companion object {
@@ -84,7 +84,12 @@ class OnAir : JavaPlugin() {
 
     override fun onDisable() {
         server.onlinePlayers.forEach { player->
-
+            val userData= UserData(player)
+            val connections=userData.getConnections()
+                .map { it.name.lowercase() }
+            connections.forEach {
+                userData.getConfig().set("user.connection.${it}", false)
+            }
         }
     }
 }

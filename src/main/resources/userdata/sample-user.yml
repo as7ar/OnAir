@@ -2,6 +2,11 @@ user:
   uuid: xxx
   name: xxx
 
+  alert:
+    chat: true
+    donate: true
+    target: STREAMER
+
   connection:
     list:
       - chzzk

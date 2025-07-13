@@ -3,6 +3,7 @@ package kr.apo2073.onAir.stream
 import kr.apo2073.onAir.OnAir
 import kr.apo2073.onAir.data.ConnectionInfo
 import kr.apo2073.onAir.data.UserData
+import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.ChzzkChatEvent
 import kr.apo2073.onAir.events.ChzzkDonationEvent
 import kr.apo2073.onAir.events.ChzzkMissionDonationEvent
@@ -16,8 +17,9 @@ import xyz.r2turntrue.chzzk4j.chat.event.NormalDonationEvent
 import xyz.r2turntrue.chzzk4j.exception.ChannelNotExistsException
 
 class ChkConnect {
-    private val plugin= OnAir.plugin
     companion object {
+        private val plugin= OnAir.plugin
+
         @JvmStatic
         fun connect(player: Player, id: String) {
             try {
@@ -47,7 +49,7 @@ class ChkConnect {
                 OnAir.cht[player.uniqueId]?.connectBlocking()
                 if (first) {
                     OnAir.cht[player.uniqueId]?.on(ChatMessageEvent::class.java) { evt->
-                        ChkConnect().plugin.server.scheduler.runTask(ChkConnect().plugin, Runnable {
+                        plugin.server.scheduler.runTask(plugin, Runnable {
                             val isSuc= ChzzkChatEvent(
                                 evt.message, evt.chat,
                                 player
@@ -56,7 +58,7 @@ class ChkConnect {
                         })
                     }
                     OnAir.cht[player.uniqueId]?.on(NormalDonationEvent::class.java) { evt->
-                        ChkConnect().plugin.server.scheduler.runTask(ChkConnect().plugin, Runnable {
+                        plugin.server.scheduler.runTask(plugin, Runnable {
                             val isSuc= ChzzkDonationEvent(
                                 evt.message, evt.chat,
                                 player
@@ -65,7 +67,7 @@ class ChkConnect {
                         })
                     }
                     OnAir.cht[player.uniqueId]?.on(MissionDonationEvent::class.java) { evt ->
-                        ChkConnect().plugin.server.scheduler.runTask(ChkConnect().plugin, Runnable {
+                        plugin.server.scheduler.runTask(plugin, Runnable {
                             val isSuc= ChzzkMissionDonationEvent(
                                 evt.message, evt.chat,
                                 player
@@ -76,7 +78,8 @@ class ChkConnect {
                 }
 
             } catch (e: ChannelNotExistsException) {
-                player.sendMessage(translate("alert.not.exist.channel"), true)
+                player.sendMessage(translate("alert.not.exist.channel")
+                    .replace("{err}", e.message ?: "0"), true)
             }catch (e: Exception) {
                 player.sendMessage(translate("command.got.problems")
                     .replace("{err}", e.message ?: "0"), true)
@@ -89,6 +92,8 @@ class ChkConnect {
                 val CHANNEL_FOL= OnAir.chzzkClient.fetchChannel(id).followerCount.toString()
 
                 ConnectionInfo.setValue(id, player.uniqueId.toString())
+                ConnectionInfo.setValue(player.uniqueId.toString(), id)
+                userdata.addConnection(Platforms.CHZZK)
 
                 config.apply {
                     set("user.connection.chzzk.first", false)
@@ -103,6 +108,21 @@ class ChkConnect {
                     true
                 )
             }
+        }
+
+        @JvmStatic
+        fun disconnect(player: Player) {
+            val id= ConnectionInfo.config.getString(player.uniqueId.toString()) ?: return
+
+            ConnectionInfo.setValue(id, null)
+            ConnectionInfo.setValue(player.uniqueId.toString(), null)
+
+            OnAir.cht[player.uniqueId]?.closeBlocking()
+            OnAir.cht[player.uniqueId]?.closeAsync()
+            OnAir.cht.remove(player.uniqueId)
+
+            UserData(player).removeConnection(Platforms.CHZZK)
+            player.sendMessage(translate("alert.disconnect"), true)
         }
     }
 }

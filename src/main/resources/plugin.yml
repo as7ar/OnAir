@@ -21,15 +21,15 @@ libraries:
   - net.kyori:adventure-text-serializer-plain:4.22.0
 
 permissions:
-  apo.onair.*:
+  apo.oa.*:
     children:
-      apo.onair.channel: true
-      apo.onair.donation: true
-      apo.onair.admin: true
+      apo.oa.channel: true
+      apo.oa.donation: true
+      apo.oa.admin: true
 
-    apo.onair.channel:
+    apo.oa.channel:
       default: op
-    apo.onair.donation:
+    apo.oa.donation:
       default: op
-    apo.onair.admin:
+    apo.oa.admin:
       default: op

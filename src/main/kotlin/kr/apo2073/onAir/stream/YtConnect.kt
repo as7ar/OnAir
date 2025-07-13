@@ -3,6 +3,7 @@ package kr.apo2073.onAir.stream
 import kr.apo2073.onAir.OnAir
 import kr.apo2073.onAir.data.ConnectionInfo
 import kr.apo2073.onAir.data.UserData
+import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.listeners.YoutubeListener
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
@@ -54,6 +55,8 @@ class YtConnect {
                 }
 
             } catch (e: Exception) {
+                player.sendMessage(translate("command.got.problems")
+                    .replace("{err}", e.message ?: "0"), true)
                 e.printStackTrace()
             } finally {
                 val userdata= UserData(player)
@@ -65,7 +68,9 @@ class YtConnect {
                     set("user.connection.youtube.isConnected", false)
                     set("user.connection.youtube.id", id)
                 }.save(file)
+                userdata.addConnection(Platforms.YOUTUBE)
                 ConnectionInfo.setValue(id, player.uniqueId.toString())
+                ConnectionInfo.setValue(player.uniqueId.toString(), id)
 
                 player.sendMessage(
                     translate("alert.connection.chzzk")
@@ -74,6 +79,20 @@ class YtConnect {
                     true
                 )
             }
+        }
+
+        @JvmStatic
+        fun disconnect(player: Player) {
+            val id= ConnectionInfo.config.getString(player.uniqueId.toString()) ?: return
+
+            ConnectionInfo.setValue(player.uniqueId.toString(), null)
+            ConnectionInfo.setValue(id, null)
+
+            OnAir.yt[player.uniqueId]?.stop()
+            OnAir.yt.remove(player.uniqueId)
+
+            UserData(player).removeConnection(Platforms.YOUTUBE)
+            player.sendMessage(translate("alert.disconnect"), true)
         }
     }
 }
