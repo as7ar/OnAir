@@ -31,7 +31,9 @@ class OnAir : JavaPlugin() {
     override fun onEnable() {
         plugin =this
 
+        // ========================[ Default Setting ]=========================
         saveDefaultConfig()
+        saveResource("lang/ko.json", true)
 
         chzzkData =ChzzkData()
         chzzkData.setClientKey(
@@ -54,12 +56,17 @@ class OnAir : JavaPlugin() {
 //        af = mutableMapOf()
         yt = mutableMapOf()
 
+        // ========================[ Listener ]=========================
+
         server.pluginManager.registerEvents(ChzzkListener(), this)
         server.pluginManager.registerEvents(BukkitListener(), this)
-        getCommand("oa")?.apply {
-            setExecutor(OACommand())
-            tabCompleter= OACommand()
-        }
+
+        // ========================[ Command ]=========================
+        OACommand()
+//        getCommand("oa")?.apply {
+//            setExecutor(OACommand())
+//            tabCompleter= OACommand()
+//        }
     }
 
     private fun setAut() { reloadConfig()

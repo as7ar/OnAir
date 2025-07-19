@@ -5,18 +5,19 @@ import kr.apo2073.onAir.cmds.oa.OAHandler
 import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
-import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
-import org.bukkit.command.TabExecutor
 import org.bukkit.entity.Player
 
-class OACommand: TabExecutor {
+class OACommand: Command(
+    OnAir.plugin.config.getString("command.name") ?: "oa",
+    OnAir.plugin.config.getStringList("command.aliases"),
+    OnAir.plugin.config.getString("command.description") ?: "OnAir 메인 커맨드",
+    "apo.oa.channel"
+) {
     private val plugin= OnAir.plugin
 
-    override fun onCommand(
+    override fun execute(
         sender: CommandSender,
-        cmd: Command,
-        label: String,
         args: Array<out String>
     ): Boolean {
         if (sender !is Player) return true
@@ -31,20 +32,29 @@ class OACommand: TabExecutor {
         val userData= UserData(sender)
 
         if (args[0]=="정보") {
+            OAHandler(sender).viewConnection(userData)
+            return true
+        }
 
+        if (args[0]=="설정") {
+            if (args.size<3) {
+                OAHandler(sender).help()
+                return true
+            }
+            val setting=args[1]
+            val value=args[2]
+            OAHandler(sender).setSetting(setting, value)
             return true
         }
         return true
     }
 
-    override fun onTabComplete(
+    override fun tabComplete(
         sender: CommandSender,
-        cmd: Command,
-        label: String,
         args: Array<out String>
     ): List<String> {
         val tab=mutableListOf<String>()
-        if (args.isEmpty()) {
+        if (args.size==1) {
             tab.addAll(arrayOf(
                 "치지직","유튜브","투네이션",
                 "정보", "설정", "도움말"
@@ -52,10 +62,25 @@ class OACommand: TabExecutor {
             if (sender.hasPermission("apo.oa.donate")) tab.add("후원")
         }
 
-        if (args.size==1) {
-            tab.addAll(arrayOf(
-                "등록", "등록해제"
-            ))
+        if (args.size==2) {
+            if (args[0]=="설정") {
+                tab.addAll(arrayOf(
+                    "채팅알림", "후원알림",
+                    "메세지대상", "채널이름"
+                ))
+            } else {
+                tab.addAll(arrayOf(
+                    "등록", "등록해제"
+                ))
+            }
+        }
+
+        if (args.size==3) {
+            if (args[0]=="설정") {
+                tab.addAll(arrayOf("값"))
+            } else  {
+                tab.addAll(arrayOf("채널이름"))
+            }
         }
         return tab
     }

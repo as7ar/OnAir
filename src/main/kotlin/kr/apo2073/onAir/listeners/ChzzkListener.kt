@@ -4,8 +4,10 @@ import kr.apo2073.onAir.OnAir
 import kr.apo2073.onAir.data.ConnectionInfo
 import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.MessageTarget
+import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.ChzzkChatEvent
 import kr.apo2073.onAir.events.ChzzkDonationEvent
+import kr.apo2073.onAir.utils.Utils.generate
 import kr.apo2073.onAir.utils.Utils.performCommandAsOP
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
@@ -101,7 +103,6 @@ class ChzzkListener: Listener {
     }
 
     private fun getPlatformName(): String {
-        val platform = if (plugin.config.getBoolean("플렛폼.영어")) "Chzzk" else "치지직"
-        return if (plugin.config.getBoolean("플렛폼.채색")) "§a$platform§f" else platform
+        return Platforms.CHZZK.generate()
     }
 }
