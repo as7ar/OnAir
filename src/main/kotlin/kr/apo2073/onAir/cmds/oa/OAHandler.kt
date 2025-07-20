@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import kr.apo2073.onAir.OnAir
 import kr.apo2073.onAir.data.ConnectionInfo
 import kr.apo2073.onAir.data.UserData
+import kr.apo2073.onAir.enums.MessageTarget
 import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.utils.Utils.generate
 import kr.apo2073.onAir.utils.Utils.sendMessage
@@ -60,6 +61,14 @@ class OAHandler(private val player: Player) {
     }
 
     fun setSetting(setting: String, value: String) {
-        // TODO: this
+        val userdata=UserData(player)
+        when(setting) {
+            "채팅알림"-> userdata.setChat(!value.contains("끄기"))
+            "후원알림"-> userdata.setDonate(!value.contains("끄기"))
+            "메세지대상"-> userdata.setMessageTarget(if (setting.contains("스트리머만")) MessageTarget.STREAMER else MessageTarget.EVERYONE)
+            "채널이름"-> {
+
+            }
+        }
     }
 }

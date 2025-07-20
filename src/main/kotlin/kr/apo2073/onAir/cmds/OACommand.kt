@@ -82,6 +82,10 @@ class OACommand: Command(
                 tab.addAll(arrayOf("채널이름"))
             }
         }
+
+        if (args.size==4) {
+            tab.addAll(arrayOf("채널ID"))
+        }
         return tab
     }
 }
