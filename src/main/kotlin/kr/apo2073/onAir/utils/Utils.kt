@@ -46,15 +46,15 @@ object Utils {
         when(this) {
             Platforms.CHZZK -> {
                 val platform = if (plugin.config.getBoolean("플렛폼.영어")) "Chzzk" else "치지직"
-                return if (plugin.config.getBoolean("플렛폼.채색")) "§a$platform§f" else platform
+                return if (plugin.config.getBoolean("플렛폼.채색")) "§a$platform§r" else platform
             }
             Platforms.YOUTUBE -> {
                 val platform = if (plugin.config.getBoolean("플렛폼.영어")) "Youtube" else "유튜브"
-                return if (plugin.config.getBoolean("플렛폼.채색")) "§c$platform§f" else platform
+                return if (plugin.config.getBoolean("플렛폼.채색")) "§c$platform§r" else platform
             }
             Platforms.TOONATION -> {
                 val platform = if (plugin.config.getBoolean("플렛폼.영어")) "Toonation" else "투네이션"
-                return if (plugin.config.getBoolean("플렛폼.채색")) "§9$platform§f" else platform
+                return if (plugin.config.getBoolean("플렛폼.채색")) "§9$platform§r" else platform
             }
             else-> return "알 수 없음"
         }

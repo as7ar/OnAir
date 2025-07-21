@@ -1,8 +1,14 @@
 package kr.apo2073.onAir
 
+import ch.njol.skript.Skript
+import ch.njol.skript.SkriptAddon
 import kr.apo2073.Toonation
 import kr.apo2073.onAir.cmds.OACommand
 import kr.apo2073.onAir.data.UserData
+import kr.apo2073.onAir.events.skript.SkriptStreamingChatEvent
+import kr.apo2073.onAir.events.skript.SkriptStreamingConnectionEvent
+import kr.apo2073.onAir.events.skript.SkriptStreamingDisConnectionEvent
+import kr.apo2073.onAir.events.skript.SkriptStreamingDonateEvent
 import kr.apo2073.onAir.listeners.BukkitListener
 import kr.apo2073.onAir.listeners.ChzzkListener
 import kr.apo2073.onAir.utils.chzzk.ChzzkData
@@ -28,6 +34,9 @@ class OnAir : JavaPlugin() {
         lateinit var yt:MutableMap<UUID, Youtube>
         //lateinit var af:MutableMap<UUID, AfreecatvAPI>
     }
+
+    private lateinit var addon: SkriptAddon
+
     override fun onEnable() {
         plugin =this
 
@@ -63,10 +72,16 @@ class OnAir : JavaPlugin() {
 
         // ========================[ Command ]=========================
         OACommand()
-//        getCommand("oa")?.apply {
-//            setExecutor(OACommand())
-//            tabCompleter= OACommand()
-//        }
+
+        // ========================[ Depends ]=========================
+        if (server.pluginManager.getPlugin("Skript")!=null) {
+            addon = Skript.registerAddon(this)
+
+            SkriptStreamingConnectionEvent()
+            SkriptStreamingDisConnectionEvent()
+            SkriptStreamingChatEvent()
+            SkriptStreamingDonateEvent()
+        }
     }
 
     private fun setAut() { reloadConfig()

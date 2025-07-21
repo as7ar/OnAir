@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerEvent
 
 class PlayerStreamingConnectionEvent(
     player: Player,
-    val platforms: Platforms,
+    val platform: Platforms,
     val id: String,
     val display:String
 ): PlayerEvent(player) {
@@ -25,7 +25,7 @@ class PlayerStreamingConnectionEvent(
 
 class PlayerStreamingDisConnectionEvent(
     player: Player,
-    val platforms: Platforms,
+    val platform: Platforms,
     val id: String,
     val display: String
 ): PlayerEvent(player) {
@@ -42,7 +42,7 @@ class PlayerStreamingDisConnectionEvent(
 
 class StreamingChatEvent(
     streamer:Player,
-    val platforms: Platforms,
+    val platform: Platforms,
     val user:String?,
     val content:String?
 ):PlayerEvent(streamer) {
@@ -59,7 +59,7 @@ class StreamingChatEvent(
 
 class StreamingDonateEvent(
     streamer:Player,
-    val platforms: Platforms,
+    val platform: Platforms,
     val user:String?,
     val content:String?,
     val amount: Double
