@@ -2,7 +2,7 @@
 
 
 - [x] chzzk
-- [x] youtube
+- [ ] youtube
 - [ ] toonation
 - [ ] twitch
 - [ ] ~~soap~~
@@ -10,3 +10,6 @@
 
 - [ ] commands
 - [ ] listeners
+
+- [ ] Skript
+- [ ] PlaceholderAPI

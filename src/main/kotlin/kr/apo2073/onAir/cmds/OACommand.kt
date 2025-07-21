@@ -43,7 +43,9 @@ class OACommand: Command(
             }
             val setting=args[1]
             val value=args[2]
-            OAHandler(sender).setSetting(setting, value)
+            var value1="none"
+            if (args.size>=4) value1= args[3]
+            OAHandler(sender).setSetting(setting, value, value1)
             return true
         }
         return true
@@ -77,14 +79,16 @@ class OACommand: Command(
 
         if (args.size==3) {
             if (args[0]=="설정") {
-                tab.addAll(arrayOf("값"))
+                if (args[1]=="채널이름") tab.addAll(arrayOf("치지직", "유튜브", "투네이션"))
+                else tab.addAll(arrayOf("값"))
             } else  {
                 tab.addAll(arrayOf("채널이름"))
             }
         }
 
         if (args.size==4) {
-            tab.addAll(arrayOf("채널ID"))
+            if (args[1]=="채널이름") tab.add("새채널이름")
+            else tab.addAll(arrayOf("채널ID"))
         }
         return tab
     }

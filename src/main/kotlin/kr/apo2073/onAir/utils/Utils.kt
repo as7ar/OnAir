@@ -56,7 +56,14 @@ object Utils {
                 val platform = if (plugin.config.getBoolean("플렛폼.영어")) "Toonation" else "투네이션"
                 return if (plugin.config.getBoolean("플렛폼.채색")) "§9$platform§f" else platform
             }
+            else-> return "알 수 없음"
         }
+    }
+    fun String.toPlatform():Platforms {
+        if (this.uppercase().contains("CHZZK") || this.contains("치지직")) return Platforms.CHZZK
+        if (this.uppercase().contains("YOUTUBE") || this.contains("유튜브")) return Platforms.YOUTUBE
+        if (this.uppercase().contains("TOONATION") || this.contains("투네이션")) return Platforms.TOONATION
+        return Platforms.UNKNOWN
     }
 }
 
