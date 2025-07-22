@@ -1,10 +1,11 @@
 #  ========================[ Plugin ]===================================
 command:
-  name: 'oa'
-  aliases:
-    - 'onair'
-    - '방송'
-  description: 'OnAir 메인 커맨드'
+  oa:
+    name: 'oa'
+    aliases:
+      - 'onair'
+      - '방송'
+    description: 'OnAir 메인 커맨드'
 
 #  ========================[ Format ]===================================
 
@@ -44,7 +45,7 @@ command:
 후원이벤트:
 #  '1000': "kill {player}"
 #  '2000': "say a"
-#  '3000': ""
+#  '3000': "custom_command"
 
 #========================[ API ]===================================
 
@@ -52,7 +53,7 @@ chzzk:
   client:
     id: '1a6d2335-0a2a-4e75-81c6-1f19b022fa5f'
     secret: 'DcbJtEcmhwHa2-ih9IBV3yMRTRh-OuR_8P739sDPreM'
-  # 밑 3개중 택1
+  # 밑 3개중 택1 (필수 X)
   api:
     accessToken: ''
     refreshToken: ''

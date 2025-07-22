@@ -25,43 +25,34 @@ class YtConnect {
                     player.sendMessage(translate("alert.already.u"), true)
                     return
                 }
-                if (cic.getString(id)!=null || cic.getString(id)!=player.uniqueId.toString()) {
+                if (cic.getString(id)!=null && cic.getString(id)!=player.uniqueId.toString()) {
                     player.sendMessage(translate("alert.already.con"), true)
                     return
                 }
 
                 val first=config.getBoolean("user.connection.chzzk.first", true)
 
-                val tempYt= YouTubeBuilder()
+                val builder = YouTubeBuilder()
                     .setApiKey("AIzaSyBpMcjduOo5VbaWa-ptNGuGsG323gaop60")
-                    .setVideoId(id).build()
-                val channelInfo=tempYt?.channelInfo()
-                if (channelInfo==null) {
+                    .setVideoId(id)
+
+                val channelInfo = builder.build()?.channelInfo()
+                if (channelInfo == null) {
                     player.sendMessage(translate("alert.not.exist.channel"), true)
                     return
                 }
 
                 if (first) {
-                    OnAir.yt[player.uniqueId]=YouTubeBuilder()
-                        .setApiKey("AIzaSyBpMcjduOo5VbaWa-ptNGuGsG323gaop60")
-                        .addListener(YoutubeListener())
-                        .setVideoId(id).build()
-                } else {
-                    OnAir.yt[player.uniqueId]=tempYt
+                    builder.addListener(YoutubeListener())
                 }
+
+                val ytInstance = builder.build()
+                OnAir.yt[player.uniqueId] = ytInstance
+
                 youtubeInfo= OnAir.yt[player.uniqueId]?.channelInfo() ?: run {
                     player.sendMessage(translate("alert.not.exist.channel"), true)
                     return
                 }
-
-            } catch (e: Exception) {
-                player.sendMessage(translate("command.got.problems")
-                    .replace("{err}", e.message ?: "0"), true)
-                e.printStackTrace()
-            } finally {
-                val userdata= UserData(player)
-                val file=userdata.getFile()
-                val config=userdata.getConfig()
 
                 config.apply {
                     set("user.connection.youtube.first", false)
@@ -72,12 +63,19 @@ class YtConnect {
                 ConnectionInfo.setValue(id, player.uniqueId.toString())
                 ConnectionInfo.setValue(player.uniqueId.toString(), id)
 
-                player.sendMessage(
-                    translate("alert.connection.chzzk")
-                        .replace("{name}", youtubeInfo.channelName)
-                        .replace("{fol}", youtubeInfo.subscriptionCount),
-                    true
-                )
+                if (::youtubeInfo.isInitialized) {
+                    player.sendMessage(translate(
+                        "alert.connection.youtube", mapOf(
+                            "name" to youtubeInfo.channelName,
+                            "sub" to youtubeInfo.subscriptionCount
+                    )), true)
+                }
+            } catch (e: Exception) {
+                player.sendMessage(translate(
+                    "command.got.problems",
+                    mapOf("err" to (e.message ?: "0"))
+                ), true)
+                e.printStackTrace()
             }
         }
 

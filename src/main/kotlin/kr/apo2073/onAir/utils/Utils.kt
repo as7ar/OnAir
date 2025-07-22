@@ -41,6 +41,13 @@ object Utils {
         return Gson().fromJson(json.readText(), JsonObject::class.java)
             .get(string)?.asString ?: string
     }
+    fun translate(key: String, placeholders: Map<String, String>): String {
+        var message = translate(key)
+        placeholders.forEach { (placeholder, value) ->
+            message = message.replace("{$placeholder}", value)
+        }
+        return message
+    }
 
     fun Platforms.generate(): String {
         when(this) {

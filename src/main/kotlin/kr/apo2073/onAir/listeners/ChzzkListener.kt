@@ -7,6 +7,8 @@ import kr.apo2073.onAir.enums.MessageTarget
 import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.ChzzkChatEvent
 import kr.apo2073.onAir.events.ChzzkDonationEvent
+import kr.apo2073.onAir.events.StreamingChatEvent
+import kr.apo2073.onAir.events.StreamingDonateEvent
 import kr.apo2073.onAir.utils.Utils.generate
 import kr.apo2073.onAir.utils.Utils.performCommandAsOP
 import kr.apo2073.onAir.utils.Utils.sendMessage
@@ -41,6 +43,14 @@ class ChzzkListener: Listener {
             } else {
                 Bukkit.broadcast(format)
             }
+
+            val suc= StreamingChatEvent(
+                player, Platforms.CHZZK,
+                this.message.userId,
+                this.message.content
+            ).callEvent()
+            if (!suc) plugin.logger.warning("StreamingChatEvent를 처리하던 중 오류가 발생했습니다")
+
         } catch (e: Exception) {
             player.sendMessage(translate("system.boom"), true)
             e.printStackTrace()
@@ -90,6 +100,13 @@ class ChzzkListener: Listener {
                 .replace("{msg}", message.content)
             player.performCommandAsOP(ec)
 
+            val suc= StreamingDonateEvent(
+                player, Platforms.CHZZK,
+                this.message.userId,
+                this.message.content,
+                this.message.payAmount.toDouble()
+            ).callEvent()
+            if (!suc) plugin.logger.warning("StreamingDonateEvent를 처리하던 중 오류가 발생했습니다")
         } catch (e: Exception) {
             player.sendMessage(translate("system.boom"), true)
             e.printStackTrace()

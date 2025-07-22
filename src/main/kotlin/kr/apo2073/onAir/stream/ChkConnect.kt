@@ -7,6 +7,7 @@ import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.ChzzkChatEvent
 import kr.apo2073.onAir.events.ChzzkDonationEvent
 import kr.apo2073.onAir.events.ChzzkMissionDonationEvent
+import kr.apo2073.onAir.events.PlayerStreamingConnectionEvent
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
 import org.bukkit.entity.Player
@@ -24,10 +25,12 @@ class ChkConnect {
         fun connect(player: Player, id: String) {
             try {
                 val userdata= UserData(player)
-                val file=userdata.getFile()
                 val config=userdata.getConfig()
+                val file=userdata.getFile()
                 val cic= ConnectionInfo.config
-                if (cic.getString(id)!=null || cic.getString(id)!=player.uniqueId.toString()) {
+                val cht=OnAir.cht[player.uniqueId]
+
+                if (cic.getString(id)!=null && cic.getString(id)!=player.uniqueId.toString()) {
                     player.sendMessage(translate("alert.already.con"), true)
                     return
                 }
@@ -38,9 +41,9 @@ class ChkConnect {
 
                 val first=config.getBoolean("user.connection.chzzk.first", true)
 
-                if (OnAir.cht[player.uniqueId]!=null) {
-                    OnAir.cht[player.uniqueId]?.closeBlocking()
-                    OnAir.cht[player.uniqueId]?.closeAsync()
+                if (cht!=null) {
+                    cht.closeBlocking()
+                    cht.closeAsync()
                 }
                 OnAir.cht[player.uniqueId]= ChzzkChatBuilder(
                     OnAir.chzzkClient, id
@@ -77,19 +80,9 @@ class ChkConnect {
                     }
                 }
 
-            } catch (e: ChannelNotExistsException) {
-                player.sendMessage(translate("alert.not.exist.channel")
-                    .replace("{err}", e.message ?: "0"), true)
-            }catch (e: Exception) {
-                player.sendMessage(translate("command.got.problems")
-                    .replace("{err}", e.message ?: "0"), true)
-                e.printStackTrace()
-            } finally {
-                val userdata= UserData(player)
-                val file=userdata.getFile()
-                val config=userdata.getConfig()
-                val CHANNEL_NAME= OnAir.chzzkClient.fetchChannel(id).channelName
-                val CHANNEL_FOL= OnAir.chzzkClient.fetchChannel(id).followerCount.toString()
+                val fetchChannel=OnAir.chzzkClient.fetchChannel(id)
+                val CHANNEL_NAME= fetchChannel.channelName
+                val CHANNEL_FOL= fetchChannel.followerCount.toString()
 
                 ConnectionInfo.setValue(id, player.uniqueId.toString())
                 ConnectionInfo.setValue(player.uniqueId.toString(), id)
@@ -102,11 +95,22 @@ class ChkConnect {
                 }.save(file)
 
                 player.sendMessage(
-                    translate("alert.connection.chzzk")
-                        .replace("{name}", CHANNEL_NAME)
-                        .replace("{fol}", CHANNEL_FOL),
+                    translate("alert.connection.chzzk", mapOf(
+                        "name" to CHANNEL_NAME,
+                        "fol" to CHANNEL_FOL
+                    )),
                     true
                 )
+            } catch (e: ChannelNotExistsException) {
+                player.sendMessage(translate(
+                    "alert.not.exist.channel",
+                    mapOf("err" to (e.message ?: "0"))
+                ), true)
+            }catch (e: Exception) {
+                player.sendMessage(translate("command.got.problems",
+                    mapOf("err" to (e.message ?: "0"))
+                ), true)
+                e.printStackTrace()
             }
         }
 

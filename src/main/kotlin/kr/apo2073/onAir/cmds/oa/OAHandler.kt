@@ -64,14 +64,41 @@ class OAHandler(private val player: Player) {
     fun setSetting(setting: String, value: String, value1:String="none") {
         val userdata=UserData(player)
         when(setting) {
-            "채팅알림"-> userdata.setChat(!value.contains("끄기"))
-            "후원알림"-> userdata.setDonate(!value.contains("끄기"))
-            "메세지대상"-> userdata.setMessageTarget(if (setting.contains("스트리머만")) MessageTarget.STREAMER else MessageTarget.EVERYONE)
+            "채팅알림"-> {
+                val set=!value.contains("끄기")
+                userdata.setChat(set)
+                player.sendMessage(translate("command.oa.setting.chat", mapOf(
+                    "setting" to "&l&6채팅&r",
+                    "value" to (if (set) "&a켜기&f" else "&c끄기&f")
+                )), true)
+            }
+            "후원알림"-> {
+                val set=!value.contains("끄기")
+                userdata.setDonate(set)
+                player.sendMessage(translate("command.oa.setting", mapOf(
+                    "setting" to "&l&6방송&r",
+                    "value" to (if (set) "&a켜기&f" else "&c끄기&f")
+                )), true)
+            }
+            "메세지대상"-> {
+                val set=
+                    if (value.contains("스트리머만")) MessageTarget.STREAMER
+                    else MessageTarget.EVERYONE
+                userdata.setMessageTarget(set)
+                player.sendMessage(translate("command.oa.setting.chat", mapOf(
+                    "setting" to "&l&6방송 알림 대상&r",
+                    "value" to value
+                )), true)
+            }
             "채널이름"-> {
                 val platforms=value.toPlatform()
                 userdata.getConfig().apply {
                     set("user.connection.${platforms.name.lowercase()}.display", value1)
                 }.save(userdata.getFile())
+                player.sendMessage(translate("command.oa.setting.chat", mapOf(
+                    "setting" to "&l&6${value} 채널 이름&r",
+                    "value" to value1
+                )), true)
             }
         }
     }

@@ -9,6 +9,10 @@ import kr.apo2073.onAir.events.skript.SkriptStreamingChatEvent
 import kr.apo2073.onAir.events.skript.SkriptStreamingConnectionEvent
 import kr.apo2073.onAir.events.skript.SkriptStreamingDisConnectionEvent
 import kr.apo2073.onAir.events.skript.SkriptStreamingDonateEvent
+import kr.apo2073.onAir.events.skript.exper.StrmChatExper
+import kr.apo2073.onAir.events.skript.exper.StrmConnectExper
+import kr.apo2073.onAir.events.skript.exper.StrmDisconnectExper
+import kr.apo2073.onAir.events.skript.exper.StrmDonateExper
 import kr.apo2073.onAir.listeners.BukkitListener
 import kr.apo2073.onAir.listeners.ChzzkListener
 import kr.apo2073.onAir.utils.chzzk.ChzzkData
@@ -81,6 +85,11 @@ class OnAir : JavaPlugin() {
             SkriptStreamingDisConnectionEvent()
             SkriptStreamingChatEvent()
             SkriptStreamingDonateEvent()
+
+            StrmConnectExper()
+            StrmDisconnectExper()
+            StrmChatExper()
+            StrmDonateExper()
         }
     }
 

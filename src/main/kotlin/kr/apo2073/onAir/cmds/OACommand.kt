@@ -3,15 +3,17 @@ package kr.apo2073.onAir.cmds
 import kr.apo2073.onAir.OnAir
 import kr.apo2073.onAir.cmds.oa.OAHandler
 import kr.apo2073.onAir.data.UserData
+import kr.apo2073.onAir.utils.ConnectManager
 import kr.apo2073.onAir.utils.Utils.sendMessage
+import kr.apo2073.onAir.utils.Utils.toPlatform
 import kr.apo2073.onAir.utils.Utils.translate
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 class OACommand: Command(
-    OnAir.plugin.config.getString("command.name") ?: "oa",
-    OnAir.plugin.config.getStringList("command.aliases"),
-    OnAir.plugin.config.getString("command.description") ?: "OnAir 메인 커맨드",
+    OnAir.plugin.config.getString("command.oa.name") ?: "oa",
+    OnAir.plugin.config.getStringList("command.oa.aliases"),
+    OnAir.plugin.config.getString("command.oa.description") ?: "OnAir 메인 커맨드",
     "apo.oa.channel"
 ) {
     private val plugin= OnAir.plugin
@@ -48,6 +50,24 @@ class OACommand: Command(
             OAHandler(sender).setSetting(setting, value, value1)
             return true
         }
+
+        if (
+            arrayOf("치지직","유튜브","투네이션").contains(args[0])
+            && args.size>=2
+        ) {
+            val plat=args[0].toPlatform()
+            val type=args[1] // 등록 / 등록해제
+
+            if (type=="등록" && args.size>=4) {
+                val channelName=args[2]
+                val id=args[3]
+                ConnectManager(sender).connect(plat, channelName, id)
+            } else if (type=="등록해제") {
+                ConnectManager(sender).disconnect(plat)
+            } else OAHandler(sender).help()
+            return true
+        }
+        OAHandler(sender).help()
         return true
     }
 

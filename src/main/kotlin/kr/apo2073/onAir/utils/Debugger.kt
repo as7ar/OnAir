@@ -10,7 +10,7 @@ class Debugger {
             if (
                 !plugin.config.getBoolean("debug", false)
             ) return
-            println(string)
+            plugin.logger.warning(string)
         }
     }
 }
