@@ -1,5 +1,9 @@
 package kr.apo2073.onAir.soop
 
+import kr.apo2073.onAir.soop.listener.SoopListener
+import kr.apo2073.onAir.utils.soop.SoopWebSocket
+import okhttp3.Response
+import org.eclipse.sisu.launch.Main
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import java.net.URI
@@ -11,7 +15,41 @@ import java.net.http.HttpRequest.BodyPublishers
 import java.net.http.HttpResponse.BodyHandlers
 import java.nio.charset.StandardCharsets
 
+//fun main() {
+//    println(SoopAPI.isOnline("khm11903"))
+//    val info= SoopAPI.getPlayerLive("khm11903") ?: return
+//    println("wss://${info.CHDOMAIN()?.lowercase()}:${(info.CHPT()?.toInt() ?: 0)+1}/Websocket/khm11903")
+//    SoopAPI.connect("a", "khm11903", object : SoopListener {
+//        override fun onConnect() {
+//            println("connected")
+//        }
+//
+//        override fun onMessage(packet: SoopPacket) {
+//            packet.dataList.forEach { println(it) }
+//        }
+//
+//        override fun onFail(t: Throwable, response: Response?) {
+//        }
+//
+//        override fun onError(e: Exception) {
+//        }
+//
+//        override fun onDisconnect() {
+//        }
+//    })
+//}
 object SoopAPI {
+    fun connect(display: String?, bjid: String, listener: SoopListener): SoopWebSocket? {
+        val info=getPlayerLive(bjid) ?: return null
+        val user= SoopUser(display ?: info.BJID(), bjid)
+        val soopWebSocket= SoopWebSocket(
+            "wss://${info.CHATNO()?.lowercase()}:${(info.CHPT()?.toInt() ?: 0)+1}/Websocket/${bjid}",
+            info, user, listener
+        )
+        soopWebSocket.connect()
+        return soopWebSocket
+    }
+
     fun getPlayerLive(bjid: String): SoopLiveInfo? {
         val requestURL = "https://live.afreecatv.com/afreeca/player_live_api.php?bjid=$bjid"
 
