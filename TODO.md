@@ -8,8 +8,8 @@
 - [ ] ~~soap~~
 
 
-- [ ] commands
+- [x] commands
 - [ ] listeners
 
-- [ ] Skript
+- [x] Skript
 - [ ] PlaceholderAPI

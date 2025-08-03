@@ -2,7 +2,6 @@ package kr.apo2073.onAir.events
 
 import kr.apo2073.onAir.enums.Platforms
 import org.bukkit.entity.Player
-import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 import org.bukkit.event.player.PlayerEvent
 
@@ -26,8 +25,6 @@ class PlayerStreamingConnectionEvent(
 class PlayerStreamingDisConnectionEvent(
     player: Player,
     val platform: Platforms,
-    val id: String,
-    val display: String
 ): PlayerEvent(player) {
     override fun getEventName() = "PlayerStreamingDisConnectionEvent"
     override fun getHandlers(): HandlerList = getHandlerList()

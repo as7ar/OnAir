@@ -7,7 +7,6 @@ import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.ChzzkChatEvent
 import kr.apo2073.onAir.events.ChzzkDonationEvent
 import kr.apo2073.onAir.events.ChzzkMissionDonationEvent
-import kr.apo2073.onAir.events.PlayerStreamingConnectionEvent
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
 import org.bukkit.entity.Player

@@ -1,12 +1,14 @@
 package kr.apo2073.onAir.utils
 
 import kr.apo2073.onAir.OnAir
-import kr.apo2073.onAir.data.ConnectionInfo
 import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.Platforms
+import kr.apo2073.onAir.events.PlayerStreamingConnectionEvent
+import kr.apo2073.onAir.events.PlayerStreamingDisConnectionEvent
 import kr.apo2073.onAir.stream.ChkConnect
 import kr.apo2073.onAir.stream.TnConnect
 import kr.apo2073.onAir.stream.YtConnect
+import kr.apo2073.onAir.utils.Utils.translate
 import org.bukkit.entity.Player
 
 class ConnectManager(private val player:Player) {
@@ -35,6 +37,8 @@ class ConnectManager(private val player:Player) {
             }
             else-> return
         }
+        val suc= PlayerStreamingConnectionEvent(player, platforms, id, channelName).callEvent()
+        if (!suc) plugin.server.logger.warning(translate("system.boom", mapOf("err" to "calling event failure (PlayerStreamingConnectionEvent)")))
     }
 
     fun disconnect(platforms: Platforms) {
@@ -44,5 +48,7 @@ class ConnectManager(private val player:Player) {
             Platforms.TOONATION -> TnConnect.disconnect(player)
             else-> return
         }
+        val suc= PlayerStreamingDisConnectionEvent(player, platforms).callEvent()
+        if (!suc) plugin.server.logger.warning(translate("system.boom", mapOf("err" to "calling event failure (PlayerStreamingDisConnectionEvent)")))
     }
 }

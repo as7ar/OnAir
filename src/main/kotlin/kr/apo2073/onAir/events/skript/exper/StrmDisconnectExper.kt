@@ -18,8 +18,6 @@ class StrmDisconnectExper: SimpleExpression<String>() {
                 String::class.java,
                 ExpressionType.PROPERTY,
                 "platform [of the stream[ing]]",
-                "(the|a) (channel|stream[ing])'s (channel id|channel key|key|id)",
-                "(the|a) (channel|stream[ing])'s (chennel display|display)"
             )
         }
     }
@@ -40,8 +38,6 @@ class StrmDisconnectExper: SimpleExpression<String>() {
         if (event is PlayerStreamingDisConnectionEvent) {
             return when (pattern) {
                 0 -> arrayOf(event.platform.generate())
-                1 -> arrayOf(event.id)
-                2 -> arrayOf(event.display)
                 else -> arrayOf()
             }
         }
