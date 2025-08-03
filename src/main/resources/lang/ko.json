@@ -25,5 +25,6 @@
   "command.oa.setting": "{setting} 설정을 &a{value}&f(으)로 설정했습니다.",
 
   "command.got.problems": "&c해당 명령어를 처리하는데 문제가 발생했습니다. {err}",
+  "plugin.disabled.player": "&c플러그인 비활성화로 인해 방송 연동이 자동으로 연동 해제되었습니다. 서버 재시작일 경우 다시 연결해주세요",
   "system.boom": "&c플러그인 내부에서 문제가 발생했습니다. {err}"
 }

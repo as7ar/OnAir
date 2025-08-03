@@ -85,12 +85,12 @@ class ChkConnect {
                 val CHANNEL_FOL= fetchChannel.followerCount.toString()
 
                 ConnectionInfo.setValue(id, player.uniqueId.toString())
-                ConnectionInfo.setValue(player.uniqueId.toString(), id)
+                ConnectionInfo.setValue("${player.uniqueId}.chzzk", id)
                 userdata.addConnection(Platforms.CHZZK)
 
                 config.apply {
                     set("user.connection.chzzk.first", false)
-                    set("user.connection.chzzk.isConnected", false)
+                    set("user.connection.chzzk.isConnected", true)
                     set("user.connection.chzzk.id", id)
                 }.save(file)
 
@@ -116,16 +116,21 @@ class ChkConnect {
 
         @JvmStatic
         fun disconnect(player: Player) {
-            val id= ConnectionInfo.config.getString(player.uniqueId.toString()) ?: return
+            val id= ConnectionInfo.config.getString("${player.uniqueId}.chzzk") ?: return
 
             ConnectionInfo.setValue(id, null)
-            ConnectionInfo.setValue(player.uniqueId.toString(), null)
+            ConnectionInfo.setValue("${player.uniqueId}.chzzk", null)
 
             OnAir.cht[player.uniqueId]?.closeBlocking()
             OnAir.cht[player.uniqueId]?.closeAsync()
             OnAir.cht.remove(player.uniqueId)
 
             UserData(player).removeConnection(Platforms.CHZZK)
+            UserData(player).getConfig().apply {
+                set("user.connection.chzzk.first", null)
+                set("user.connection.chzzk.isConnected", null)
+                set("user.connection.chzzk.id", null)
+            }.save(UserData(player).getFile())
             player.sendMessage(translate("alert.disconnect"), true)
         }
     }

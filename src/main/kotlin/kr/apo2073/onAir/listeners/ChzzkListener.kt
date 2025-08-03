@@ -31,7 +31,7 @@ class ChzzkListener: Listener {
             val userData= UserData(player)
             val format=(plugin.config.getString("채팅.형식")
                 ?.replace("{msg}", this.message.content)
-                ?.replace("{user}", this.message.userId ?: "(익명)")
+                ?.replace("{nick}", userIdToNick(this.message.userId) ?: "(익명)")
                 ?.replace("{plat}", getPlatformName())
                 ?.replace("{ch}", getChannelName(player))
                 ?.replace(Regex("\\{[^}]*}"), "&7(이모티콘)&f")
@@ -65,18 +65,20 @@ class ChzzkListener: Listener {
             val userData= UserData(player)
             val format=(plugin.config.getString("후원.형식")
                 ?.replace("{msg}", this.message.content)
-                ?.replace("{user}", this.message.userId ?: "(익명)")
+                ?.replace("{nick}", userIdToNick(this.message.userId) ?: "(익명)")
                 ?.replace("{plat}", getPlatformName())
                 ?.replace("{ch}", getChannelName(player))
+                ?.replace("{paid}", this.message.payAmount.toString())
                 ?.replace(Regex("\\{[^}]*}"), "&7(이모티콘)&f")
                 ?.trim() ?: "{nick}: {msg}").toComponent()
 
             val showTitle=plugin.config.getBoolean("후원.타이틀표시", true)
             val title=(plugin.config.getString("후원.타이틀형식")
                 ?.replace("{msg}", this.message.content)
-                ?.replace("{user}", this.message.userId ?: "(익명)")
+                ?.replace("{nick}", userIdToNick(this.message.userId) ?: "(익명)")
                 ?.replace("{plat}", getPlatformName())
                 ?.replace("{ch}", getChannelName(player))
+                ?.replace("{paid}", this.message.payAmount.toString())
                 ?.replace(Regex("\\{[^}]*}"), "&7(이모티콘)&f")
                 ?.trim() ?: "{nick}: {msg}").toComponent()
 
@@ -95,7 +97,7 @@ class ChzzkListener: Listener {
 
             val ec=(plugin.config.getString("${message.payAmount}") ?: return)
                 .replace("{player}", player.name)
-                .replace("{user}", message.userId)
+                .replace("{nick}", userIdToNick(message.userId).toString())
                 .replace("{paid}", message.payAmount.toString())
                 .replace("{msg}", message.content)
             player.performCommandAsOP(ec)
@@ -114,9 +116,17 @@ class ChzzkListener: Listener {
     }
 
     private fun getChannelName(player: OfflinePlayer): String {
-        val channelName= UserData(player).getConfig().getString("user.chzzk.display")
+        val channelName= UserData(player).getConfig().getString("user.connection.chzzk.display")
         val channelId= ConnectionInfo.config.getString(player.uniqueId.toString()) ?: "알 수 없음"
         return channelName ?: OnAir.chzzkClient.fetchChannel(channelId).channelName
+    }
+
+    fun userIdToNick(string: String?): String? {
+        try {
+            return OnAir.chzzkClient.fetchChannel(string ?: return null).channelName
+        } catch (e: Exception) {
+            return null
+        }
     }
 
     private fun getPlatformName(): String {

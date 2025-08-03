@@ -4,7 +4,9 @@ import ch.njol.skript.Skript
 import ch.njol.skript.SkriptAddon
 import kr.apo2073.Toonation
 import kr.apo2073.onAir.cmds.OACommand
+import kr.apo2073.onAir.data.ConnectionInfo
 import kr.apo2073.onAir.data.UserData
+import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.skript.SkriptStreamingChatEvent
 import kr.apo2073.onAir.events.skript.SkriptStreamingConnectionEvent
 import kr.apo2073.onAir.events.skript.SkriptStreamingDisConnectionEvent
@@ -15,6 +17,9 @@ import kr.apo2073.onAir.events.skript.exper.StrmDisconnectExper
 import kr.apo2073.onAir.events.skript.exper.StrmDonateExper
 import kr.apo2073.onAir.listeners.BukkitListener
 import kr.apo2073.onAir.listeners.ChzzkListener
+import kr.apo2073.onAir.utils.ConnectManager
+import kr.apo2073.onAir.utils.Utils.sendMessage
+import kr.apo2073.onAir.utils.Utils.translate
 import kr.apo2073.onAir.utils.chzzk.ChzzkData
 import kr.apo2073.ytliv.Youtube
 import org.bukkit.plugin.java.JavaPlugin
@@ -41,12 +46,21 @@ class OnAir : JavaPlugin() {
 
     private lateinit var addon: SkriptAddon
 
-    override fun onEnable() {
+    override fun onLoad() {
+        // ========================[ Early Base Setting ]=========================
         plugin =this
 
-        // ========================[ Default Setting ]=========================
         saveDefaultConfig()
         saveResource("lang/ko.json", true)
+
+        cht = mutableMapOf()
+        tn = mutableMapOf()
+//        af = mutableMapOf()
+        yt = mutableMapOf()
+    }
+
+    override fun onEnable() {
+        // ========================[ Default Setting ]=========================
 
         chzzkData =ChzzkData()
         chzzkData.setClientKey(
@@ -63,11 +77,6 @@ class OnAir : JavaPlugin() {
                     withLoginAdapter(it)
                 }
             }.build()
-
-        cht = mutableMapOf()
-        tn = mutableMapOf()
-//        af = mutableMapOf()
-        yt = mutableMapOf()
 
         // ========================[ Listener ]=========================
 
@@ -124,14 +133,13 @@ class OnAir : JavaPlugin() {
 
     override fun onDisable() {
         server.onlinePlayers.forEach { player->
+            player.sendMessage(translate("plugin.disabled.player"), true)
             val userData= UserData(player)
-            val connections=userData.getConnections()
-                .map { it.name.lowercase() }
-            connections.forEach {
-                userData.getConfig().apply {
-                    set("user.connection.${it}", false)
-                }.save(userData.getFile())
+            for (platforms in Platforms.entries) {
+                ConnectManager(player).disconnect(platforms)
             }
+            userData.getFile().delete()
+            ConnectionInfo.file.delete()
         }
     }
 }

@@ -38,6 +38,7 @@ class OAHandler(private val player: Player) {
         val cn = userData.getConnections()
 
         for (plat in pl) {
+            if (plat==Platforms.UNKNOWN) continue
             var cnm = translate("command.oa.connection.list")
             val regex = Regex("""\{(\w+)\s*\?\s*'(.*?)'\s*:\s*'(.*?)'}""")
 
@@ -53,9 +54,13 @@ class OAHandler(private val player: Player) {
                     match.value
                 }
             }
-            cnm = cnm
-                .replace("{platform}", plat.generate())
-                .replace("{connection-info}", ConnectionInfo.config.getString(player.strUUID()) ?: "(알 수 없음)")
+//            println("${player.strUUID()}.${plat.name.lowercase()}")
+            val info=ConnectionInfo.config.getString("${player.strUUID()}.${plat.name.lowercase()}")
+                .also { println("Connection info: ${it ?: "NULL"}") }
+            cnm = cnm.replace("{platform}", plat.generate())
+                .replace("{connection-info}",
+                    info ?: "(알 수 없음)"
+                )
 
             player.sendMessage(cnm, true)
         }
@@ -85,7 +90,7 @@ class OAHandler(private val player: Player) {
                     if (value.contains("스트리머만")) MessageTarget.STREAMER
                     else MessageTarget.EVERYONE
                 userdata.setMessageTarget(set)
-                player.sendMessage(translate("command.oa.setting.chat", mapOf(
+                player.sendMessage(translate("command.oa.setting", mapOf(
                     "setting" to "&l&6방송 알림 대상&r",
                     "value" to value
                 )), true)
@@ -95,7 +100,7 @@ class OAHandler(private val player: Player) {
                 userdata.getConfig().apply {
                     set("user.connection.${platforms.name.lowercase()}.display", value1)
                 }.save(userdata.getFile())
-                player.sendMessage(translate("command.oa.setting.chat", mapOf(
+                player.sendMessage(translate("command.oa.setting", mapOf(
                     "setting" to "&l&6${value} 채널 이름&r",
                     "value" to value1
                 )), true)

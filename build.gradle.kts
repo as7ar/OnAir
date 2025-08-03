@@ -27,7 +27,7 @@ dependencies {
     implementation("me.clip:placeholderapi:2.11.6")
 
     implementation(files("libs/chzzk4j-0.1.1.jar"))
-    implementation(files("libs/ToontaionLiv-1.1.jar"))
+    implementation(files("libs/ToontaionLiv-1.2.jar"))
     implementation(files("libs/AfreecatvLib-master-1.0.3.jar"))
     implementation(files("libs/YouTubeLiv-1.1.1.jar"))
     implementation("com.github.twitch4j:twitch4j:1.25.0")
@@ -85,7 +85,7 @@ tasks.shadowJar {
     dependencies {
         include(dependency("net.wesjd:anvilgui:1.10.6-SNAPSHOT"))
         include(dependency(files("libs/AfreecatvLib-master-1.0.3.jar")))
-        include(dependency(files("libs/ToontaionLiv-1.1.jar")))
+        include(dependency(files("libs/ToontaionLiv-1.2.jar")))
         include(dependency(files("libs/chzzk4j-0.1.1.jar")))
     }
 }

@@ -56,12 +56,12 @@ class YtConnect {
 
                 config.apply {
                     set("user.connection.youtube.first", false)
-                    set("user.connection.youtube.isConnected", false)
+                    set("user.connection.youtube.isConnected", true)
                     set("user.connection.youtube.id", id)
                 }.save(file)
                 userdata.addConnection(Platforms.YOUTUBE)
                 ConnectionInfo.setValue(id, player.uniqueId.toString())
-                ConnectionInfo.setValue(player.uniqueId.toString(), id)
+                ConnectionInfo.setValue("${player.uniqueId}.youtube", id)
 
                 if (::youtubeInfo.isInitialized) {
                     player.sendMessage(translate(
@@ -81,9 +81,9 @@ class YtConnect {
 
         @JvmStatic
         fun disconnect(player: Player) {
-            val id= ConnectionInfo.config.getString(player.uniqueId.toString()) ?: return
+            val id= ConnectionInfo.config.getString("${player.uniqueId}.youtube") ?: return
 
-            ConnectionInfo.setValue(player.uniqueId.toString(), null)
+            ConnectionInfo.setValue("${player.uniqueId}.youtube", null)
             ConnectionInfo.setValue(id, null)
 
             OnAir.yt[player.uniqueId]?.stop()

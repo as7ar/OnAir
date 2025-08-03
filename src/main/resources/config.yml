@@ -58,8 +58,8 @@ chzzk:
     accessToken: ''
     refreshToken: ''
   cookie:
-    ses: ''
-    aut: ''
+    ses: 'AAABzdUVK5CsCzdu2XI26u1ytSyt73q5zJLWMyZSPwfc/atYpii/mtlkGdeybcP6DTh5/Jm3nFMaZSSeUz2tRb9n7UXfHJNEX7h7IqZWfv0jjO/Z+Nzdgi2SvurMWABSAoat++cpv0lFziZahUmz9VSFfznfhpe54HvteFGOSn8ri75SV4sradcmIXi+i81qJXQLPWGsdFkhwnZelD9ti3vmfAFyaf7GqG4xTizqS6myL1QYzJVrlRZS4VUzSLlARMRWtdqRyncpEUa3BOP+k0zxGLtMnMO7inuJrD1Rw6a5DxkvKo44e8wxXcktuPD8qvjPkYpjI1PCjmKls1n4ULMExjWMjJYIrQA5XjOoamGsaZfRMAQqiqGXhP0jGm3hjr8dlWtiex+FiLq1TN5I3ayY8CUuUCh8Cz790gEZiwSJMES9zRjmdNpt24Qy0b3CMi4qcog9tninHav3GZtjtKA/XZMz2bPYiwg49Cw9aDI5eqBtTEhX1z55AMmf6VWcIv6hOKTob5YcwEW2bTa2m5xIFLKr6ws8Rp9cvG4Xygvp8AUilWffG/P6uZJ4xKBlOcDEUXavQnQ8GUR2jpGXxGsowj1nHyf1qH6C9mVZGhnXAizc'
+    aut: 'X2mpWe4dMgLAodJJRbUM5M35e2VtCSYPiETQPXinZnIQ6Y13SJWOtOzwdq8NNjiV'
   naver:
     id: ''
     pw: ''
