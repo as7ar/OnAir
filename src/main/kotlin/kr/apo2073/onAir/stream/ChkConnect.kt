@@ -86,13 +86,13 @@ class ChkConnect {
 
                 ConnectionInfo.setValue(id, player.uniqueId.toString())
                 ConnectionInfo.setValue("${player.uniqueId}.chzzk", id)
-                userdata.addConnection(Platforms.CHZZK)
 
                 config.apply {
                     set("user.connection.chzzk.first", false)
                     set("user.connection.chzzk.isConnected", true)
                     set("user.connection.chzzk.id", id)
                 }.save(file)
+                userdata.addConnection(Platforms.CHZZK)
 
                 player.sendMessage(
                     translate("alert.connection.chzzk", mapOf(

@@ -45,25 +45,30 @@ class UserData(private val player: OfflinePlayer) {
     }
 
     fun getConnections(): MutableList<Platforms> {
-        return getConfig().getStringList("user.connection.list")
+        return getConfig().getStringList("user.connection-list")
             .mapNotNull { runCatching { Platforms.valueOf(it) }.getOrNull() }
             .toMutableList()
     }
 
     fun addConnection(platform: Platforms) {
         val connections = getConnections()
-        println(connections)
         if (!connections.contains(platform)) {
             connections.add(platform)
-            updateConfig("user.connection.list", connections.map { it.name })
+            val config = YamlConfiguration.loadConfiguration(
+                File(plugin.dataFolder, "userdata/${player.uniqueId}.yml")
+            )
+            config.apply {
+                set("user.connection-list", connections.map { it.name })
+            }.save(File(plugin.dataFolder, "userdata/${player.uniqueId}.yml"))
         }
+        println(getConnections())
     }
 
     fun removeConnection(platform: Platforms) {
         updateConfig("user.connection.${platform.name.lowercase()}", null)
         val connections = getConnections()
         connections.remove(platform)
-        updateConfig("user.connection.list", connections.map { it.name })
+        updateConfig("user.connection-list", connections.map { it.name })
     }
 
     private fun updateConfig(path: String, value: Any?) {

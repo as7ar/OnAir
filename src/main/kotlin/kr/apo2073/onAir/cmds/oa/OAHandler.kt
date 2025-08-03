@@ -72,7 +72,7 @@ class OAHandler(private val player: Player) {
             "채팅알림"-> {
                 val set=!value.contains("끄기")
                 userdata.setChat(set)
-                player.sendMessage(translate("command.oa.setting.chat", mapOf(
+                player.sendMessage(translate("command.oa.setting", mapOf(
                     "setting" to "&l&6채팅&r",
                     "value" to (if (set) "&a켜기&f" else "&c끄기&f")
                 )), true)

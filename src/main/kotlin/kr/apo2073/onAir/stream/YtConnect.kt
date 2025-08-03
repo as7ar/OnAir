@@ -59,9 +59,9 @@ class YtConnect {
                     set("user.connection.youtube.isConnected", true)
                     set("user.connection.youtube.id", id)
                 }.save(file)
-                userdata.addConnection(Platforms.YOUTUBE)
                 ConnectionInfo.setValue(id, player.uniqueId.toString())
                 ConnectionInfo.setValue("${player.uniqueId}.youtube", id)
+                userdata.addConnection(Platforms.YOUTUBE)
 
                 if (::youtubeInfo.isInitialized) {
                     player.sendMessage(translate(

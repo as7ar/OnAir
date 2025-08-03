@@ -100,7 +100,8 @@ class OACommand: Command(
         if (args.size==3) {
             if (args[0]=="설정") {
                 if (args[1]=="채널이름") tab.addAll(arrayOf("치지직", "유튜브", "투네이션"))
-                else tab.addAll(arrayOf("값"))
+                if (args[0]=="설정") tab.addAll(arrayOf("값"))
+                if (args[1]=="채팅알림" || args[1]=="후원알림") tab.addAll(arrayOf("켜기", "끄기"))
             } else  {
                 tab.addAll(arrayOf("채널이름"))
             }
