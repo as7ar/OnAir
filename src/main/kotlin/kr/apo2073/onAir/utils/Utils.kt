@@ -8,6 +8,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.entity.Player
 import java.io.File
+import java.util.UUID
 
 object Utils {
     private val plugin= OnAir.plugin
@@ -33,6 +34,9 @@ object Utils {
     }
 
     fun Player.strUUID(): String = this.uniqueId.toString()
+
+    fun UUID.str(): String = this.toString()
+    fun String.toUUID(): UUID= UUID.fromString(this)
 
     fun translate(string: String): String {
         plugin.reloadConfig()

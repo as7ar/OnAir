@@ -61,7 +61,6 @@ class UserData(private val player: OfflinePlayer) {
                 set("user.connection-list", connections.map { it.name })
             }.save(File(plugin.dataFolder, "userdata/${player.uniqueId}.yml"))
         }
-        println(getConnections())
     }
 
     fun removeConnection(platform: Platforms) {

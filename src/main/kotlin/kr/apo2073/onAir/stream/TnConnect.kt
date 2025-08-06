@@ -10,6 +10,7 @@ import kr.apo2073.onAir.utils.Utils.translate
 import kr.apo2073.tnliv.Toonation
 import kr.apo2073.tnliv.ToonationBuilder
 import kr.apo2073.tnliv.exception.TokenNotFound
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
 class TnConnect {
@@ -28,6 +29,7 @@ class TnConnect {
                 val first=config.getBoolean("user.connection.chzzk.first", true)
 
                 val builder= ToonationBuilder()
+//                    .setDebug(true)
                     .setKey(id)
 
                 if (first) {
@@ -35,29 +37,45 @@ class TnConnect {
                 } else {
                     OnAir.tn[player.uniqueId]= builder.build()
                 }
+                Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+                    try {
+                        val streamer=Toonation.getStreamerAsync(channelId).get()
+                        var channel=streamer.nickname
+                        if (streamer==null) channel=null
 
-                val streamer=Toonation.getStreamer(channelId)
-                var channel=streamer.nickname
-                if (streamer==null) channel=null
-                if (channel==null) {
-                    player.sendMessage(translate("command.oa.connection.tn.channelid"),true)
-                    return
-                }
+                        Bukkit.getScheduler().runTask(plugin, Runnable {
+                            if (channel==null) {
+                                player.sendMessage(translate("command.oa.connection.tn.channelid"),true)
+                                return@Runnable
+                            }
 
-                config.apply {
-                    set("user.connection.toonation.first", false)
-                    set("user.connection.toonation.isConnected", true)
-                    set("user.connection.toonation.id", id)
-                }.save(file)
-                ConnectionManager.setConfigValue(id, player.uniqueId.toString())
-                ConnectionManager.setConfigValue("${player.uniqueId}.toonation", id)
-                userdata.addConnection(Platforms.TOONATION)
+                            config.apply {
+                                set("user.connection.toonation.display", channel)
+                                set("user.connection.toonation.first", false)
+                                set("user.connection.toonation.isConnected", true)
+                                set("user.connection.toonation.id", id)
+                            }.save(file)
+                            ConnectionManager.setConfigValue(id, player.uniqueId.toString())
+                            ConnectionManager.setConfigValue("${player.uniqueId}.toonation", id)
+                            userdata.addConnection(Platforms.TOONATION)
 
-                player.sendMessage(translate(
-                    "alert.connection.toonation", mapOf(
-                        "name" to channel,)),
-                    true
-                )
+                            player.sendMessage(translate(
+                                "alert.connection.toonation", mapOf(
+                                    "name" to channel,)),
+                                true
+                            )
+                        })
+                    } catch (e: TokenNotFound) {
+                        player.sendMessage(translate("alert.not.exist.channel"), true)
+                        return@Runnable
+                    } catch (e: Exception) {
+                        player.sendMessage(translate(
+                            "command.got.problems",
+                            mapOf("err" to (e.message ?: "0"))
+                        ), true)
+                        e.printStackTrace()
+                    }
+                })
             } catch (e: TokenNotFound) {
                 player.sendMessage(translate("alert.not.exist.channel"), true)
                 return
@@ -72,15 +90,21 @@ class TnConnect {
 
         @JvmStatic
         fun disconnect(player: Player) {
-            val id= ConnectionManager.infoConfig.getString("${player.uniqueId}.youtube") ?: return
+            val id= ConnectionManager.infoConfig.getString("${player.uniqueId}.toonation") ?: return
 
-            ConnectionManager.setConfigValue("${player.uniqueId}.youtube", null)
+            ConnectionManager.setConfigValue("${player.uniqueId}.toonation", null)
             ConnectionManager.setConfigValue(id, null)
 
             OnAir.tn[player.uniqueId]?.close()
             OnAir.tn.remove(player.uniqueId)
 
             UserData(player).removeConnection(Platforms.TOONATION)
+            UserData(player).getConfig().apply {
+                set("user.connection.toonation.display", null)
+                set("user.connection.toonation.first", null)
+                set("user.connection.toonation.isConnected", null)
+                set("user.connection.toonation.id", null)
+            }.save(UserData(player).getFile())
             player.sendMessage(translate("alert.disconnect"), true)
         }
     }

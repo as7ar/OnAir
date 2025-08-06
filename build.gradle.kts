@@ -27,7 +27,7 @@ dependencies {
     implementation("me.clip:placeholderapi:2.11.6")
 
     implementation(files("libs/chzzk4j-0.1.1.jar"))
-    implementation(files("libs/ToontaionLiv-1.2.1.jar"))
+    implementation(files("libs/ToontaionLiv-1.2.2.jar"))
     implementation(files("libs/AfreecatvLib-master-1.0.3.jar"))
     implementation(files("libs/YouTubeLiv-1.1.1.jar"))
     implementation("com.github.twitch4j:twitch4j:1.25.0")
@@ -37,8 +37,8 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
 
-    implementation("io.socket:socket.io-client:2.0.1")
-    implementation("io.reactivex.rxjava2:rxjava:2.1.16")
+    implementation("io.socket:socket.io-client:2.1.1")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.10")
     implementation("org.jsoup:jsoup:1.15.3")
     implementation("org.seleniumhq.selenium:selenium-java:4.34.0")
     implementation("io.github.bonigarcia:webdrivermanager:6.2.0")
@@ -87,7 +87,7 @@ tasks.shadowJar {
     dependencies {
         include(dependency("net.wesjd:anvilgui:1.10.6-SNAPSHOT"))
         include(dependency(files("libs/AfreecatvLib-master-1.0.3.jar")))
-        include(dependency(files("libs/ToontaionLiv-1.2.1.jar")))
+        include(dependency(files("libs/ToontaionLiv-1.2.2.jar")))
         include(dependency(files("libs/chzzk4j-0.1.1.jar")))
     }
 }
