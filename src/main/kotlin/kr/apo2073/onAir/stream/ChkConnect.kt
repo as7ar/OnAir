@@ -1,7 +1,7 @@
 package kr.apo2073.onAir.stream
 
 import kr.apo2073.onAir.OnAir
-import kr.apo2073.onAir.data.ConnectionInfo
+import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.ChzzkChatEvent
@@ -26,17 +26,10 @@ class ChkConnect {
                 val userdata= UserData(player)
                 val config=userdata.getConfig()
                 val file=userdata.getFile()
-                val cic= ConnectionInfo.config
+                val cic= ConnectionManager.infoConfig
                 val cht=OnAir.cht[player.uniqueId]
 
-                if (cic.getString(id)!=null && cic.getString(id)!=player.uniqueId.toString()) {
-                    player.sendMessage(translate("alert.already.con"), true)
-                    return
-                }
-                if (cic.getString(id)==player.uniqueId.toString()) {
-                    player.sendMessage(translate("alert.already.u"), true)
-                    return
-                }
+                if (!ConnectionManager.connectionCheck(player, id)) return
 
                 val first=config.getBoolean("user.connection.chzzk.first", true)
 
@@ -83,8 +76,8 @@ class ChkConnect {
                 val CHANNEL_NAME= fetchChannel.channelName
                 val CHANNEL_FOL= fetchChannel.followerCount.toString()
 
-                ConnectionInfo.setValue(id, player.uniqueId.toString())
-                ConnectionInfo.setValue("${player.uniqueId}.chzzk", id)
+                ConnectionManager.setConfigValue(id, player.uniqueId.toString())
+                ConnectionManager.setConfigValue("${player.uniqueId}.chzzk", id)
 
                 config.apply {
                     set("user.connection.chzzk.first", false)
@@ -115,10 +108,10 @@ class ChkConnect {
 
         @JvmStatic
         fun disconnect(player: Player) {
-            val id= ConnectionInfo.config.getString("${player.uniqueId}.chzzk") ?: return
+            val id= ConnectionManager.infoConfig.getString("${player.uniqueId}.chzzk") ?: return
 
-            ConnectionInfo.setValue(id, null)
-            ConnectionInfo.setValue("${player.uniqueId}.chzzk", null)
+            ConnectionManager.setConfigValue(id, null)
+            ConnectionManager.setConfigValue("${player.uniqueId}.chzzk", null)
 
             OnAir.cht[player.uniqueId]?.closeBlocking()
             OnAir.cht[player.uniqueId]?.closeAsync()

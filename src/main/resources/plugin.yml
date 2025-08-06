@@ -9,6 +9,8 @@ libraries:
   - org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.0
   - com.squareup.okhttp3:okhttp:4.9.3
   - org.java-websocket:Java-WebSocket:1.5.2
+  - org.seleniumhq.selenium:selenium-java:4.34.0
+  - io.github.bonigarcia:webdrivermanager:6.2.0
   - com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0
   - com.google.http-client:google-http-client-jackson2:1.39.2
   - com.google.api-client:google-api-client:1.33.0

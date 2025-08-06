@@ -2,8 +2,8 @@ package kr.apo2073.onAir.cmds
 
 import kr.apo2073.onAir.OnAir
 import kr.apo2073.onAir.cmds.oa.OAHandler
+import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.data.UserData
-import kr.apo2073.onAir.utils.ConnectManager
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.toPlatform
 import kr.apo2073.onAir.utils.Utils.translate
@@ -61,9 +61,9 @@ class OACommand: Command(
             if (type=="등록" && args.size>=4) {
                 val channelName=args[2]
                 val id=args[3]
-                ConnectManager(sender).connect(plat, channelName, id)
+                ConnectionManager.Manager(sender).connect(plat, channelName, id)
             } else if (type=="등록해제") {
-                ConnectManager(sender).disconnect(plat)
+                ConnectionManager.Manager(sender).disconnect(plat)
             } else OAHandler(sender).help()
             return true
         }

@@ -2,9 +2,8 @@ package kr.apo2073.onAir
 
 import ch.njol.skript.Skript
 import ch.njol.skript.SkriptAddon
-import kr.apo2073.Toonation
 import kr.apo2073.onAir.cmds.OACommand
-import kr.apo2073.onAir.data.ConnectionInfo
+import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.skript.SkriptStreamingChatEvent
@@ -17,10 +16,10 @@ import kr.apo2073.onAir.events.skript.exper.StrmDisconnectExper
 import kr.apo2073.onAir.events.skript.exper.StrmDonateExper
 import kr.apo2073.onAir.listeners.BukkitListener
 import kr.apo2073.onAir.listeners.ChzzkListener
-import kr.apo2073.onAir.utils.ConnectManager
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
 import kr.apo2073.onAir.utils.chzzk.ChzzkData
+import kr.apo2073.tnliv.Toonation
 import kr.apo2073.ytliv.Youtube
 import org.bukkit.plugin.java.JavaPlugin
 import xyz.r2turntrue.chzzk4j.ChzzkClient
@@ -136,10 +135,10 @@ class OnAir : JavaPlugin() {
             player.sendMessage(translate("plugin.disabled.player"), true)
             val userData= UserData(player)
             for (platforms in Platforms.entries) {
-                ConnectManager(player).disconnect(platforms)
+                ConnectionManager.Manager(player).disconnect(platforms)
             }
             userData.getFile().delete()
-            ConnectionInfo.file.delete()
+            ConnectionManager.infoFile.delete()
         }
     }
 }

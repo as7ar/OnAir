@@ -1,7 +1,7 @@
 package kr.apo2073.onAir.listeners
 
 import kr.apo2073.onAir.OnAir
-import kr.apo2073.onAir.data.ConnectionInfo
+import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.MessageTarget
 import kr.apo2073.onAir.enums.Platforms
@@ -117,7 +117,7 @@ class ChzzkListener: Listener {
 
     private fun getChannelName(player: OfflinePlayer): String {
         val channelName= UserData(player).getConfig().getString("user.connection.chzzk.display")
-        val channelId= ConnectionInfo.config.getString(player.uniqueId.toString()) ?: "알 수 없음"
+        val channelId= ConnectionManager.infoConfig.getString(player.uniqueId.toString()) ?: "알 수 없음"
         return channelName ?: OnAir.chzzkClient.fetchChannel(channelId).channelName
     }
 

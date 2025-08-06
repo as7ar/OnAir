@@ -1,7 +1,7 @@
 package kr.apo2073.onAir.stream
 
 import kr.apo2073.onAir.OnAir
-import kr.apo2073.onAir.data.ConnectionInfo
+import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.listeners.YoutubeListener
@@ -20,15 +20,9 @@ class YtConnect {
                 val userdata= UserData(player)
                 val file=userdata.getFile()
                 val config=userdata.getConfig()
-                val cic= ConnectionInfo.config
-                if (cic.getString(id)==player.uniqueId.toString()) {
-                    player.sendMessage(translate("alert.already.u"), true)
-                    return
-                }
-                if (cic.getString(id)!=null && cic.getString(id)!=player.uniqueId.toString()) {
-                    player.sendMessage(translate("alert.already.con"), true)
-                    return
-                }
+                val cic= ConnectionManager.infoConfig
+
+                if (!ConnectionManager.connectionCheck(player, id)) return
 
                 val first=config.getBoolean("user.connection.chzzk.first", true)
 
@@ -59,8 +53,8 @@ class YtConnect {
                     set("user.connection.youtube.isConnected", true)
                     set("user.connection.youtube.id", id)
                 }.save(file)
-                ConnectionInfo.setValue(id, player.uniqueId.toString())
-                ConnectionInfo.setValue("${player.uniqueId}.youtube", id)
+                ConnectionManager.setConfigValue(id, player.uniqueId.toString())
+                ConnectionManager.setConfigValue("${player.uniqueId}.youtube", id)
                 userdata.addConnection(Platforms.YOUTUBE)
 
                 if (::youtubeInfo.isInitialized) {
@@ -81,10 +75,10 @@ class YtConnect {
 
         @JvmStatic
         fun disconnect(player: Player) {
-            val id= ConnectionInfo.config.getString("${player.uniqueId}.youtube") ?: return
+            val id= ConnectionManager.infoConfig.getString("${player.uniqueId}.youtube") ?: return
 
-            ConnectionInfo.setValue("${player.uniqueId}.youtube", null)
-            ConnectionInfo.setValue(id, null)
+            ConnectionManager.setConfigValue("${player.uniqueId}.youtube", null)
+            ConnectionManager.setConfigValue(id, null)
 
             OnAir.yt[player.uniqueId]?.stop()
             OnAir.yt.remove(player.uniqueId)

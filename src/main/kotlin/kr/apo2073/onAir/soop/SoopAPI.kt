@@ -2,8 +2,6 @@ package kr.apo2073.onAir.soop
 
 import kr.apo2073.onAir.soop.listener.SoopListener
 import kr.apo2073.onAir.utils.soop.SoopWebSocket
-import okhttp3.Response
-import org.eclipse.sisu.launch.Main
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import java.net.URI

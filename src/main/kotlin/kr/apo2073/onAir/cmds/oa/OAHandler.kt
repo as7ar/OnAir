@@ -3,7 +3,7 @@ package kr.apo2073.onAir.cmds.oa
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kr.apo2073.onAir.OnAir
-import kr.apo2073.onAir.data.ConnectionInfo
+import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.MessageTarget
 import kr.apo2073.onAir.enums.Platforms
@@ -55,7 +55,7 @@ class OAHandler(private val player: Player) {
                 }
             }
 //            println("${player.strUUID()}.${plat.name.lowercase()}")
-            val info=ConnectionInfo.config.getString("${player.strUUID()}.${plat.name.lowercase()}")
+            val info=ConnectionManager.infoConfig.getString("${player.strUUID()}.${plat.name.lowercase()}")
                 .also { println("Connection info: ${it ?: "NULL"}") }
             cnm = cnm.replace("{platform}", plat.generate())
                 .replace("{connection-info}",
