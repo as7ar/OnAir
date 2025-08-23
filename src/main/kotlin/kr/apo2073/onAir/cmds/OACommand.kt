@@ -13,7 +13,7 @@ import org.bukkit.entity.Player
 class OACommand: Command(
     OnAir.plugin.config.getString("command.oa.name") ?: "oa",
     OnAir.plugin.config.getStringList("command.oa.aliases"),
-    OnAir.plugin.config.getString("command.oa.description") ?: "OnAir 메인 커맨드",
+    OnAir.plugin.config.getString("command.oa.description") ?: "OnAir 메인 명령어",
     "apo.oa.channel"
 ) {
     private val plugin= OnAir.plugin

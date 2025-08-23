@@ -26,7 +26,7 @@ class OAHandler(private val player: Player) {
             .get("command.oa.help")
             .asJsonArray.mapNotNull {
                 it.asString
-                    .replace("{command}", plugin.config.getString("command.name") ?: "oa")
+                    .replace("{command}", plugin.config.getString("command.oa.name") ?: "oa")
             }.toMutableList()
         array.forEach {
             player.sendMessage(it, true)

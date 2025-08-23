@@ -3,6 +3,7 @@ package kr.apo2073.onAir
 import ch.njol.skript.Skript
 import ch.njol.skript.SkriptAddon
 import kr.apo2073.onAir.cmds.OACommand
+import kr.apo2073.onAir.cmds.OAdminCommand
 import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.Platforms
@@ -84,6 +85,7 @@ class OnAir : JavaPlugin() {
 
         // ========================[ Command ]=========================
         OACommand()
+        OAdminCommand()
 
         // ========================[ Depends ]=========================
         if (server.pluginManager.getPlugin("Skript")!=null) {

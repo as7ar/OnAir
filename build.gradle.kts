@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "kr.apo2073"
-version = "1.0-ALPHA"
+version = "1.1-ALPHA"
 
 repositories {
     mavenCentral()
@@ -82,7 +82,7 @@ tasks.shadowJar {
     archiveClassifier.set("all")
 //    destinationDirectory = file("C:\\Users\\PC\\Desktop\\Test_Server\\21.1\\plugins")
 //    destinationDirectory= file("C:\\Users\\이태수\\Desktop\\server\\plugins")
-    destinationDirectory=file("C:\\Users\\PC\\Desktop\\projects\\OnAir\\run\\plugins")
+//    destinationDirectory=file("C:\\Users\\PC\\Desktop\\projects\\OnAir\\run\\plugins")
     mergeServiceFiles()
     dependencies {
         include(dependency("net.wesjd:anvilgui:1.10.6-SNAPSHOT"))

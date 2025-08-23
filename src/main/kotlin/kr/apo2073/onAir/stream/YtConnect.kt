@@ -27,7 +27,7 @@ class YtConnect {
                 val first=config.getBoolean("user.connection.chzzk.first", true)
 
                 val builder = YouTubeBuilder()
-                    .setApiKey("AIzaSyBpMcjduOo5VbaWa-ptNGuGsG323gaop60")
+                    .setApiKey("AIzaSyB9OU6s_oA_6Hi6hW1zTyW37Rmak33F2aM")
                     .setVideoId(id)
 
                 val channelInfo = builder.build()?.channelInfo()

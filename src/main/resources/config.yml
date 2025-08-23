@@ -5,7 +5,13 @@ command:
     aliases:
       - 'onair'
       - '방송'
-    description: 'OnAir 메인 커맨드'
+    description: 'OnAir 메인 명령어'
+  oadmin:
+    name: 'oadmin'
+    aliases:
+      - 'oad'
+      - '방송관리'
+    description: 'OnAir 관리자 명령어'
 
 #  ========================[ Format ]===================================
 
