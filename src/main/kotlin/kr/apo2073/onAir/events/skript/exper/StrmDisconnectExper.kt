@@ -6,7 +6,7 @@ import ch.njol.skript.lang.ExpressionType
 import ch.njol.skript.lang.SkriptParser
 import ch.njol.skript.lang.util.SimpleExpression
 import ch.njol.util.Kleenean
-import kr.apo2073.onAir.events.PlayerStreamingDisConnectionEvent
+import kr.apo2073.onAir.events.PlayerStreamingDisconnectionEvent
 import kr.apo2073.onAir.utils.Utils.generate
 import org.bukkit.event.Event
 
@@ -17,7 +17,7 @@ class StrmDisconnectExper: SimpleExpression<String>() {
                 StrmDisconnectExper::class.java,
                 String::class.java,
                 ExpressionType.PROPERTY,
-                "platform [of the stream[ing]]",
+                "platform [of [(the|a)] disconnection]",
             )
         }
     }
@@ -35,7 +35,7 @@ class StrmDisconnectExper: SimpleExpression<String>() {
     }
 
     override fun get(event: Event): Array<String?> {
-        if (event is PlayerStreamingDisConnectionEvent) {
+        if (event is PlayerStreamingDisconnectionEvent) {
             return when (pattern) {
                 0 -> arrayOf(event.platform.generate())
                 else -> arrayOf()

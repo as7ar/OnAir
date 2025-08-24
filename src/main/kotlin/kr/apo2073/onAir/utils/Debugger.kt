@@ -7,10 +7,11 @@ class Debugger {
         private val plugin= OnAir.plugin
         @JvmStatic
         fun debug(string: String) {
+            plugin.reloadConfig()
             if (
                 !plugin.config.getBoolean("debug", false)
             ) return
-            plugin.logger.warning(string)
+            plugin.logger.warning("- [DEBUG] $string")
         }
     }
 }

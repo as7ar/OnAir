@@ -17,8 +17,8 @@ class StrmDonateExper: SimpleExpression<String>() {
                 StrmDonateExper::class.java,
                 String::class.java,
                 ExpressionType.PROPERTY,
-                "platform [of the stream[ing]]",
-                "[chat] user's id",
+                "platform [of [(the|a)] (stream[ing]|donat(e|ion))]",
+                "[donat(e|ion)] user['s id]",
                 "content [of donate] [message]",
                 "[donate] amount"
             )

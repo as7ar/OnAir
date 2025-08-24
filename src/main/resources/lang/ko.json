@@ -8,6 +8,7 @@
   "alert.connection.chzzk": "스트리머 &a{name}&f( {fol} 팔로워 )에 연결했습니다",
   "alert.connection.youtube": "채널 &a{name}&f( {sub} 구독자 )에 연결했습니다",
   "alert.connection.toonation": "크리에이터 &a{name}&f에 연결했습니다",
+  "alert.replaced.emoji": "&7(이모티콘)&f",
 
   "command.oa.permission.no": "&c해당 명령어를 실행할 권한이 없습니다",
   "command.oa.help": [
@@ -26,9 +27,11 @@
   "command.oa.setting": "{setting} 설정을 &a{value}&f(으)로 설정했습니다.",
   "command.oa.connection.tn.channelid": "해당 크리에이터를 찾을 수 없습니다. 채널이름을 다시 입력해주세요. &7https://toon.at/donate/(여기)",
 
+  "command.oadmin.invalid.value": "&c올바른 값을 입력하세요",
   "command.oadmin.help": [
-
+    "&l   &c관리자 &f명령어 도움말"
   ],
+  "command.oadmin.donate": "후원 이벤트 &a{amount}&f에 명령어 &6{command}&f를 설정했습니다",
 
   "command.got.problems": "&c해당 명령어를 처리하는데 문제가 발생했습니다. {err}",
   "plugin.disabled.player": "&c플러그인 비활성화로 인해 방송 연동이 자동으로 연동 해제되었습니다. 서버 재시작일 경우 다시 연결해주세요",

@@ -17,7 +17,7 @@ class StrmConnectExper: SimpleExpression<String>() {
                 StrmConnectExper::class.java,
                 String::class.java,
                 ExpressionType.PROPERTY,
-                "platform [of the stream[ing]]",
+                "platform [of [(the|a)] connection]",
                 "(the|a) (channel|stream[ing])'s (channel id|channel key|key|id)",
                 "(the|a) (channel|stream[ing])'s (chennel display|display)"
             )

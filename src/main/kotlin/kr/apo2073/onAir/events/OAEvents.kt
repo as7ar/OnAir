@@ -22,7 +22,7 @@ class PlayerStreamingConnectionEvent(
     }
 }
 
-class PlayerStreamingDisConnectionEvent(
+class PlayerStreamingDisconnectionEvent(
     player: Player,
     val platform: Platforms,
 ): PlayerEvent(player) {

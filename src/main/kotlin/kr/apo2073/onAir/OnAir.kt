@@ -9,7 +9,7 @@ import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.skript.SkriptStreamingChatEvent
 import kr.apo2073.onAir.events.skript.SkriptStreamingConnectionEvent
-import kr.apo2073.onAir.events.skript.SkriptStreamingDisConnectionEvent
+import kr.apo2073.onAir.events.skript.SkriptStreamingDisconnectionEvent
 import kr.apo2073.onAir.events.skript.SkriptStreamingDonateEvent
 import kr.apo2073.onAir.events.skript.exper.StrmChatExper
 import kr.apo2073.onAir.events.skript.exper.StrmConnectExper
@@ -103,7 +103,7 @@ class OnAir : JavaPlugin() {
             addon = Skript.registerAddon(this)
 
             SkriptStreamingConnectionEvent()
-            SkriptStreamingDisConnectionEvent()
+            SkriptStreamingDisconnectionEvent()
             SkriptStreamingChatEvent()
             SkriptStreamingDonateEvent()
 

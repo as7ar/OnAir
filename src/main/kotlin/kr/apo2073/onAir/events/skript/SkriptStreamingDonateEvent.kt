@@ -14,7 +14,7 @@ class SkriptStreamingDonateEvent: SkriptEvent() {
                 "SkriptStreamingDonateEvent",
                 SkriptStreamingDonateEvent::class.java,
                 StreamingDonateEvent::class.java,
-                "(streaming|stream) donate"
+                "(streaming|stream) donat(e|ion)"
             )
         }
     }

@@ -17,8 +17,8 @@ class StrmChatExper: SimpleExpression<String>() {
                 StrmChatExper::class.java,
                 String::class.java,
                 ExpressionType.PROPERTY,
-                "platform [of the stream[ing]]",
-                "[chat] user's id",
+                "platform [of [(the|a)] (stream[ing]|chat)]",
+                "[chat] user['s id]",
                 "content [of the chat]"
             )
         }

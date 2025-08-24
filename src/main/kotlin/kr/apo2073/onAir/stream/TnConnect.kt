@@ -5,6 +5,7 @@ import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.listeners.ToonationListener
+import kr.apo2073.onAir.utils.Temp
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
 import kr.apo2073.tnliv.Toonation
@@ -39,9 +40,16 @@ class TnConnect {
                 }
                 Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
                     try {
-                        val streamer=Toonation.getStreamerAsync(channelId).get()
-                        var channel=streamer.nickname
-                        if (streamer==null) channel=null
+                        var channel: String?
+
+                        if (Temp.getTempAsString(channelId)==null) {
+                            val streamer = Toonation.getStreamerAsync(channelId).get()
+                            channel = streamer.nickname
+                            if (streamer == null) channel = null
+                            else Temp.addTemp(channelId  , channel)
+                        } else {
+                            channel= Temp.getTempAsString(channelId)
+                        }
 
                         Bukkit.getScheduler().runTask(plugin, Runnable {
                             if (channel==null) {

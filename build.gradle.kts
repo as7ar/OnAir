@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "kr.apo2073"
-version = "1.1-ALPHA"
+version = "1.2-BETA"
 
 repositories {
     mavenCentral()
@@ -23,7 +23,7 @@ dependencies {
 
     compileOnly("net.wesjd:anvilgui:1.10.6-SNAPSHOT")
     compileOnly("org.bstats","bstats-bukkit","3.1.0")
-    compileOnly("com.github.SkriptLang:Skript:2.11.2")
+    compileOnly("com.github.SkriptLang:Skript:2.12.1")
     compileOnly("me.clip:placeholderapi:2.11.6")
 
     implementation(files("libs/chzzk4j-0.1.1.jar"))

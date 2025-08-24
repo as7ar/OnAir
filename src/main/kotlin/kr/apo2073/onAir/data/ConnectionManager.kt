@@ -3,7 +3,7 @@ package kr.apo2073.onAir.data
 import kr.apo2073.onAir.OnAir
 import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.PlayerStreamingConnectionEvent
-import kr.apo2073.onAir.events.PlayerStreamingDisConnectionEvent
+import kr.apo2073.onAir.events.PlayerStreamingDisconnectionEvent
 import kr.apo2073.onAir.stream.ChkConnect
 import kr.apo2073.onAir.stream.TnConnect
 import kr.apo2073.onAir.stream.YtConnect
@@ -80,7 +80,7 @@ object ConnectionManager {
                 Platforms.TOONATION -> TnConnect.disconnect(player)
                 else-> return
             }
-            val suc= PlayerStreamingDisConnectionEvent(player, platforms).callEvent()
+            val suc= PlayerStreamingDisconnectionEvent(player, platforms).callEvent()
             if (!suc) plugin.server.logger.warning(translate(
                 "system.boom",
                 mapOf("err" to "calling event failure (PlayerStreamingDisConnectionEvent)")

@@ -4,16 +4,16 @@ import ch.njol.skript.Skript
 import ch.njol.skript.lang.Literal
 import ch.njol.skript.lang.SkriptEvent
 import ch.njol.skript.lang.SkriptParser
-import kr.apo2073.onAir.events.PlayerStreamingDisConnectionEvent
+import kr.apo2073.onAir.events.PlayerStreamingDisconnectionEvent
 import org.bukkit.event.Event
 
-class SkriptStreamingDisConnectionEvent: SkriptEvent() {
+class SkriptStreamingDisconnectionEvent: SkriptEvent() {
     companion object {
         init {
             Skript.registerEvent(
                 "SkriptStreamingConnectionEvent",
-                SkriptStreamingDisConnectionEvent::class.java,
-                PlayerStreamingDisConnectionEvent::class.java,
+                SkriptStreamingDisconnectionEvent::class.java,
+                PlayerStreamingDisconnectionEvent::class.java,
                 "(streaming|stream) disconnection"
             )
         }
@@ -24,7 +24,7 @@ class SkriptStreamingDisConnectionEvent: SkriptEvent() {
     }
 
     override fun check(event: Event): Boolean {
-        return event is PlayerStreamingDisConnectionEvent
+        return event is PlayerStreamingDisconnectionEvent
     }
 
     override fun toString(event: Event?, debug: Boolean): String {

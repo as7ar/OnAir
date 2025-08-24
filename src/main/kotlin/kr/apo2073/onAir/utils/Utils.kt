@@ -6,6 +6,7 @@ import kr.apo2073.onAir.OnAir
 import kr.apo2073.onAir.enums.Platforms
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.io.File
 import java.util.*
@@ -15,7 +16,13 @@ object Utils {
     val prefix = MiniMessage.miniMessage().deserialize("<b><gradient:#E7B0B0:#BA4242>[ OnAir ]</gradient></b> ")
     fun Player.sendMessage(string: String, boolean: Boolean=true) {
         this.sendMessage(
-            if (boolean) prefix.append(string.toComponent())
+            if (boolean) prefix.append(
+                try {
+                    string.toMiniMessage()
+                } catch (e: Exception) {
+                    string.toComponent()
+                }
+            )
             else string.toComponent()
         )
     }
@@ -102,6 +109,14 @@ object Utils {
         result += boxed(info)
         result += topBottom
         return result.toTypedArray()
+    }
+
+    infix fun asynchronously(runnable: Runnable) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable)
+    }
+
+    infix fun runTask(runnable: Runnable) {
+        Bukkit.getScheduler().runTask(plugin, runnable)
     }
 }
 

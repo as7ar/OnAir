@@ -10,6 +10,7 @@ import kr.apo2073.onAir.events.StreamingDonateEvent
 import kr.apo2073.onAir.utils.Debugger
 import kr.apo2073.onAir.utils.Utils.generate
 import kr.apo2073.onAir.utils.Utils.performCommandAsOP
+import kr.apo2073.onAir.utils.Utils.runTask
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.toUUID
 import kr.apo2073.onAir.utils.Utils.translate
@@ -24,8 +25,8 @@ class YoutubeListener: YouTubeEventListener {
     private val plugin = OnAir.plugin
 
     override fun onChat(chat: Chatting) {
+        plugin.reloadConfig()
         val cic= ConnectionManager.infoConfig
-        Debugger.debug("Youtube Chat Event Called")
         val uuid=cic.getString(chat.videoId)?.toUUID() ?: run {
             plugin.logger.warning(translate(
                 "system.boom",
@@ -41,6 +42,17 @@ class YoutubeListener: YouTubeEventListener {
             return
         }
         Debugger.debug("Player loaded: ${player.name}")
+
+        runTask {
+            Debugger.debug("Calling StreamingChatEvent")
+            val suc= StreamingChatEvent(
+                player, Platforms.YOUTUBE,
+                chat.author().name,
+                chat.message
+            ).callEvent()
+            if (!suc) plugin.logger.warning("StreamingChatEvent를 처리하던 중 오류가 발생했습니다")
+        }
+
         try {
             if (UserData(player).getChat().not()) {
                 Debugger.debug("Chatting not allowed")
@@ -53,7 +65,6 @@ class YoutubeListener: YouTubeEventListener {
 
             val channelName=UserData(player).getConfig().getString("user.connection.youtube.display") ?: return
 
-            Debugger.debug("Formatting chatting")
             val userData= UserData(player)
             val format=(plugin.config.getString("채팅.형식")
                 ?.replace("{msg}", chat.message)
@@ -64,24 +75,8 @@ class YoutubeListener: YouTubeEventListener {
                 ?.trim() ?: "{nick}: {msg}").toComponent()
 
             val target=userData.getMessageTarget()
-            if (target== MessageTarget.STREAMER) {
-                Debugger.debug("Sending message to streamer")
-                player.sendMessage(format)
-            } else {
-                Debugger.debug("Broadcasting message")
-                Bukkit.broadcast(format)
-            }
-
-            Bukkit.getScheduler().runTask(plugin, Runnable {
-                Debugger.debug("Calling StreamingChatEvent")
-                val suc= StreamingChatEvent(
-                    player, Platforms.YOUTUBE,
-                    chat.author().name,
-                    chat.message
-                ).callEvent()
-                if (!suc) plugin.logger.warning("StreamingChatEvent를 처리하던 중 오류가 발생했습니다")
-            })
-
+            if (target== MessageTarget.STREAMER) player.sendMessage(format)
+            else Bukkit.broadcast(format)
         } catch (e: Exception) {
             player.sendMessage(translate("system.boom"), true)
             e.printStackTrace()
@@ -103,6 +98,17 @@ class YoutubeListener: YouTubeEventListener {
                 mapOf("err" to "current donator's player is not exist or offline")
             ))
             return
+        }
+
+        plugin.reloadConfig()
+        runTask {
+            val suc= StreamingDonateEvent(
+                player, Platforms.YOUTUBE,
+                superChat.author().name,
+                superChat.message,
+                superChat.amount.toDouble()
+            ).callEvent()
+            if (!suc) plugin.logger.warning("StreamingDonateEvent를 처리하던 중 오류가 발생했습니다")
         }
 
         try {
@@ -142,22 +148,12 @@ class YoutubeListener: YouTubeEventListener {
                 Bukkit.broadcast(format)
             }
 
-            val ec=(plugin.config.getString("${superChat.amount}") ?: return)
+            val ec=(plugin.config.getString("후원이벤트.${superChat.amount}") ?: return)
                 .replace("{player}", player.name)
                 .replace("{paid}", superChat.amount)
                 .replace("{nick}", superChat.author().name)
                 .replace("{msg}", superChat.message)
             player.performCommandAsOP(ec)
-
-            Bukkit.getScheduler().runTask(plugin, Runnable {
-                val suc= StreamingDonateEvent(
-                    player, Platforms.YOUTUBE,
-                    superChat.author().name,
-                    superChat.message,
-                    superChat.amount.toDouble()
-                ).callEvent()
-                if (!suc) plugin.logger.warning("StreamingDonateEvent를 처리하던 중 오류가 발생했습니다")
-            })
         } catch (e: Exception) {
             player.sendMessage(translate("system.boom"), true)
             e.printStackTrace()

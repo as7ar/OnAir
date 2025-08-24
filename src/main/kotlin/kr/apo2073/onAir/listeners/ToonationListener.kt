@@ -20,6 +20,7 @@ import org.bukkit.Bukkit
 class ToonationListener: ToonationEventListener {
     private val plugin= OnAir.plugin
     override fun onDonation(donation: Donation) {
+        plugin.reloadConfig()
         val cic= ConnectionManager.infoConfig
         val uuid=cic.getString(donation.alertBox)?.toUUID() ?: run {
             plugin.logger.warning(translate(
@@ -35,6 +36,14 @@ class ToonationListener: ToonationEventListener {
             ))
             return
         }
+
+        val suc= StreamingDonateEvent(
+            player, Platforms.TOONATION,
+            donation.nickName,
+            donation.comment,
+            donation.amount.toDouble()
+        ).callEvent()
+        if (!suc) plugin.logger.warning("StreamingDonateEvent를 처리하던 중 오류가 발생했습니다")
 
         try {
             val userData= UserData(player)
@@ -60,33 +69,20 @@ class ToonationListener: ToonationEventListener {
                 ?.replace("{paid}", donation.amount.toString())
                 ?.trim() ?: "{nick}: {msg}").toComponent()
 
-            if (showTitle) {
-                player.showTitle(
-                    Title.title("".toComponent(), title)
-                )
-            }
+            if (showTitle) player.showTitle(
+                Title.title("".toComponent(), title)
+            )
 
             val target=userData.getMessageTarget()
-            if (target== MessageTarget.STREAMER) {
-                player.sendMessage(format)
-            } else {
-                Bukkit.broadcast(format)
-            }
+            if (target== MessageTarget.STREAMER) player.sendMessage(format)
+            else Bukkit.broadcast(format)
 
-            val ec=(plugin.config.getString("${donation.amount.toInt()}") ?: return)
+            val ec=(plugin.config.getString("후원이벤트.${donation.amount.toInt()}") ?: return)
                 .replace("{player}", player.name)
                 .replace("{nick}", donation.nickName.replace("\"", ""))
                 .replace("{paid}", donation.amount.toString())
                 .replace("{msg}", donation.comment.replace("\"", ""))
             player.performCommandAsOP(ec)
-
-            val suc= StreamingDonateEvent(
-                player, Platforms.TOONATION,
-                donation.nickName,
-                donation.comment,
-                donation.amount.toDouble()
-            ).callEvent()
-            if (!suc) plugin.logger.warning("StreamingDonateEvent를 처리하던 중 오류가 발생했습니다")
         } catch (e: Exception) {
             player.sendMessage(translate("system.boom"), true)
             e.printStackTrace()

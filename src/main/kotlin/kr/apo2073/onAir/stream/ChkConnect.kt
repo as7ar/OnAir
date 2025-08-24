@@ -7,6 +7,7 @@ import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.ChzzkChatEvent
 import kr.apo2073.onAir.events.ChzzkDonationEvent
 import kr.apo2073.onAir.events.ChzzkMissionDonationEvent
+import kr.apo2073.onAir.utils.Temp
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
 import org.bukkit.entity.Player
@@ -75,6 +76,7 @@ class ChkConnect {
                 val fetchChannel=OnAir.chzzkClient.fetchChannel(id)
                 val CHANNEL_NAME= fetchChannel.channelName
                 val CHANNEL_FOL= fetchChannel.followerCount.toString()
+                Temp.addTemp(id, CHANNEL_NAME)
 
                 ConnectionManager.setConfigValue(id, player.uniqueId.toString())
                 ConnectionManager.setConfigValue("${player.uniqueId}.chzzk", id)
