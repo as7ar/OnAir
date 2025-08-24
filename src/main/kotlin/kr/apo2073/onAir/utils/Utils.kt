@@ -8,7 +8,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.entity.Player
 import java.io.File
-import java.util.UUID
+import java.util.*
 
 object Utils {
     private val plugin= OnAir.plugin
@@ -45,6 +45,7 @@ object Utils {
         return Gson().fromJson(json.readText(), JsonObject::class.java)
             .get(string)?.asString ?: string
     }
+
     fun translate(key: String, placeholders: Map<String, String>): String {
         var message = translate(key)
         placeholders.forEach { (placeholder, value) ->
@@ -70,11 +71,37 @@ object Utils {
             else-> return "알 수 없음"
         }
     }
+
     fun String.toPlatform():Platforms {
         if (this.uppercase().contains("CHZZK") || this.contains("치지직")) return Platforms.CHZZK
         if (this.uppercase().contains("YOUTUBE") || this.contains("유튜브")) return Platforms.YOUTUBE
         if (this.uppercase().contains("TOONATION") || this.contains("투네이션")) return Platforms.TOONATION
         return Platforms.UNKNOWN
+    }
+
+    fun bannerGenerator(
+        artLines: List<String>,
+        version: String,
+        author: String
+    ): Array<String> {
+        val innerWidth = artLines.maxOf { it.length }
+
+        fun boxed(line: String): String =
+            "|" + line.padEnd(innerWidth, ' ') + "|"
+
+        val topBottom = "+" + "=".repeat(innerWidth) + "+"
+        val separator = "|" + "=".repeat(innerWidth) + "|"
+
+        val info = "Version: $version     author: $author"
+            .padEnd(innerWidth, ' ')
+
+        val result = mutableListOf<String>()
+        result += topBottom
+        result += artLines.map { boxed(it) }
+        result += separator
+        result += boxed(info)
+        result += topBottom
+        return result.toTypedArray()
     }
 }
 

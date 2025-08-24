@@ -21,15 +21,15 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation("net.wesjd:anvilgui:1.10.6-SNAPSHOT")
-    implementation("org.bstats","bstats-bukkit","3.1.0")
-    implementation("com.github.SkriptLang:Skript:2.11.2")
-    implementation("me.clip:placeholderapi:2.11.6")
+    compileOnly("net.wesjd:anvilgui:1.10.6-SNAPSHOT")
+    compileOnly("org.bstats","bstats-bukkit","3.1.0")
+    compileOnly("com.github.SkriptLang:Skript:2.11.2")
+    compileOnly("me.clip:placeholderapi:2.11.6")
 
     implementation(files("libs/chzzk4j-0.1.1.jar"))
     implementation(files("libs/ToontaionLiv-1.2.2.jar"))
     implementation(files("libs/AfreecatvLib-master-1.0.3.jar"))
-    implementation(files("libs/YouTubeLiv-1.1.1.jar"))
+    implementation(files("libs/YouTubeLiv-1.1.2.jar"))
     implementation("com.github.twitch4j:twitch4j:1.25.0")
 
     implementation("org.slf4j:slf4j-api:2.0.7")
@@ -82,7 +82,7 @@ tasks.shadowJar {
     archiveClassifier.set("all")
 //    destinationDirectory = file("C:\\Users\\PC\\Desktop\\Test_Server\\21.1\\plugins")
 //    destinationDirectory= file("C:\\Users\\이태수\\Desktop\\server\\plugins")
-//    destinationDirectory=file("C:\\Users\\PC\\Desktop\\projects\\OnAir\\run\\plugins")
+    destinationDirectory=file("C:\\Users\\PC\\Desktop\\projects\\OnAir\\run\\plugins")
     mergeServiceFiles()
     dependencies {
         include(dependency("net.wesjd:anvilgui:1.10.6-SNAPSHOT"))

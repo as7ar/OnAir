@@ -12,7 +12,6 @@ import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.toUUID
 import kr.apo2073.onAir.utils.Utils.translate
 import kr.apo2073.onAir.utils.toComponent
-import kr.apo2073.tnliv.Toonation
 import kr.apo2073.tnliv.data.Donation
 import kr.apo2073.tnliv.listener.ToonationEventListener
 import net.kyori.adventure.title.Title

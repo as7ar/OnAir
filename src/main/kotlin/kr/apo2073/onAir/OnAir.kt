@@ -17,6 +17,8 @@ import kr.apo2073.onAir.events.skript.exper.StrmDisconnectExper
 import kr.apo2073.onAir.events.skript.exper.StrmDonateExper
 import kr.apo2073.onAir.listeners.BukkitListener
 import kr.apo2073.onAir.listeners.ChzzkListener
+import kr.apo2073.onAir.utils.Debugger
+import kr.apo2073.onAir.utils.Utils.bannerGenerator
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
 import kr.apo2073.onAir.utils.chzzk.ChzzkData
@@ -50,6 +52,9 @@ class OnAir : JavaPlugin() {
         // ========================[ Early Base Setting ]=========================
         plugin =this
 
+        Debugger.debug("Loading Plugin")
+
+        Debugger.debug("saving default file")
         saveDefaultConfig()
         saveResource("lang/ko.json", true)
 
@@ -63,10 +68,11 @@ class OnAir : JavaPlugin() {
         // ========================[ Default Setting ]=========================
 
         chzzkData =ChzzkData()
-        chzzkData.setClientKey(
-            config.getString("chzzk.client.id") ?: "",
-            config.getString("chzzk.client.secret") ?: ""
-        )
+        val clientApi=config.getString("chzzk.client.id") ?: ""
+        val clientSecret=config.getString("chzzk.client.secret") ?: ""
+
+        Debugger.debug("setting Chzzk Client (api: ${clientApi}, secret: $clientSecret )")
+        chzzkData.setClientKey(clientApi, clientSecret)
         val key= chzzkData.getClientKey()
         val data= chzzkData
         setAut()
@@ -80,14 +86,19 @@ class OnAir : JavaPlugin() {
 
         // ========================[ Listener ]=========================
 
+        Debugger.debug("Registering Events")
         server.pluginManager.registerEvents(ChzzkListener(), this)
         server.pluginManager.registerEvents(BukkitListener(), this)
 
         // ========================[ Command ]=========================
+
+        Debugger.debug("Registering Command")
         OACommand()
         OAdminCommand()
 
         // ========================[ Depends ]=========================
+
+        Debugger.debug("Trying to register Skript addon")
         if (server.pluginManager.getPlugin("Skript")!=null) {
             addon = Skript.registerAddon(this)
 
@@ -100,7 +111,12 @@ class OnAir : JavaPlugin() {
             StrmDisconnectExper()
             StrmChatExper()
             StrmDonateExper()
-        }
+
+            Debugger.debug("Succeed to register Skript Addon")
+        } else Debugger.debug("Failed to register Skript Addon")
+
+        // ========================[ Loading Plugin Suc ]=========================
+        printLogo()
     }
 
     private fun setAut() { reloadConfig()
@@ -115,28 +131,43 @@ class OnAir : JavaPlugin() {
         val naverId=config.getString("chzzk.naver.id") ?: ""
         val naverPw=config.getString("chzzk.naver.pw") ?: ""
 
-        if (apiToken!="" && apiRefresh!="") {
-            data.addAdapter(ChzzkSimpleUserLoginAdapter(
-                    apiToken, apiRefresh
-            ))
-        }
-        if (cookieSes != "" && cookieAut != "") {
-            data.addAdapter(ChzzkLegacyLoginAdapter(
-                    cookieAut, cookieSes
-            ))
-        }
-        if (naverId!="" && naverPw!="") {
-            data.addAdapter(NaverAutologinAdapter(
-                    naverId, naverPw
-            ))
-        }
+        if (apiToken!="" && apiRefresh!="") data.addAdapter(ChzzkSimpleUserLoginAdapter(
+            apiToken, apiRefresh
+        ))
+        if (cookieSes != "" && cookieAut != "") data.addAdapter(ChzzkLegacyLoginAdapter(
+            cookieAut, cookieSes
+        ))
+        if (naverId!="" && naverPw!="") data.addAdapter(NaverAutologinAdapter(
+            naverId, naverPw
+        ))
+    }
+
+    private fun printLogo() {
+        val art = listOf(
+            " ██████╗ ███╗   ██╗ █████╗ ██╗██████╗ ",
+            "██╔═══██╗████╗  ██║██╔══██╗██║██╔══██╗",
+            "██║   ██║██╔██╗ ██║███████║██║██████╔╝",
+            "██║   ██║██║╚██╗██║██╔══██║██║██╔══██╗",
+            "╚██████╔╝██║ ╚████║██║  ██║██║██║  ██║",
+            " ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝"
+        )
+
+        val banner = bannerGenerator(
+            art,
+            version = pluginMeta.version,
+            author = pluginMeta.authors.joinToString(", ")
+        )
+
+        banner.forEach { server.logger.info(it) }
     }
 
     override fun onDisable() {
         server.onlinePlayers.forEach { player->
+            Debugger.debug("Trying to disable plugin from Player: ${player.name}")
             player.sendMessage(translate("plugin.disabled.player"), true)
             val userData= UserData(player)
             for (platforms in Platforms.entries) {
+                Debugger.debug("Disconnecting Platform: ${platforms.name}")
                 ConnectionManager.Manager(player).disconnect(platforms)
             }
             userData.getFile().delete()
