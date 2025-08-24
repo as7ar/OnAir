@@ -8,6 +8,7 @@ import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.StreamingDonateEvent
 import kr.apo2073.onAir.utils.Utils.generate
 import kr.apo2073.onAir.utils.Utils.performCommandAsOP
+import kr.apo2073.onAir.utils.Utils.runTask
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.toUUID
 import kr.apo2073.onAir.utils.Utils.translate
@@ -37,13 +38,15 @@ class ToonationListener: ToonationEventListener {
             return
         }
 
-        val suc= StreamingDonateEvent(
-            player, Platforms.TOONATION,
-            donation.nickName,
-            donation.comment,
-            donation.amount.toDouble()
-        ).callEvent()
-        if (!suc) plugin.logger.warning("StreamingDonateEvent를 처리하던 중 오류가 발생했습니다")
+        runTask {
+            val suc= StreamingDonateEvent(
+                player, Platforms.TOONATION,
+                donation.nickName,
+                donation.comment,
+                donation.amount.toDouble()
+            ).callEvent()
+            if (!suc) plugin.logger.warning("StreamingDonateEvent를 처리하던 중 오류가 발생했습니다")
+        }
 
         try {
             val userData= UserData(player)
@@ -69,20 +72,22 @@ class ToonationListener: ToonationEventListener {
                 ?.replace("{paid}", donation.amount.toString())
                 ?.trim() ?: "{nick}: {msg}").toComponent()
 
-            if (showTitle) player.showTitle(
-                Title.title("".toComponent(), title)
-            )
+            runTask {
+                if (showTitle) player.showTitle(
+                    Title.title("".toComponent(), title)
+                )
 
-            val target=userData.getMessageTarget()
-            if (target== MessageTarget.STREAMER) player.sendMessage(format)
-            else Bukkit.broadcast(format)
+                val target=userData.getMessageTarget()
+                if (target== MessageTarget.STREAMER) player.sendMessage(format)
+                else Bukkit.broadcast(format)
 
-            val ec=(plugin.config.getString("후원이벤트.${donation.amount.toInt()}") ?: return)
-                .replace("{player}", player.name)
-                .replace("{nick}", donation.nickName.replace("\"", ""))
-                .replace("{paid}", donation.amount.toString())
-                .replace("{msg}", donation.comment.replace("\"", ""))
-            player.performCommandAsOP(ec)
+                val ec=(plugin.config.getString("후원이벤트.${donation.amount.toInt()}") ?: return@runTask)
+                    .replace("{player}", player.name)
+                    .replace("{nick}", donation.nickName.replace("\"", ""))
+                    .replace("{paid}", donation.amount.toString())
+                    .replace("{msg}", donation.comment.replace("\"", ""))
+                player.performCommandAsOP(ec)
+            }
         } catch (e: Exception) {
             player.sendMessage(translate("system.boom"), true)
             e.printStackTrace()

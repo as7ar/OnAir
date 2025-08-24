@@ -21,7 +21,8 @@
     "&l  &6?&7) &f채널 ID",
     "&l↪ • &a 치지직&7(채널): &rhttps://chzzk.naver.com/(여기)",
     "&l↪ • &c 유튜브&7(라이브 영상): &rhttps://www.youtube.com/watch?v=(여기)",
-    "&l↪ • &9 투네이션&7(통합 알림 창): &rhttps://toon.at/widget/alertbox/(여기)"
+    "&l↪ • &9 투네이션&7(통합 알림 창): &rhttps://toon.at/widget/alertbox/(여기)",
+    "&l↪       * 투네이션의 채널이름은 https://toon.at/donate/(여기) 로 해주세요"
   ],
   "command.oa.connection.list": "&7[ {connection ? '&a연결됨&r' : '&7신호 없음&r'} &7] {platform} &7- &f{connection ? '{connection-info}' : '&7연결 안 됨'}",
   "command.oa.setting": "{setting} 설정을 &a{value}&f(으)로 설정했습니다.",

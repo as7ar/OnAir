@@ -81,7 +81,7 @@ class OACommand: Command(
                 "치지직","유튜브","투네이션",
                 "정보", "설정", "도움말"
             ))
-            if (sender.hasPermission("apo.oa.donate")) tab.add("후원")
+//            if (sender.hasPermission("apo.oa.donate")) tab.add("후원")
         }
 
         if (args.size==2) {
