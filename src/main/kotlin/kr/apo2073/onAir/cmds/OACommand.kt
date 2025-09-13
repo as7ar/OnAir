@@ -58,13 +58,17 @@ class OACommand: Command(
             val plat=args[0].toPlatform()
             val type=args[1] // 등록 / 등록해제
 
-            if (type=="등록" && args.size>=4) {
-                val channelName=args[2]
-                val id=args[3]
-                ConnectionManager.Manager(sender).connect(plat, channelName, id)
-            } else if (type=="등록해제") {
-                ConnectionManager.Manager(sender).disconnect(plat)
-            } else OAHandler(sender).help()
+            when (type) {
+                "등록" if args.size >= 4 -> {
+                    val channelName = args[2]
+                    val id = args[3]
+                    ConnectionManager.Manager(sender).connect(plat, channelName, id)
+                }
+                "등록해제" -> {
+                    ConnectionManager.Manager(sender).disconnect(plat)
+                }
+                else -> OAHandler(sender).help()
+            }
             return true
         }
         OAHandler(sender).help()
