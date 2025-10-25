@@ -40,6 +40,17 @@ object ConnectionManager {
         return true
     }
 
+    fun isConnected(player: Player, platforms: Platforms): Boolean {
+        val userData= UserData(player)
+        val config=userData.getConfig()
+        return when(platforms) {
+            Platforms.CHZZK -> config.getBoolean("user.connection.chzzk.isConnected", false)
+            Platforms.YOUTUBE -> config.getBoolean("user.connection.youtube.isConnected", false)
+            Platforms.TOONATION -> config.getBoolean("user.connection.toonation.isConnected", false)
+            else-> false
+        }
+    }
+
     class Manager(private val player:Player) {
         private val plugin=OnAir.plugin
         private val userData=UserData(player)

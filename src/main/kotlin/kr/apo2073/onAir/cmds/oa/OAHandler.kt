@@ -58,7 +58,8 @@ class OAHandler(private val player: Player) {
             val info=ConnectionManager.infoConfig.getString("${player.strUUID()}.${plat.name.lowercase()}")
                 .also { println("Connection info: ${it ?: "NULL"}") }
             cnm = cnm.replace("{platform}", plat.generate())
-                .replace("{connection-info}",
+                .replace(
+                    "{connection-info}",
                     info ?: "(알 수 없음)"
                 )
 
