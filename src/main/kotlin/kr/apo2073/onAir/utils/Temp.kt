@@ -1,14 +1,14 @@
 package kr.apo2073.onAir.utils
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import kr.apo2073.onAir.OnAir
 import java.io.File
+import java.util.concurrent.ConcurrentHashMap
 
 object Temp {
     private val plugin = OnAir.plugin
-    private val temperature = mutableMapOf<String, Any>()
+    private val temperature = ConcurrentHashMap<String, Any>()
     private val file = File(plugin.dataFolder, "temp")
     private val gson =  GsonBuilder().setPrettyPrinting().create()
 
@@ -33,7 +33,8 @@ object Temp {
     private fun save() {
         try {
             if (!plugin.dataFolder.exists()) plugin.dataFolder.mkdirs()
-            file.writeText(gson.toJson(temperature))
+            val copy = HashMap(temperature)
+            file.writeText(gson.toJson(copy))
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -50,7 +50,7 @@ object Utils {
         val lang=plugin.config.getString("language") ?: "ko"
         val json= File("${plugin.dataFolder}/lang", "${lang}.json")
         return Gson().fromJson(json.readText(), JsonObject::class.java)
-            .get(string)?.asString ?: string
+            .get(string)?.asString?.replace("{plugin}", plugin.pluginMeta.name) ?: string
     }
 
     fun translate(key: String, placeholders: Map<String, String>): String {

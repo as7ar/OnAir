@@ -1,8 +1,5 @@
-package kr.apo2073.onAir.utils.soop
+package kr.apo2073.onAir.soop
 
-import kr.apo2073.onAir.soop.SoopLiveInfo
-import kr.apo2073.onAir.soop.SoopPacket
-import kr.apo2073.onAir.soop.SoopUser
 import kr.apo2073.onAir.soop.listener.SoopListener
 import okhttp3.*
 import java.util.concurrent.TimeUnit

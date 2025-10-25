@@ -28,7 +28,7 @@ class YtConnect {
                 Debugger.debug("First connect? ${config.getBoolean("user.connection.youtube.first")}")
 
                 val builder = YouTubeBuilder()
-                    .setApiKey("AIzaSyB9OU6s_oA_6Hi6hW1zTyW37Rmak33F2aM")
+                    .setApiKey(OnAir.plugin.config.getString("youtube.key"))
                     .setVideoId(id)
 
                 if (first) builder.addListener(YoutubeListener())

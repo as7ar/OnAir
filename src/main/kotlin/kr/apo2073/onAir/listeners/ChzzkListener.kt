@@ -136,6 +136,7 @@ class ChzzkListener: Listener {
         return channelName ?: OnAir.chzzkClient.fetchChannel(channelId).channelName
     }
 
+
     fun userIdToNick(string: String?): String? {
         try {
             string ?: return null
@@ -150,7 +151,6 @@ class ChzzkListener: Listener {
             return null
         }
     }
-
     private fun getPlatformName(): String {
         return Platforms.CHZZK.generate()
     }

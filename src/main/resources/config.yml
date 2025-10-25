@@ -25,7 +25,7 @@ command:
   형식: "&l[ &a{ch}&f ] &r {nick} : {msg} &7- &r&l[ {plat} ]"
 # --/후원/--
 후원:
-  형식: "&l[ &a{ch}&f ] &e{paid}원 &7>&f{nick} &d:: &b{msg} &7- &r&l&6[ 후원 ]"
+  형식: "&l[ &a{ch}&f ] &e{paid}원 &7> &f{nick} &d:: &b{msg} &7- &r&l&6[ 후원 ]"
   타이틀표시: true
   타이틀형식: "&e{paid}&f원 후원!"
 
@@ -70,6 +70,9 @@ chzzk:
   naver:
     id: ''
     pw: ''
+
+youtube:
+  key: 'AIzaSyB9OU6s_oA_6Hi6hW1zTyW37Rmak33F2aM'
 
 # ========================[ Dev ]===================================
 

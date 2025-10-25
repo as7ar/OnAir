@@ -22,8 +22,10 @@ import kr.apo2073.onAir.utils.Utils.bannerGenerator
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
 import kr.apo2073.onAir.utils.chzzk.ChzzkData
+import kr.apo2073.onAir.utils.toMiniMessage
 import kr.apo2073.tnliv.Toonation
 import kr.apo2073.ytliv.Youtube
+import okio.FileNotFoundException
 import org.bukkit.plugin.java.JavaPlugin
 import xyz.r2turntrue.chzzk4j.ChzzkClient
 import xyz.r2turntrue.chzzk4j.ChzzkClientBuilder
@@ -158,20 +160,25 @@ class OnAir : JavaPlugin() {
             author = pluginMeta.authors.joinToString(", ")
         )
 
-        banner.forEach { server.logger.info(it) }
+        banner.forEach { server.consoleSender.sendMessage(it.toMiniMessage()) }
     }
 
     override fun onDisable() {
-        server.onlinePlayers.forEach { player->
-            Debugger.debug("Trying to disable plugin from Player: ${player.name}")
-            player.sendMessage(translate("plugin.disabled.player"), true)
-            val userData= UserData(player)
-            for (platforms in Platforms.entries) {
-                Debugger.debug("Disconnecting Platform: ${platforms.name}")
-                ConnectionManager.Manager(player).disconnect(platforms)
+        try {
+            server.onlinePlayers.forEach { player->
+                Debugger.debug("Trying to disable plugin from Player: ${player.name}")
+                player.sendMessage(translate("system.disabled.player"), true)
+                val userData= UserData(player)
+                for (platforms in Platforms.entries) {
+                    Debugger.debug("Disconnecting Platform: ${platforms.name}")
+                    ConnectionManager.Manager(player).disconnect(platforms)
+                }
+                userData.getFile().delete()
+                ConnectionManager.infoFile.delete()
             }
-            userData.getFile().delete()
-            ConnectionManager.infoFile.delete()
+        } catch (_: FileNotFoundException) {
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

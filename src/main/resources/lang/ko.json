@@ -10,6 +10,9 @@
   "alert.connection.toonation": "크리에이터 &a{name}&f에 연결했습니다",
   "alert.replaced.emoji": "&7(이모티콘)&f",
 
+  "command.invalid.value": "&c올바른 값을 입력하세요",
+  "command.invalid.player": "&c해당 플레이어를 찾을 수 없습니다",
+
   "command.oa.permission.no": "&c해당 명령어를 실행할 권한이 없습니다",
   "command.oa.help": [
     "&l   명령어 도움말",
@@ -28,13 +31,27 @@
   "command.oa.setting": "{setting} 설정을 &a{value}&f(으)로 설정했습니다.",
   "command.oa.connection.tn.channelid": "해당 크리에이터를 찾을 수 없습니다. 채널이름을 다시 입력해주세요. &7https://toon.at/donate/(여기)",
 
-  "command.oadmin.invalid.value": "&c올바른 값을 입력하세요",
   "command.oadmin.help": [
-    "&l   &c관리자 &f명령어 도움말"
+    "&l   &c관리자 &f명령어 도움말",
+    "&l↪ &a/oadmin &f<플레이어> <설정> <값> [추가값] &7- 해당 플레이어의 설정을 변경합니다",
+    "&l↪ &a/oadmin &f후원 <금액> <명령어> &7- 후원 금액에 따른 실행 명령어를 설정합니다",
+    "&l↪ &a/oadmin &f후원테스트 <금액> &7- 특정 금액의 후원 테스트를 실행합니다",
+    "&l  &6설정 종류",
+    "&l↪ • &f채팅알림 &7(켜기/끄기) - 채팅 알림을 켜거나 끕니다",
+    "&l↪ • &f후원알림 &7(켜기/끄기) - 후원 알림을 켜거나 끕니다",
+    "&l↪ • &f메세지대상 &7(설정값) - 메시지 대상을 설정합니다",
+    "&l↪ • &f채널이름 &7(치지직/유튜브/투네이션) [새채널이름] - 채널 이름을 변경합니다"
   ],
   "command.oadmin.donate": "후원 이벤트 &a{amount}&f에 명령어 &6{command}&f를 설정했습니다",
 
+  "command.oadmin.reset.check": "정말로 플러그인 ( &a{plugin}&f ) 의 모든 설정을 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다. 또한 플러그인은 비활성화되며, 서버를 재시작해야 플러그인이 재활성화 됩니다..",
+  "command.oadmin.reset.done": "&c{plugin}&f 플러그인의 모든 설정이 초기화되었습니다.",
+  "command.oadmin.reset.cancel": "&a플러그인 설정 초기화가 취소되었습니다.",
+
+  "command.check.yes": "&l&a [✔]",
+  "command.check.no": "&l&c [✘]",
   "command.got.problems": "&c해당 명령어를 처리하는데 문제가 발생했습니다. {err}",
-  "plugin.disabled.player": "&c플러그인 비활성화로 인해 방송 연동이 자동으로 연동 해제되었습니다. 서버 재시작일 경우 다시 연결해주세요",
+
+  "system.disabled.player": "&c방송 연동이 자동으로 연동 해제되었습니다. 다시 연결을 시도하십시오.",
   "system.boom": "&c플러그인 내부에서 문제가 발생했습니다. {err}"
 }

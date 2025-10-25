@@ -1,11 +1,13 @@
 plugins {
-    kotlin("jvm") version "2.2.0"
+    kotlin("jvm") version "2.2.21"
     id("com.gradleup.shadow") version "8.3.0"
     id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("java")
+    `java-library`
 }
 
 group = "kr.apo2073"
-version = "1.2-BETA"
+version = "1.2"
 
 repositories {
     mavenCentral()
@@ -15,10 +17,11 @@ repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.codemc.io/repository/maven-snapshots/")
     maven("https://repo.skriptlang.org/releases")
+    maven { url = uri("https://repo.gradle.org/gradle/repo") }
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     compileOnly("net.wesjd:anvilgui:1.10.6-SNAPSHOT")
@@ -27,9 +30,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.6")
 
     implementation(files("libs/chzzk4j-0.1.1.jar"))
-    implementation(files("libs/ToontaionLiv-1.2.2.jar"))
-    implementation(files("libs/AfreecatvLib-master-1.0.3.jar"))
-    implementation(files("libs/YouTubeLiv-1.1.2.jar"))
+//    implementation(files("libs/AfreecatvLib-master-1.0.3.jar"))
     implementation("com.github.twitch4j:twitch4j:1.25.0")
 
     implementation("org.slf4j:slf4j-api:2.0.7")
@@ -46,6 +47,10 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
+    implementation("com.google.api-client:google-api-client:1.33.0")
+    implementation("com.google.oauth-client:google-oauth-client-jetty:1.23.0")
+    implementation("com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0")
+    implementation("com.google.http-client:google-http-client-jackson2:1.39.2")
 
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
@@ -77,7 +82,9 @@ tasks.processResources {
 }
 
 tasks.shadowJar {
-    minimize()
+    minimize {
+        exclude("kr.apo2073.*")
+    }
     archiveFileName.set("onAir-${version}.jar")
     archiveClassifier.set("all")
 //    destinationDirectory = file("C:\\Users\\PC\\Desktop\\Test_Server\\21.1\\plugins")
@@ -86,8 +93,8 @@ tasks.shadowJar {
     mergeServiceFiles()
     dependencies {
         include(dependency("net.wesjd:anvilgui:1.10.6-SNAPSHOT"))
-        include(dependency(files("libs/AfreecatvLib-master-1.0.3.jar")))
-        include(dependency(files("libs/ToontaionLiv-1.2.2.jar")))
+//        include(dependency(files("libs/AfreecatvLib-master-1.0.3.jar")))
+//        include(dependency(files("libs/ToontaionLiv-1.2.2.jar")))
         include(dependency(files("libs/chzzk4j-0.1.1.jar")))
     }
 }

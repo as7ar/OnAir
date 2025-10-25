@@ -1,7 +1,6 @@
 package kr.apo2073.onAir.soop
 
 import kr.apo2073.onAir.soop.listener.SoopListener
-import kr.apo2073.onAir.utils.soop.SoopWebSocket
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import java.net.URI
@@ -14,10 +13,11 @@ import java.net.http.HttpResponse.BodyHandlers
 import java.nio.charset.StandardCharsets
 
 //fun main() {
-//    println(SoopAPI.isOnline("khm11903"))
-//    val info= SoopAPI.getPlayerLive("khm11903") ?: return
-//    println("wss://${info.CHDOMAIN()?.lowercase()}:${(info.CHPT()?.toInt() ?: 0)+1}/Websocket/khm11903")
-//    SoopAPI.connect("a", "khm11903", object : SoopListener {
+//    val bgid="arinbbidol"
+//    println(SoopAPI.isOnline(bgid))
+//    val info= SoopAPI.getPlayerLive(bgid) ?: return
+//    println("wss://${info.CHDOMAIN()?.lowercase()}:${(info.CHPT()?.toInt() ?: 0)+1}/Websocket/${bgid}")
+//    SoopAPI.connect("a", bgid, object : SoopListener {
 //        override fun onConnect() {
 //            println("connected")
 //        }
