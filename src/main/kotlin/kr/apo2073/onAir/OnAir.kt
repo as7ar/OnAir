@@ -17,6 +17,7 @@ import kr.apo2073.onAir.events.skript.exper.StrmDisconnectExper
 import kr.apo2073.onAir.events.skript.exper.StrmDonateExper
 import kr.apo2073.onAir.listeners.BukkitListener
 import kr.apo2073.onAir.listeners.ChzzkListener
+import kr.apo2073.onAir.papi.PlaceholderHandler
 import kr.apo2073.onAir.utils.Debugger
 import kr.apo2073.onAir.utils.Utils.bannerGenerator
 import kr.apo2073.onAir.utils.Utils.sendMessage
@@ -117,6 +118,10 @@ class OnAir : JavaPlugin() {
             Debugger.debug("Succeed to register Skript Addon")
         } else Debugger.debug("Failed to register Skript Addon")
 
+        Debugger.debug("Trying to register PlaceholderAPI expansion")
+        if (server.pluginManager.getPlugin("PlaceholderAPI")!=null) {
+            PlaceholderHandler().register()
+        }
         // ========================[ Loading Plugin Suc ]=========================
         printLogo()
     }
