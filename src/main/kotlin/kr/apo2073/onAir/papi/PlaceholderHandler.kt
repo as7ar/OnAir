@@ -3,6 +3,7 @@ package kr.apo2073.onAir.papi
 import kr.apo2073.onAir.OnAir
 import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.utils.Streamer
+import kr.apo2073.onAir.utils.Utils.toPlatform
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.entity.Player
 
@@ -17,16 +18,19 @@ class PlaceholderHandler: PlaceholderExpansion() {
         if (player==null) return null
         val streamer= Streamer(player)
         val userData=streamer.getUserdata()
+
         if (params=="connection") {
             return userData.getConnections().joinToString(",") { it.name }
         }
+
         if (params.contains("check_connection_")) {
             val id=params.replace("check_connection_", "")
             return ConnectionManager.infoConfig.getString(id) ?: "false"
         }
-        // 플랫폼별 키 가져오기
+
         if (params.matches(Regex("(youtube|toonation|chzzk|twitch)_key"))) {
-            val platform = params.replace("_key", "")
+            val platform = params.replace("_key", "").toPlatform()
+            return userData.getChannelData(platform).id
         }
 
         return params

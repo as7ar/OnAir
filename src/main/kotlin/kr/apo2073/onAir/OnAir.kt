@@ -112,15 +112,7 @@ class OnAir : JavaPlugin() {
         if (server.pluginManager.getPlugin("Skript")!=null) {
             addon = Skript.registerAddon(this)
 
-            SkriptStreamingConnectionEvent()
-            SkriptStreamingDisconnectionEvent()
-            SkriptStreamingChatEvent()
-            SkriptStreamingDonateEvent()
-
-            StrmConnectExper()
-            StrmDisconnectExper()
-            StrmChatExper()
-            StrmDonateExper()
+            addon.loadClasses("kr.apo2073.onAir.events.skript")
 
             Debugger.debug("Succeed to register Skript Addon")
         } else Debugger.debug("Failed to register Skript Addon")
