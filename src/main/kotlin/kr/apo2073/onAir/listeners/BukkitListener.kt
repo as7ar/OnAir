@@ -1,6 +1,6 @@
 package kr.apo2073.onAir.listeners
 
-import kr.apo2073.onAir.utils.Streamer
+import kr.apo2073.onAir.player.Streamer
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent

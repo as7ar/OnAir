@@ -6,7 +6,7 @@ authors: [ APO2073 ]
 soft-depend: [Skript, Placeholder]
 
 libraries:
-  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.0
+  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin_version}
   - com.squareup.okhttp3:okhttp:4.9.3
   - org.java-websocket:Java-WebSocket:1.5.2
   - org.jsoup:jsoup:1.15.3

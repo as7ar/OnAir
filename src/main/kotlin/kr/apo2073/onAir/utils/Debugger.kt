@@ -9,7 +9,7 @@ class Debugger {
         fun debug(string: String) {
             plugin.reloadConfig()
             if (!ConfigSet.debug) return
-            OALogger().info("[DEBUG] $string")
+            plugin.log.info("[DEBUG] $string")
         }
     }
 }

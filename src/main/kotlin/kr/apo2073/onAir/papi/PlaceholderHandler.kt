@@ -2,7 +2,7 @@ package kr.apo2073.onAir.papi
 
 import kr.apo2073.onAir.OnAir
 import kr.apo2073.onAir.data.ConnectionManager
-import kr.apo2073.onAir.utils.Streamer
+import kr.apo2073.onAir.player.Streamer
 import kr.apo2073.onAir.utils.Utils.toPlatform
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.entity.Player

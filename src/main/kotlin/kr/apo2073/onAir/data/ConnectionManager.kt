@@ -5,6 +5,7 @@ import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.PlayerStreamingConnectionEvent
 import kr.apo2073.onAir.events.PlayerStreamingDisconnectionEvent
 import kr.apo2073.onAir.stream.ChkConnect
+import kr.apo2073.onAir.stream.SpConnect
 import kr.apo2073.onAir.stream.TnConnect
 import kr.apo2073.onAir.stream.YtConnect
 import kr.apo2073.onAir.utils.Utils.sendMessage
@@ -75,10 +76,16 @@ object ConnectionManager {
                     }.save(userData.getFile())
                     TnConnect.connect(player, id, channelName)
                 }
+                Platforms.SOOP -> {
+                    userData.getConfig().apply {
+                        set("user.connection.toonation.display", channelName)
+                    }.save(userData.getFile())
+                    SpConnect.connect(player, id)
+                }
                 else-> return
             }
             val suc= PlayerStreamingConnectionEvent(player, platforms, id, channelName).callEvent()
-            if (!suc) plugin.server.logger.warning(translate(
+            if (!suc) plugin.log.warning(translate(
                 "system.boom",
                 mapOf("err" to "calling event failure (PlayerStreamingConnectionEvent)")
             ))
@@ -89,10 +96,11 @@ object ConnectionManager {
                 Platforms.CHZZK -> ChkConnect.disconnect(player)
                 Platforms.YOUTUBE -> YtConnect.disconnect(player)
                 Platforms.TOONATION -> TnConnect.disconnect(player)
+                Platforms.SOOP -> SpConnect.disconnect(player)
                 else-> return
             }
             val suc= PlayerStreamingDisconnectionEvent(player, platforms).callEvent()
-            if (!suc) plugin.server.logger.warning(translate(
+            if (!suc) plugin.log.warning(translate(
                 "system.boom",
                 mapOf("err" to "calling event failure (PlayerStreamingDisConnectionEvent)")
             ))

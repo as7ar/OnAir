@@ -3,8 +3,8 @@ package kr.apo2073.onAir.cmds
 import kr.apo2073.onAir.OnAir
 import kr.apo2073.onAir.cmds.oa.OAHandler
 import kr.apo2073.onAir.data.UserData
+import kr.apo2073.onAir.player.Streamer
 import kr.apo2073.onAir.utils.ConfigSet
-import kr.apo2073.onAir.utils.Streamer
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.toPlatform
 import kr.apo2073.onAir.utils.Utils.translate
@@ -55,17 +55,19 @@ class OACommand: Command(
         }
 
         if (
-            arrayOf("치지직","유튜브","투네이션").contains(args[0])
+            arrayOf("치지직","유튜브","투네이션","숲","트위치").contains(args[0])
             && args.size>=2
         ) {
             val plat=args[0].toPlatform()
             val type=args[1] // ( 등록 / 등록해제 )
 
             when (type) {
-                "등록" if args.size >= 4 -> {
-                    val channelName = args[2]
-                    val id = args[3]
-                    steamer.connect(plat, channelName, id)
+                "등록"  -> {
+                    if (args.size >= 4) {
+                        val channelName = args[2]
+                        val id = args[3]
+                        steamer.connect(plat, channelName, id)
+                    }
                 }
                 "등록해제" -> steamer.disconnect(plat)
                 else -> handler.help()
@@ -82,7 +84,7 @@ class OACommand: Command(
     ): List<String> {
         val tab = mutableListOf<String>()
         if (args.size == 1) {
-            tab.addAll(arrayOf("치지직","유튜브","투네이션", "정보", "설정", "도움말"))
+            tab.addAll(arrayOf("치지직","유튜브","투네이션"/*, "숲"*/, "정보", "설정", "도움말"))
         }
 
         if (args.size == 2) {

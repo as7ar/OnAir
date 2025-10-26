@@ -37,4 +37,5 @@ object ConfigSet {
     val debug= plugin.config.getBoolean("debug", false)
     val colored= plugin.config.getBoolean("플렛폼.채색")
     val en = plugin.config.getBoolean("플렛폼.영어")
+    val balloon= plugin.config.getBoolean("soop.donation-balloon", false)
 }

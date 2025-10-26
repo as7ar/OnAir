@@ -5,18 +5,14 @@ import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.listeners.SoopListener
-import kr.apo2073.onAir.utils.Debugger
+import kr.apo2073.onAir.utils.ConfigSet
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
+import kr.apo2073.soopliv.SoopBuilder
 import kr.apo2073.soopliv.soop.SoopApi
-import kr.apo2073.soopliv.soop.SoopLiveInfo
-import kr.apo2073.soopliv.soop.SoopWebSocket
 import org.bukkit.entity.Player
-import org.java_websocket.drafts.Draft_6455
-import org.java_websocket.protocols.Protocol
-import java.util.*
 
-class SoopConnect {
+class SpConnect {
     companion object {
         private val plugin = OnAir.plugin
 
@@ -36,18 +32,13 @@ class SoopConnect {
                     return
                 }
 
-                val ws = SoopWebSocket(
-                    "wss://${liveInfo.CHDOMAIN()}:${liveInfo.CHPT()}/Websocket/${liveInfo.BJID()}",
-                    Draft_6455(
-                        emptyList(),
-                        listOf(Protocol("chat"))
-                    ),
-                    liveInfo,
-                    mapOf("nickname" to id, "tag" to player.name),
-                    OnAir.plugin.config.getBoolean("soop.poong", false),
-                    false,
-                    SoopListener()
-                )
+                val builder=SoopBuilder()
+                    .setID(id).enableBalloon(ConfigSet.balloon)
+                    .setUser(mapOf("nickname" to id, "tag" to player.name))
+
+                val ws= if (first) {
+                    builder.setListener(SoopListener()).build(ConfigSet.debug)
+                } else { builder.build(ConfigSet.debug) }
 
                 ws.connect()
                 OnAir.sp[player.uniqueId] = ws

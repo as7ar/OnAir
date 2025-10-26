@@ -56,14 +56,14 @@ public class SoopWebSocket extends WebSocketClient {
 
     private final Map<String, SoopPacket> packetMap = new HashMap<>();
 
-    public SoopWebSocket(String serverUri, Draft_6455 draft6455, SoopLiveInfo liveInfo, Map<String, String> soopUser, boolean poong, boolean isDebug , SoopEventListener listener) {
+    public SoopWebSocket(String serverUri, Draft_6455 draft6455, SoopLiveInfo liveInfo, Map<String, String> soopUser, boolean genBalloon, boolean isDebug , SoopEventListener listener) {
         super(URI.create(serverUri), draft6455);
         this.setConnectionLostTimeout(0);
         this.setSocketFactory(SSLUtils.createSSLSocketFactory());
 
         this.liveInfo = liveInfo;
         this.soopUser = soopUser;
-        this.poong = poong;
+        this.poong = genBalloon;
         this.debugger= new Debugger();
         this.debugger.isDebug=isDebug;
         this.listener = listener;

@@ -73,11 +73,15 @@ object Utils {
             }
             Platforms.TOONATION -> {
                 val platform = if (ConfigSet.en) "Toonation" else "투네이션"
-                return if (ConfigSet.colored) "§9$platform§r" else platform
+                return if (ConfigSet.colored) "§b$platform§r" else platform
             }
             Platforms.TWITCH -> {
                 val platform = if (ConfigSet.en) "Twitch" else "트위치"
                 return if (ConfigSet.colored) "§d$platform§r" else platform
+            }
+            Platforms.SOOP -> {
+                val platform = if (ConfigSet.en) "Soop" else "숲"
+                return if (ConfigSet.colored) "§9$platform§r" else platform
             }
             else-> return "알 수 없음"
         }
@@ -88,6 +92,7 @@ object Utils {
         if (this.uppercase().contains("YOUTUBE") || this.contains("유튜브")) return Platforms.YOUTUBE
         if (this.uppercase().contains("TOONATION") || this.contains("투네이션")) return Platforms.TOONATION
         if (this.uppercase().contains("TWITCH") || this.contains("트위치")) return Platforms.TWITCH
+        if (this.uppercase().contains("SOOP") || this.contains("숲")) return Platforms.SOOP
         return Platforms.UNKNOWN
     }
 

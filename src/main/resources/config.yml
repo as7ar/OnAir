@@ -83,6 +83,10 @@ twitch:
     secret: ''
   token: ''
 
+soop:
+  # 별풍선을 KRW로 변환
+  donation-balloon: false
+
 # ========================[ Dev ]===================================
 
 language: 'ko'

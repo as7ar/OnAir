@@ -35,9 +35,10 @@ class OnAir : JavaPlugin() {
     companion object {
         @JvmStatic
         lateinit var plugin: OnAir
-        lateinit var chzzkData: ChzzkData
 
+        lateinit var chzzkData: ChzzkData
         lateinit var chzzkClient: ChzzkClient
+
         lateinit var cht: MutableMap<UUID, ChzzkChat>
         lateinit var tn: MutableMap<UUID, Toonation>
         lateinit var yt:MutableMap<UUID, Youtube>
@@ -46,7 +47,7 @@ class OnAir : JavaPlugin() {
     }
 
     private lateinit var addon: SkriptAddon
-    private val log= OALogger()
+    val log= OALogger()
 
     override fun onLoad() {
         // ========================[ Early Base Setting ]=========================
@@ -155,7 +156,9 @@ class OnAir : JavaPlugin() {
             author = pluginMeta.authors.joinToString(", ")
         )
 
-        banner.forEach { server.consoleSender.sendMessage("<gradient:#E7B0B0:#BA4242>${it}</gradient>".toMiniMessage()) }
+        banner.forEach { server.consoleSender.sendMessage(
+            "<gradient:#E7B0B0:#BA4242>${it}</gradient>".toMiniMessage()
+        ) }
     }
 
     override fun onDisable() {
