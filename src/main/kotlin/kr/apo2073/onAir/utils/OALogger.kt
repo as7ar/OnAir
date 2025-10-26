@@ -6,7 +6,7 @@ import org.bukkit.Bukkit
 
 class OALogger {
     private fun format(color: String, message: String): Component {
-        return "$prefix <#E06B80>></#E06B80> <$color>$message</$color>".toMiniMessage()
+        return prefix.append("<#E06B80>></#E06B80> <$color>$message</$color>".toMiniMessage())
     }
 
     fun info(string: String) = send("white", string)

@@ -5,7 +5,7 @@ public class Debugger {
     public Debugger(boolean isDebug) {
         this.isDebug=isDebug;
     }
-    public void debug(String message) {
+    public static void debug(String message) {
         System.out.println(message);
     }
 
