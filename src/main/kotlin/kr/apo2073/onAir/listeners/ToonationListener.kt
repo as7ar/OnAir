@@ -6,6 +6,7 @@ import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.MessageTarget
 import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.StreamingDonateEvent
+import kr.apo2073.onAir.utils.ConfigSet
 import kr.apo2073.onAir.utils.Utils.generate
 import kr.apo2073.onAir.utils.Utils.performCommandAsOP
 import kr.apo2073.onAir.utils.Utils.runTask
@@ -13,8 +14,8 @@ import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.toUUID
 import kr.apo2073.onAir.utils.Utils.translate
 import kr.apo2073.onAir.utils.toComponent
-import kr.apo2073.tnliv.data.Donation
-import kr.apo2073.tnliv.listener.ToonationEventListener
+import kr.apo2073.toonLiv.data.Donation
+import kr.apo2073.toonLiv.listener.ToonationEventListener
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 
@@ -25,15 +26,13 @@ class ToonationListener: ToonationEventListener {
         val cic= ConnectionManager.infoConfig
         val uuid=cic.getString(donation.alertBox)?.toUUID() ?: run {
             plugin.logger.warning(translate(
-                "system.boom",
-                mapOf("err" to "uuid parse error (${cic.getString(donation.alertBox)})")
+                "system.boom", mapOf("err" to "uuid parse error (${cic.getString(donation.alertBox)})")
             ))
             return
         }
         val player= Bukkit.getPlayer(uuid) ?: run {
             plugin.logger.warning(translate(
-                "system.boom",
-                mapOf("err" to "current donator's player is not exist or offline")
+                "system.boom", mapOf("err" to "current donator's player is not exist or offline")
             ))
             return
         }
@@ -55,7 +54,7 @@ class ToonationListener: ToonationEventListener {
 
             val channelName=userData.getConfig().getString("user.connection.toonation.display") ?: return
 
-            val format=(plugin.config.getString("후원.형식")
+            val format=(ConfigSet.donation.donationFormat
                 ?.replace("{msg}", donation.comment.replace("\"", ""))
                 ?.replace("{nick}", donation.nickName.replace("\"", ""))
                 ?.replace("{plat}", getPlatformName())
@@ -63,8 +62,8 @@ class ToonationListener: ToonationEventListener {
                 ?.replace("{paid}", donation.amount.toString())
                 ?.trim() ?: "{nick}: {msg}").toComponent()
 
-            val showTitle=plugin.config.getBoolean("후원.타이틀표시", true)
-            val title=(plugin.config.getString("후원.타이틀형식")
+            val showTitle=ConfigSet.donation.showTitle
+            val title=(ConfigSet.donation.titleFormat
                 ?.replace("{msg}", donation.comment.replace("\"", ""))
                 ?.replace("{nick}", donation.nickName.replace("\"", ""))
                 ?.replace("{plat}", getPlatformName())
@@ -81,7 +80,7 @@ class ToonationListener: ToonationEventListener {
                 if (target== MessageTarget.STREAMER) player.sendMessage(format)
                 else Bukkit.broadcast(format)
 
-                val ec=(plugin.config.getString("후원이벤트.${donation.amount.toInt()}") ?: return@runTask)
+                val ec=(ConfigSet.donation.command(donation.amount.toInt()) ?: return@runTask)
                     .replace("{player}", player.name)
                     .replace("{nick}", donation.nickName.replace("\"", ""))
                     .replace("{paid}", donation.amount.toString())

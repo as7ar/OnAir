@@ -28,7 +28,7 @@ class ChkConnect {
                 val config=userdata.getConfig()
                 val file=userdata.getFile()
                 val cic= ConnectionManager.infoConfig
-                val cht=OnAir.cht[player.uniqueId]
+                var cht=OnAir.cht[player.uniqueId]
 
                 if (!ConnectionManager.connectionCheck(player, id)) return
 
@@ -41,10 +41,11 @@ class ChkConnect {
                 OnAir.cht[player.uniqueId]= ChzzkChatBuilder(
                     OnAir.chzzkClient, id
                 ).build()
+                cht=OnAir.cht[player.uniqueId]
 
-                OnAir.cht[player.uniqueId]?.connectBlocking()
+                cht?.connectBlocking()
                 if (first) {
-                    OnAir.cht[player.uniqueId]?.on(ChatMessageEvent::class.java) { evt->
+                    cht?.on(ChatMessageEvent::class.java) { evt->
                         plugin.server.scheduler.runTask(plugin, Runnable {
                             val isSuc= ChzzkChatEvent(
                                 evt.message, evt.chat,
@@ -53,7 +54,7 @@ class ChkConnect {
                             if (!isSuc) throw Exception("치지직 채팅 이벤트를 처리하던 중 오류가 발생했습니다.")
                         })
                     }
-                    OnAir.cht[player.uniqueId]?.on(NormalDonationEvent::class.java) { evt->
+                    cht?.on(NormalDonationEvent::class.java) { evt->
                         plugin.server.scheduler.runTask(plugin, Runnable {
                             val isSuc= ChzzkDonationEvent(
                                 evt.message, evt.chat,
@@ -62,7 +63,7 @@ class ChkConnect {
                             if (!isSuc) throw Exception("치지직 후원 이벤트를 처리하던 중 오류가 발생했습니다.")
                         })
                     }
-                    OnAir.cht[player.uniqueId]?.on(MissionDonationEvent::class.java) { evt ->
+                    cht?.on(MissionDonationEvent::class.java) { evt ->
                         plugin.server.scheduler.runTask(plugin, Runnable {
                             val isSuc= ChzzkMissionDonationEvent(
                                 evt.message, evt.chat,
@@ -72,6 +73,7 @@ class ChkConnect {
                         })
                     }
                 }
+                if (cht!=null) OnAir.cht[player.uniqueId] = cht
 
                 val fetchChannel=OnAir.chzzkClient.fetchChannel(id)
                 val CHANNEL_NAME= fetchChannel.channelName

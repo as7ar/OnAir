@@ -1,4 +1,5 @@
 #  ========================[ Plugin ]===================================
+prefix: '<b><gradient:#E7B0B0:#BA4242>[ OnAir ]</gradient></b> '
 command:
   oa:
     name: 'oa'
@@ -22,6 +23,8 @@ command:
 # {plat} 플렛폼
 # --/채팅/--
 채팅:
+  이모티콘: "&7(이모티콘)&f"
+  익명: "(익명)"
   형식: "&l[ &a{ch}&f ] &r {nick} : {msg} &7- &r&l[ {plat} ]"
 # --/후원/--
 후원:
@@ -73,6 +76,12 @@ chzzk:
 
 youtube:
   key: 'AIzaSyB9OU6s_oA_6Hi6hW1zTyW37Rmak33F2aM'
+
+twitch:
+  client:
+    id: ''
+    secret: ''
+  token: ''
 
 # ========================[ Dev ]===================================
 

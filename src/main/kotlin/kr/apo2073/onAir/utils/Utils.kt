@@ -13,7 +13,7 @@ import java.util.*
 
 object Utils {
     private val plugin= OnAir.plugin
-    val prefix = MiniMessage.miniMessage().deserialize("<b><gradient:#E7B0B0:#BA4242>[ OnAir ]</gradient></b> ")
+    val prefix = MiniMessage.miniMessage().deserialize(ConfigSet.prefix)
     fun Player.sendMessage(string: String, boolean: Boolean=true) {
         this.sendMessage(
             if (boolean) prefix.append(
@@ -64,16 +64,20 @@ object Utils {
     fun Platforms.generate(): String {
         when(this) {
             Platforms.CHZZK -> {
-                val platform = if (plugin.config.getBoolean("플렛폼.영어")) "Chzzk" else "치지직"
-                return if (plugin.config.getBoolean("플렛폼.채색")) "§a$platform§r" else platform
+                val platform = if (ConfigSet.en) "Chzzk" else "치지직"
+                return if (ConfigSet.colored) "§a$platform§r" else platform
             }
             Platforms.YOUTUBE -> {
-                val platform = if (plugin.config.getBoolean("플렛폼.영어")) "Youtube" else "유튜브"
-                return if (plugin.config.getBoolean("플렛폼.채색")) "§c$platform§r" else platform
+                val platform = if (ConfigSet.en) "Youtube" else "유튜브"
+                return if (ConfigSet.colored) "§c$platform§r" else platform
             }
             Platforms.TOONATION -> {
-                val platform = if (plugin.config.getBoolean("플렛폼.영어")) "Toonation" else "투네이션"
-                return if (plugin.config.getBoolean("플렛폼.채색")) "§9$platform§r" else platform
+                val platform = if (ConfigSet.en) "Toonation" else "투네이션"
+                return if (ConfigSet.colored) "§9$platform§r" else platform
+            }
+            Platforms.TWITCH -> {
+                val platform = if (ConfigSet.en) "Twitch" else "트위치"
+                return if (ConfigSet.colored) "§d$platform§r" else platform
             }
             else-> return "알 수 없음"
         }
@@ -83,6 +87,7 @@ object Utils {
         if (this.uppercase().contains("CHZZK") || this.contains("치지직")) return Platforms.CHZZK
         if (this.uppercase().contains("YOUTUBE") || this.contains("유튜브")) return Platforms.YOUTUBE
         if (this.uppercase().contains("TOONATION") || this.contains("투네이션")) return Platforms.TOONATION
+        if (this.uppercase().contains("TWITCH") || this.contains("트위치")) return Platforms.TWITCH
         return Platforms.UNKNOWN
     }
 

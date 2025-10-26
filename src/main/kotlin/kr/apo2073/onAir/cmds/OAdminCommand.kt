@@ -5,6 +5,7 @@ import kr.apo2073.onAir.cmds.oa.OAdminHandler
 import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.Platforms
+import kr.apo2073.onAir.utils.ConfigSet
 import kr.apo2073.onAir.utils.Debugger
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
@@ -19,9 +20,9 @@ import kotlin.collections.get
 import kotlin.compareTo
 
 class OAdminCommand: Command(
-    OnAir.plugin.config.getString("command.oadmin.name") ?: "oadmin",
-    OnAir.plugin.config.getStringList("command.oadmin.aliases"),
-    OnAir.plugin.config.getString("command.oadmin.description") ?: "OnAir 관리자 명령어",
+    ConfigSet.Command.oadmin.name,
+    ConfigSet.Command.oadmin.aliases,
+    ConfigSet.Command.oadmin.description,
     "apo.oa.admin"
 ) {
     private val plugin= OnAir.plugin

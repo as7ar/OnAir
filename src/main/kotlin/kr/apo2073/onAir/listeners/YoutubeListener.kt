@@ -7,6 +7,7 @@ import kr.apo2073.onAir.enums.MessageTarget
 import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.events.StreamingChatEvent
 import kr.apo2073.onAir.events.StreamingDonateEvent
+import kr.apo2073.onAir.utils.ConfigSet
 import kr.apo2073.onAir.utils.Debugger
 import kr.apo2073.onAir.utils.Utils.generate
 import kr.apo2073.onAir.utils.Utils.performCommandAsOP
@@ -15,9 +16,9 @@ import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.toUUID
 import kr.apo2073.onAir.utils.Utils.translate
 import kr.apo2073.onAir.utils.toComponent
-import kr.apo2073.ytliv.data.Chatting
-import kr.apo2073.ytliv.data.SuperChat
-import kr.apo2073.ytliv.listener.YouTubeEventListener
+import kr.apo2073.utubeLiv.data.Chatting
+import kr.apo2073.utubeLiv.data.SuperChat
+import kr.apo2073.utubeLiv.listener.YouTubeEventListener
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 
@@ -66,12 +67,12 @@ class YoutubeListener: YouTubeEventListener {
             val channelName=UserData(player).getConfig().getString("user.connection.youtube.display") ?: return
 
             val userData= UserData(player)
-            val format=(plugin.config.getString("채팅.형식")
+            val format=(ConfigSet.chatFormat
                 ?.replace("{msg}", chat.message)
                 ?.replace("{nick}", chat.author().name)
                 ?.replace("{plat}", getPlatformName())
                 ?.replace("{ch}", channelName)
-                ?.replace(Regex(":[^:]+:"), "&7(이모티콘)&f")
+                ?.replace(Regex(":[^:]+:"), ConfigSet.emoticon)
                 ?.trim() ?: "{nick}: {msg}").toComponent()
 
             val target=userData.getMessageTarget()
@@ -118,7 +119,7 @@ class YoutubeListener: YouTubeEventListener {
 
             val channelName=userData.getConfig().getString("user.connection.youtube.display") ?: return
 
-            val format=(plugin.config.getString("후원.형식")
+            val format=(ConfigSet.donation.donationFormat
                 ?.replace("{msg}", superChat.message)
                 ?.replace("{nick}", superChat.author().name)
                 ?.replace("{plat}", getPlatformName())
@@ -126,8 +127,8 @@ class YoutubeListener: YouTubeEventListener {
                 ?.replace("{paid}", superChat.amount)
                 ?.trim() ?: "{nick}: {msg}").toComponent()
 
-            val showTitle=plugin.config.getBoolean("후원.타이틀표시", true)
-            val title=(plugin.config.getString("후원.타이틀형식")
+            val showTitle= ConfigSet.donation.showTitle
+            val title=(ConfigSet.donation.titleFormat
                 ?.replace("{msg}", superChat.message)
                 ?.replace("{nick}", superChat.author().name)
                 ?.replace("{plat}", getPlatformName())
@@ -148,7 +149,7 @@ class YoutubeListener: YouTubeEventListener {
                 Bukkit.broadcast(format)
             }
 
-            val ec=(plugin.config.getString("후원이벤트.${superChat.amount}") ?: return)
+            val ec=(ConfigSet.donation.command(superChat.amount.toInt()) ?: return)
                 .replace("{player}", player.name)
                 .replace("{paid}", superChat.amount)
                 .replace("{nick}", superChat.author().name)

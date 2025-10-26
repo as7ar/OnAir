@@ -8,9 +8,9 @@ import kr.apo2073.onAir.listeners.ToonationListener
 import kr.apo2073.onAir.utils.Temp
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
-import kr.apo2073.tnliv.Toonation
-import kr.apo2073.tnliv.ToonationBuilder
-import kr.apo2073.tnliv.exception.TokenNotFound
+import kr.apo2073.toonLiv.Toonation
+import kr.apo2073.toonLiv.ToonationBuilder
+import kr.apo2073.toonLiv.exception.TokenNotFound
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 

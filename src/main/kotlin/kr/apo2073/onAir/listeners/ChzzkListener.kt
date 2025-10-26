@@ -9,6 +9,7 @@ import kr.apo2073.onAir.events.ChzzkChatEvent
 import kr.apo2073.onAir.events.ChzzkDonationEvent
 import kr.apo2073.onAir.events.StreamingChatEvent
 import kr.apo2073.onAir.events.StreamingDonateEvent
+import kr.apo2073.onAir.utils.ConfigSet
 import kr.apo2073.onAir.utils.Debugger
 import kr.apo2073.onAir.utils.Temp
 import kr.apo2073.onAir.utils.Utils.asynchronously
@@ -36,7 +37,7 @@ class ChzzkListener: Listener {
 
         asynchronously {
             try {
-                val nick = userIdToNick(userId) ?: "(익명)"
+                val nick = userIdToNick(userId) ?: ConfigSet.anon
 
                 runTask {
                     val suc = StreamingChatEvent(player, Platforms.CHZZK, nick, content).callEvent()
@@ -48,12 +49,12 @@ class ChzzkListener: Listener {
                     !userData.getChat() || !userData.getConfig().getBoolean("user.connection.chzzk.isConnected")
                 ) return@asynchronously
 
-                val format = (plugin.config.getString("채팅.형식")
+                val format = (ConfigSet.chatFormat
                     ?.replace("{msg}", content)
                     ?.replace("{nick}", nick)
                     ?.replace("{plat}", getPlatformName())
                     ?.replace("{ch}", getChannelName(player))
-                    ?.replace(Regex("\\{[^}]*}"), "&7(이모티콘)&f")
+                    ?.replace(Regex("\\{[^}]*}"), ConfigSet.emoticon)
                     ?.trim() ?: "{nick}: {msg}").toComponent()
 
                 runTask {
@@ -87,23 +88,23 @@ class ChzzkListener: Listener {
         if (UserData(player).getConfig().getBoolean("user.connection.chzzk.isConnected").not()) return
         try {
             val userData= UserData(player)
-            val format=(plugin.config.getString("후원.형식")
+            val format=(ConfigSet.donation.donationFormat
                 ?.replace("{msg}", this.message.content)
-                ?.replace("{nick}", userIdToNick(this.message.userId) ?: "(익명)")
+                ?.replace("{nick}", userIdToNick(this.message.userId) ?: ConfigSet.anon)
                 ?.replace("{plat}", getPlatformName())
                 ?.replace("{ch}", getChannelName(player))
                 ?.replace("{paid}", this.message.payAmount.toString())
-                ?.replace(Regex("\\{[^}]*}"), "&7(이모티콘)&f")
+                ?.replace(Regex("\\{[^}]*}"), ConfigSet.emoticon)
                 ?.trim() ?: "{nick}: {msg}").toComponent()
 
-            val showTitle=plugin.config.getBoolean("후원.타이틀표시", true)
-            val title=(plugin.config.getString("후원.타이틀형식")
+            val showTitle= ConfigSet.donation.showTitle
+            val title=(ConfigSet.donation.donationFormat
                 ?.replace("{msg}", this.message.content)
-                ?.replace("{nick}", userIdToNick(this.message.userId) ?: "(익명)")
+                ?.replace("{nick}", userIdToNick(this.message.userId) ?: ConfigSet.anon)
                 ?.replace("{plat}", getPlatformName())
                 ?.replace("{ch}", getChannelName(player))
                 ?.replace("{paid}", this.message.payAmount.toString())
-                ?.replace(Regex("\\{[^}]*}"), "&7(이모티콘)&f")
+                ?.replace(Regex("\\{[^}]*}"), ConfigSet.emoticon)
                 ?.trim() ?: "{nick}: {msg}").toComponent()
 
             if (showTitle) player.showTitle(
@@ -115,9 +116,9 @@ class ChzzkListener: Listener {
             else Bukkit.broadcast(format)
 
             Debugger.debug("try to get command( ${message.payAmount} ): ${
-                plugin.config.getString("후원이벤트.${message.payAmount
-                }")}")
-            val ec=(plugin.config.getString("후원이벤트.${message.payAmount}") ?: return)
+                ConfigSet.donation.command(message.payAmount)
+            }")
+            val ec=(ConfigSet.donation.command(message.payAmount) ?: return)
                 .replace("{player}", player.name)
                 .replace("{nick}", userIdToNick(message.userId).toString())
                 .replace("{paid}", message.payAmount.toString())
@@ -132,7 +133,7 @@ class ChzzkListener: Listener {
 
     private fun getChannelName(player: OfflinePlayer): String {
         val channelName= UserData(player).getConfig().getString("user.connection.chzzk.display")
-        val channelId= ConnectionManager.infoConfig.getString(player.uniqueId.toString()) ?: "알 수 없음"
+        val channelId= ConnectionManager.infoConfig.getString(player.uniqueId.toString()) ?: "UNKNOWN"
         return channelName ?: OnAir.chzzkClient.fetchChannel(channelId).channelName
     }
 

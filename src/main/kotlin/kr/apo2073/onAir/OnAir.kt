@@ -24,8 +24,8 @@ import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
 import kr.apo2073.onAir.utils.chzzk.ChzzkData
 import kr.apo2073.onAir.utils.toMiniMessage
-import kr.apo2073.tnliv.Toonation
-import kr.apo2073.ytliv.Youtube
+import kr.apo2073.toonLiv.Toonation
+import kr.apo2073.utubeLiv.Youtube
 import okio.FileNotFoundException
 import org.bukkit.plugin.java.JavaPlugin
 import xyz.r2turntrue.chzzk4j.ChzzkClient

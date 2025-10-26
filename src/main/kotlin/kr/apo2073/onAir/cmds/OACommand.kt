@@ -3,6 +3,7 @@ package kr.apo2073.onAir.cmds
 import kr.apo2073.onAir.OnAir
 import kr.apo2073.onAir.cmds.oa.OAHandler
 import kr.apo2073.onAir.data.UserData
+import kr.apo2073.onAir.utils.ConfigSet
 import kr.apo2073.onAir.utils.Streamer
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.toPlatform
@@ -11,9 +12,9 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 class OACommand: Command(
-    OnAir.plugin.config.getString("command.oa.name") ?: "oa",
-    OnAir.plugin.config.getStringList("command.oa.aliases"),
-    OnAir.plugin.config.getString("command.oa.description") ?: "OnAir 메인 명령어",
+    ConfigSet.Command.oa.name,
+    ConfigSet.Command.oa.aliases,
+    ConfigSet.Command.oa.description,
     "apo.oa.channel"
 ) {
     private val plugin= OnAir.plugin

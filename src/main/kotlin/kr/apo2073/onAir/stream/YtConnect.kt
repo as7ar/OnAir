@@ -8,8 +8,8 @@ import kr.apo2073.onAir.listeners.YoutubeListener
 import kr.apo2073.onAir.utils.Debugger
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
-import kr.apo2073.ytliv.YouTubeBuilder
-import kr.apo2073.ytliv.YouTubeInfo
+import kr.apo2073.utubeLiv.YouTubeBuilder
+import kr.apo2073.utubeLiv.YouTubeInfo
 import org.bukkit.entity.Player
 
 class YtConnect {

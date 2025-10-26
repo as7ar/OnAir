@@ -4,5 +4,6 @@ enum class Platforms {
     CHZZK,
     YOUTUBE,
     TOONATION,
+    TWITCH,
     UNKNOWN
 }

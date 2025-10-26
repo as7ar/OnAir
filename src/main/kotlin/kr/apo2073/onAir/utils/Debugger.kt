@@ -1,6 +1,7 @@
 package kr.apo2073.onAir.utils
 
 import kr.apo2073.onAir.OnAir
+import org.bukkit.Bukkit
 
 class Debugger {
     companion object {
@@ -8,10 +9,8 @@ class Debugger {
         @JvmStatic
         fun debug(string: String) {
             plugin.reloadConfig()
-            if (
-                !plugin.config.getBoolean("debug", false)
-            ) return
-            plugin.logger.warning("- [DEBUG] $string")
+            if (!ConfigSet.debug) return
+            Bukkit.getConsoleSender().sendMessage("[DEBUG] $string")
         }
     }
 }

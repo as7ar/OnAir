@@ -24,7 +24,11 @@ class PlaceholderHandler: PlaceholderExpansion() {
             val id=params.replace("check_connection_", "")
             return ConnectionManager.infoConfig.getString(id) ?: "false"
         }
-        if (params.contains("")) {} // todo:getter of player's platform key
+        // 플랫폼별 키 가져오기
+        if (params.matches(Regex("(youtube|toonation|chzzk|twitch)_key"))) {
+            val platform = params.replace("_key", "")
+        }
+
         return params
     }
 }
