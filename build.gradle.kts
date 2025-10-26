@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "kr.apo2073"
-version = "1.2.1-a1"
+version = "1.2.1-b1"
 
 repositories {
     mavenCentral()

@@ -19,12 +19,14 @@ import kr.apo2073.onAir.listeners.BukkitListener
 import kr.apo2073.onAir.listeners.ChzzkListener
 import kr.apo2073.onAir.papi.PlaceholderHandler
 import kr.apo2073.onAir.utils.Debugger
+import kr.apo2073.onAir.utils.OALogger
 import kr.apo2073.onAir.utils.Utils.bannerGenerator
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
 import kr.apo2073.onAir.utils.chzzk.ChzzkData
 import kr.apo2073.onAir.utils.toMiniMessage
 import kr.apo2073.toonLiv.Toonation
+import kr.apo2073.twitchLiv.Twitch
 import kr.apo2073.utubeLiv.Youtube
 import okio.FileNotFoundException
 import org.bukkit.plugin.java.JavaPlugin
@@ -46,12 +48,15 @@ class OnAir : JavaPlugin() {
         lateinit var cht: MutableMap<UUID, ChzzkChat>
         lateinit var tn: MutableMap<UUID, Toonation>
         lateinit var yt:MutableMap<UUID, Youtube>
+        lateinit var tw: MutableMap<UUID, Twitch>
         //lateinit var af:MutableMap<UUID, AfreecatvAPI>
     }
 
     private lateinit var addon: SkriptAddon
+    private val log= OALogger()
 
     override fun onLoad() {
+        log.info("Initializing OnAir Plugin...")
         // ========================[ Early Base Setting ]=========================
         plugin =this
 
@@ -65,9 +70,11 @@ class OnAir : JavaPlugin() {
         tn = mutableMapOf()
 //        af = mutableMapOf()
         yt = mutableMapOf()
+        tw = mutableMapOf()
     }
 
     override fun onEnable() {
+        log.info("Enabling OnAir Plugin...")
         // ========================[ Default Setting ]=========================
 
         chzzkData =ChzzkData()
@@ -165,11 +172,12 @@ class OnAir : JavaPlugin() {
             author = pluginMeta.authors.joinToString(", ")
         )
 
-        banner.forEach { server.consoleSender.sendMessage(it.toMiniMessage()) }
+        banner.forEach { server.consoleSender.sendMessage("<gradient:#E7B0B0:#BA4242>${it}</gradient>".toMiniMessage()) }
     }
 
     override fun onDisable() {
         try {
+            log.warning("Disabling OnAir Plugin...")
             server.onlinePlayers.forEach { player->
                 Debugger.debug("Trying to disable plugin from Player: ${player.name}")
                 player.sendMessage(translate("system.disabled.player"), true)

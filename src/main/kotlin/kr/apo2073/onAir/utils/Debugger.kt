@@ -10,7 +10,7 @@ class Debugger {
         fun debug(string: String) {
             plugin.reloadConfig()
             if (!ConfigSet.debug) return
-            Bukkit.getConsoleSender().sendMessage("[DEBUG] $string")
+            OALogger().info("[DEBUG] $string")
         }
     }
 }
