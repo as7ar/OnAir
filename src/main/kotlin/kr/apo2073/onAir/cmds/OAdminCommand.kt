@@ -2,20 +2,13 @@ package kr.apo2073.onAir.cmds
 
 import kr.apo2073.onAir.OnAir
 import kr.apo2073.onAir.cmds.oa.OAdminHandler
-import kr.apo2073.onAir.data.ConnectionManager
-import kr.apo2073.onAir.data.UserData
-import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.utils.ConfigSet
 import kr.apo2073.onAir.utils.Debugger
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
-import kr.apo2073.onAir.utils.toComponent
-import net.kyori.adventure.audience.Audience
-import net.kyori.adventure.text.event.ClickEvent
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import java.io.File
 
 class OAdminCommand: Command(
     ConfigSet.Command.oadmin.name,

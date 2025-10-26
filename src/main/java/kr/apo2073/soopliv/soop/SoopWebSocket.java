@@ -1,6 +1,7 @@
 package kr.apo2073.soopliv.soop;
 
 import kr.apo2073.soopliv.SSLUtils;
+import kr.apo2073.soopliv.data.Chat;
 import kr.apo2073.soopliv.data.Donate;
 import kr.apo2073.soopliv.soop.listener.SoopEventListener;
 import kr.apo2073.soopliv.utilities.Debugger;
@@ -125,8 +126,7 @@ public class SoopWebSocket extends WebSocketClient {
             String cmd = packet.getCommand();
             debugger.log("COMMAND: " + cmd);
             List<String> dataList = switch (cmd) {
-                case COMMAND_ENTER -> null;
-                case COMMAND_ENTER_FAN -> null;
+                case COMMAND_ENTER, COMMAND_ENTER_FAN -> null;
                 default -> packet.getDataList();
             };
 
@@ -164,12 +164,15 @@ public class SoopWebSocket extends WebSocketClient {
                 synchronized (packetMap) {
                     donePacket = packetMap.remove(nick);
                     if (donePacket == null) {
+                        String nickname = dataList.get(2);
+                        String msg = dataList.get(0);
+                        handleChat(nickname, msg);
                         return;
                     }
                 }
 
-                String msg = dataList.get(0);
                 String nickname = donePacket.getDataList().get(2);
+                String msg = dataList.getFirst();
                 int tempPayAmount = Integer.parseInt(donePacket.getDataList().get(3));
                 int payAmount = poong ? tempPayAmount : tempPayAmount * 100;
                 handleDone(nickname, payAmount, msg);
@@ -181,9 +184,12 @@ public class SoopWebSocket extends WebSocketClient {
     }
 
     private void handleDone(String nickname, int payAmount, String msg) {
-        if (listener != null) {
-            listener.onDonation(new Donate(soopUser.get("tag"), nickname, payAmount, msg));
-        }
+        listener.onDonation(new Donate(soopUser.get("tag"), nickname, payAmount, msg));
+    }
+
+    private void handleChat(String nickname, String msg) {
+        if (listener == null) return;
+        listener.onChat(new Chat(soopUser.get("tag"), nickname, msg));
     }
 
 

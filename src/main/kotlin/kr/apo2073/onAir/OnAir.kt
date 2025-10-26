@@ -7,14 +7,6 @@ import kr.apo2073.onAir.cmds.OAdminCommand
 import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.data.UserData
 import kr.apo2073.onAir.enums.Platforms
-import kr.apo2073.onAir.events.skript.SkriptStreamingChatEvent
-import kr.apo2073.onAir.events.skript.SkriptStreamingConnectionEvent
-import kr.apo2073.onAir.events.skript.SkriptStreamingDisconnectionEvent
-import kr.apo2073.onAir.events.skript.SkriptStreamingDonateEvent
-import kr.apo2073.onAir.events.skript.exper.StrmChatExper
-import kr.apo2073.onAir.events.skript.exper.StrmConnectExper
-import kr.apo2073.onAir.events.skript.exper.StrmDisconnectExper
-import kr.apo2073.onAir.events.skript.exper.StrmDonateExper
 import kr.apo2073.onAir.listeners.BukkitListener
 import kr.apo2073.onAir.listeners.ChzzkListener
 import kr.apo2073.onAir.papi.PlaceholderHandler
@@ -25,6 +17,7 @@ import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
 import kr.apo2073.onAir.utils.chzzk.ChzzkData
 import kr.apo2073.onAir.utils.toMiniMessage
+import kr.apo2073.soopliv.soop.SoopWebSocket
 import kr.apo2073.toonLiv.Toonation
 import kr.apo2073.twitchLiv.Twitch
 import kr.apo2073.utubeLiv.Youtube
@@ -49,7 +42,7 @@ class OnAir : JavaPlugin() {
         lateinit var tn: MutableMap<UUID, Toonation>
         lateinit var yt:MutableMap<UUID, Youtube>
         lateinit var tw: MutableMap<UUID, Twitch>
-        //lateinit var af:MutableMap<UUID, AfreecatvAPI>
+        lateinit var sp: MutableMap<UUID, SoopWebSocket>
     }
 
     private lateinit var addon: SkriptAddon
@@ -67,7 +60,6 @@ class OnAir : JavaPlugin() {
 
         cht = mutableMapOf()
         tn = mutableMapOf()
-//        af = mutableMapOf()
         yt = mutableMapOf()
         tw = mutableMapOf()
     }

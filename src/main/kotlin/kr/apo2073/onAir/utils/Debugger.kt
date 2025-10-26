@@ -1,7 +1,6 @@
 package kr.apo2073.onAir.utils
 
 import kr.apo2073.onAir.OnAir
-import org.bukkit.Bukkit
 
 class Debugger {
     companion object {
