@@ -5,14 +5,14 @@
 - [x] youtube
 - [x] toonation
 - [ ] twitch
-- [ ] ~~soap~~
+- [ ] soop
 
 
 - [x] commands
 - [x] listeners
 
 - [x] Skript
-- [ ] PlaceholderAPI
+- [x] PlaceholderAPI
 
 
 | Version | description |
