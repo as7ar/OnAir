@@ -16,8 +16,6 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import java.io.File
-import kotlin.collections.get
-import kotlin.compareTo
 
 class OAdminCommand: Command(
     ConfigSet.Command.oadmin.name,
@@ -43,38 +41,7 @@ class OAdminCommand: Command(
 
         if (args[0]=="플러그인초기화") {
             try {
-                sender.sendMessage(
-                    translate("command.oadmin.reset.check").toComponent()
-                        .append(translate("command.check.yes").toComponent()
-                            .clickEvent(ClickEvent.callback { aud: Audience ->
-                                plugin.server.onlinePlayers.forEach { player->
-                                    player.sendMessage(translate("system.disabled.player"), true)
-                                    val userData= UserData(player)
-                                    for (platforms in Platforms.entries) {
-                                        ConnectionManager.Manager(player).disconnect(platforms)
-                                    }
-                                    userData.getFile().delete()
-                                    ConnectionManager.infoFile.delete()
-                                }
-
-                                fun deleteRecursively(file: File) {
-                                    if (file.isDirectory) file.listFiles()?.forEach { deleteRecursively(it) }
-                                    file.delete()
-                                }
-                                val done_message=translate("command.oadmin.reset.done")
-
-                                val file= plugin.dataFolder
-                                deleteRecursively(file)
-
-                                sender.sendMessage(done_message, true)
-                                plugin.server.pluginManager.disablePlugin(plugin)
-                            }))
-                        .append(translate("command.check.no").toComponent()
-                            .clickEvent(ClickEvent.callback {
-                                sender.sendMessage(translate("command.oadmin.reset.cancel"), true)
-                            }))
-                    , true
-                )
+                handler.reset()
             } catch (e: Exception) {
                 sender.sendMessage(translate(
                     "command.got.problems",

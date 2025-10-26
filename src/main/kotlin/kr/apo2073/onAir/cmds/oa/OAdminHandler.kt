@@ -3,12 +3,15 @@ package kr.apo2073.onAir.cmds.oa
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kr.apo2073.onAir.OnAir
+import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.data.UserData
-import kr.apo2073.onAir.utils.Debugger
+import kr.apo2073.onAir.enums.Platforms
 import kr.apo2073.onAir.utils.Utils.performCommandAsOP
 import kr.apo2073.onAir.utils.Utils.sendMessage
 import kr.apo2073.onAir.utils.Utils.translate
 import kr.apo2073.onAir.utils.toComponent
+import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.title.Title
 import org.bukkit.entity.Player
 import java.io.File
@@ -87,5 +90,40 @@ class OAdminHandler(private val player: Player) {
             .replace("{paid}", "$amount")
             .replace("{msg}", msg)
         target.performCommandAsOP(ec)
+    }
+
+    fun reset() {
+        player.sendMessage(
+            translate("command.oadmin.reset.check").toComponent()
+                .append(translate("command.check.yes").toComponent()
+                    .clickEvent(ClickEvent.callback { aud: Audience ->
+                        plugin.server.onlinePlayers.forEach { player->
+                            player.sendMessage(translate("system.disabled.player"), true)
+                            val userData= UserData(player)
+                            for (platforms in Platforms.entries) {
+                                ConnectionManager.Manager(player).disconnect(platforms)
+                            }
+                            userData.getFile().delete()
+                            ConnectionManager.infoFile.delete()
+                        }
+
+                        fun deleteRecursively(file: File) {
+                            if (file.isDirectory) file.listFiles()?.forEach { deleteRecursively(it) }
+                            file.delete()
+                        }
+                        val done_message=translate("command.oadmin.reset.done")
+
+                        val file= plugin.dataFolder
+                        deleteRecursively(file)
+
+                        player.sendMessage(done_message, true)
+                        plugin.server.pluginManager.disablePlugin(plugin)
+                    }))
+                .append(translate("command.check.no").toComponent()
+                    .clickEvent(ClickEvent.callback {
+                        player.sendMessage(translate("command.oadmin.reset.cancel"), true)
+                    }))
+            , true
+        )
     }
 }

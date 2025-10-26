@@ -2,6 +2,7 @@ package kr.apo2073.onAir.utils
 
 import kr.apo2073.onAir.data.ConnectionManager
 import kr.apo2073.onAir.data.UserData
+import kr.apo2073.onAir.data.toChannelData
 import kr.apo2073.onAir.enums.Platforms
 import org.bukkit.entity.Player
 
@@ -13,5 +14,25 @@ class Streamer(private val player: Player) {
     }
     fun disconnect(platforms: Platforms) {
         ConnectionManager.Manager(player).disconnect(platforms)
+    }
+
+    fun disconnectAll() {
+        getUserdata().getConnections().forEach {
+            ConnectionManager.Manager(player).disconnect(it)
+        }
+    }
+
+    fun saveTemp() {
+        val data=getUserdata()
+        val l= data.getConnections().joinToString("|") { data.getChannelData(it).toString() }
+        Temp.addTemp("${player.uniqueId}", l)
+    }
+
+    fun loadTemp() {
+        val data= Temp.getTemp("${player.uniqueId}", String::class) ?: return
+        val l= data.split("|").map { it.toChannelData() }
+        l.forEach {
+            ConnectionManager.Manager(player).connect(it.platforms, it.display, it.id)
+        }
     }
 }

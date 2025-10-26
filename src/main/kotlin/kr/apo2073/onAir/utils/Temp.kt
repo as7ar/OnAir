@@ -5,6 +5,8 @@ import com.google.gson.reflect.TypeToken
 import kr.apo2073.onAir.OnAir
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.reflect.KClass
+import kotlin.reflect.cast
 
 object Temp {
     private val plugin = OnAir.plugin
@@ -26,7 +28,13 @@ object Temp {
         save()
     }
 
-    fun getTemp(key: String): Any? = temperature[key]
+    fun <T: Any> getTemp(key: String, clazz: KClass<T>): T? {
+        return try {
+            clazz.cast(temperature[key])
+        } catch (e: Exception) {
+            null
+        }
+    }
     fun getTempAsString(key: String): String? = temperature[key] as? String
     fun getAll(): Map<String, Any> = temperature.toMap()
 

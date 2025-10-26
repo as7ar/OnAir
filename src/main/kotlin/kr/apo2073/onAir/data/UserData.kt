@@ -44,6 +44,16 @@ class UserData(private val player: OfflinePlayer) {
         updateConfig("user.alert.target", target.name)
     }
 
+    fun getChannelData(platforms: Platforms): ChannelData {
+        val platform= platforms.name.lowercase()
+        val config = YamlConfiguration.loadConfiguration(
+            File(plugin.dataFolder, "userdata/${player.uniqueId}.yml")
+        )
+        val id= config.getString("user.connection.$platform.id") ?: ""
+        val display= config.getString("user.connection.$platform.display") ?: ""
+        return ChannelData(platforms, display, id)
+    }
+
     fun getConnections(): MutableList<Platforms> {
         return getConfig().getStringList("user.connection-list")
             .mapNotNull { runCatching { Platforms.valueOf(it) }.getOrNull() }
