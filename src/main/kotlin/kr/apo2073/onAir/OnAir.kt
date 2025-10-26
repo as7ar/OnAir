@@ -56,7 +56,6 @@ class OnAir : JavaPlugin() {
     private val log= OALogger()
 
     override fun onLoad() {
-        log.info("Initializing OnAir Plugin...")
         // ========================[ Early Base Setting ]=========================
         plugin =this
 
