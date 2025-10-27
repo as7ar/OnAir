@@ -50,8 +50,6 @@ class EventManager(private val platforms: Platforms) {
                         else -> Bukkit.broadcast(format)
                     }
                 }
-
-
             }
 
             runTask {
@@ -75,7 +73,7 @@ class EventManager(private val platforms: Platforms) {
         try {
             asynchronously {
                 val userData = UserData(player)
-                if (!userData.getChat() || !userData.getConfig().getBoolean(
+                if (!userData.getDonate() || !userData.getConfig().getBoolean(
                         "user.connection.${platform}.isConnected"
                 )) return@asynchronously
 
