@@ -21,126 +21,150 @@ import kr.apo2073.onair.utils.toComponent
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
+import org.bukkit.entity.Player
 
 class EventManager(private val platforms: Platforms) {
     private val plugin= OnAir.plugin
 
     fun onChat(chat: ChatContent) {
         plugin.reloadConfig()
-        val player=chat.offlinePlayer.player ?: return
-        val platform= platforms.name.lowercase()
-        try {
+        val player = chat.offlinePlayer.player ?: return
+
+        safely(player) {
             asynchronously {
                 val userData = UserData(player)
-                if (!userData.getChat() || !userData.getConfig().getBoolean(
-                        "user.connection.${platform}.isConnected"
-                )) return@asynchronously
+                if (
+                    !userData.getChat()
+                    || !userData.isPlatformConnected(platforms)
+                ) return@asynchronously
 
-                val format = (ConfigSet.chatFormat
-                    ?.replace("{msg}", chat.content)
-                    ?.replace("{nick}", chat.nickname ?: ConfigSet.anon)
-                    ?.replace("{plat}", getPlatformName())
-                    ?.replace("{ch}", getChannelName(player))
-                    ?.replace(Regex("\\{[^}]*}|:[^:]+:"), ConfigSet.emoticon)
-                    ?.trim() ?: "{nick}: {msg}").toComponent()
+                val formatted = formatMessage(
+                    ConfigSet.chatFormat,
+                    chat.nickname, chat.content, player
+                )
 
                 runTask {
                     when (userData.getMessageTarget()) {
-                        MessageTarget.STREAMER -> player.sendMessage(format)
-                        else -> Bukkit.broadcast(format)
+                        MessageTarget.STREAMER -> player.sendMessage(formatted)
+                        else -> Bukkit.broadcast(formatted)
                     }
                 }
             }
 
-            runTask {
-                val suc = StreamingChatEvent(
-                    player, platforms,
-                    chat.nickname, chat.content
-                ).callEvent()
-                if (!suc) plugin.logger.warning("StreamingChatEvent 처리 중 오류 발생")
-            }
-        } catch (e: Exception) {
-            player.sendMessage(translate("system.boom"), true)
-            e.printStackTrace()
+            callChatEvent(player, chat)
         }
     }
 
     fun onDonate(donate: DonateContent) {
         plugin.reloadConfig()
-        val player=donate.offlinePlayer.player ?: return
-        val platform= platforms.name.lowercase()
+        val player = donate.offlinePlayer.player ?: return
 
-        try {
+        safely(player) {
             asynchronously {
                 val userData = UserData(player)
-                if (!userData.getDonate() || !userData.getConfig().getBoolean(
-                        "user.connection.${platform}.isConnected"
-                )) return@asynchronously
+                if (
+                    !userData.getDonate()
+                    || !userData.isPlatformConnected(platforms)
+                ) return@asynchronously
 
-                val format=(ConfigSet.donation.donationFormat
-                    ?.replace("{msg}", donate.content ?: "")
-                    ?.replace("{nick}", donate.nickname ?: ConfigSet.anon)
-                    ?.replace("{plat}", getPlatformName())
-                    ?.replace("{ch}", getChannelName(player))
-                    ?.replace("{paid}", donate.payAmount.toString())
-                    ?.replace(Regex("\\{[^}]*}|:[^:]+:"), ConfigSet.emoticon)
-                    ?.trim() ?: "{nick}: {msg}").toComponent()
-
-                val showTitle= ConfigSet.donation.showTitle
-                val title=(ConfigSet.donation.donationFormat
-                    ?.replace("{msg}", donate.content ?: "")
-                    ?.replace("{nick}", donate.nickname ?: ConfigSet.anon)
-                    ?.replace("{plat}", getPlatformName())
-                    ?.replace("{ch}", getChannelName(player))
-                    ?.replace("{paid}", donate.payAmount.toString())
-                    ?.replace(Regex("\\{[^}]*}|:[^:]+:"), ConfigSet.emoticon)
-                    ?.trim() ?: "{nick}: {msg}").toComponent()
-
-                if (showTitle) player.showTitle(
-                    Title.title("".toComponent(), title)
+                val formatted = formatMessage(
+                    ConfigSet.donation.donationFormat,
+                    donate.nickname, donate.content, player,
+                    donate.payAmount
                 )
 
-                val target=userData.getMessageTarget()
-                if (target== MessageTarget.STREAMER) player.sendMessage(format)
-                else Bukkit.broadcast(format)
-
-                Debugger.debug("try to get command( ${donate.payAmount} ): ${
-                    ConfigSet.donation.command(donate.payAmount.toInt())
-                }")
-                val ec=(ConfigSet.donation.command(donate.payAmount.toInt()) ?: return@asynchronously)
-                    .replace("{player}", player.name)
-                    .replace("{nick}", donate.nickname ?: ConfigSet.anon)
-                    .replace("{paid}", donate.payAmount.toString())
-                    .replace("{msg}", donate.content ?: "")
-                Debugger.debug("execute command ${donate.payAmount} as  $ec")
-                player.performCommandAsOP(ec)
-            }
-
-            runTask {
-                val suc= StreamingDonateEvent(
-                    player, platforms,
-                    donate.nickname, donate.content,
+                val titleComponent = formatMessage(
+                    ConfigSet.donation.titleFormat,
+                    donate.nickname, donate.content, player,
                     donate.payAmount
-                ).callEvent()
-                if (!suc) plugin.logger.warning("StreamingDonateEvent를 처리하던 중 오류가 발생했습니다")
+                )
+
+                if (ConfigSet.donation.showTitle) {
+                    player.showTitle(Title.title("".toComponent(), titleComponent))
+                }
+
+                when (userData.getMessageTarget()) {
+                    MessageTarget.STREAMER -> player.sendMessage(formatted)
+                    else -> Bukkit.broadcast(formatted)
+                }
+
+                executeCommand(player, donate)
             }
-        } catch (e: Exception) {
-            player.sendMessage(translate("system.boom"), true)
-            e.printStackTrace()
+
+            callDonateEvent(player, donate)
+        }
+    }
+
+    private fun UserData.isPlatformConnected(platform: Platforms): Boolean {
+        return getConfig().getBoolean(
+            "user.connection.${platform.name.lowercase()}.isConnected"
+        )
+    }
+
+    private fun formatMessage(
+        baseFormat: String?,
+        nickname: String?,
+        message: String?,
+        player: OfflinePlayer,
+        paid: Double? = null
+    ) = (baseFormat
+        ?.replace("{msg}", message ?: "")
+        ?.replace("{nick}", nickname ?: ConfigSet.anon)
+        ?.replace("{plat}", platforms.generate())
+        ?.replace("{ch}", getChannelName(player))
+        ?.replace("{paid}", paid?.toString() ?: "")
+        ?.replace(Regex("\\{[^}]*}|:[^:]+:"), ConfigSet.emoticon)
+        ?.trim() ?: "{nick}: {msg}").toComponent()
+
+    private fun executeCommand(player: Player, donate: DonateContent) {
+        val command = ConfigSet.donation.command(donate.payAmount.toInt()) ?: return
+        val parsed = command
+            .replace("{player}", player.name)
+            .replace("{nick}", donate.nickname ?: ConfigSet.anon)
+            .replace("{paid}", donate.payAmount.toString())
+            .replace("{msg}", donate.content ?: "")
+
+        Debugger.debug("Executing donation command: $parsed")
+        player.performCommandAsOP(parsed)
+    }
+
+    private fun callChatEvent(player: Player, chat: ChatContent) {
+        runTask {
+            val success = StreamingChatEvent(
+                player, platforms, chat.nickname, chat.content
+            ).callEvent()
+            if (!success) plugin.log.warning("StreamingChatEvent 처리 중 오류 발생")
+        }
+    }
+
+    private fun callDonateEvent(player: Player, donate: DonateContent) {
+        runTask {
+            val success = StreamingDonateEvent(
+                player, platforms, donate.nickname, donate.content, donate.payAmount
+            ).callEvent()
+            if (!success) plugin.log.warning("StreamingDonateEvent 처리 중 오류 발생")
         }
     }
 
     private fun getChannelName(player: OfflinePlayer): String {
-        val channelName= UserData(player).getConfig()
-            .getString("user.connection.${platforms.name.lowercase()}.display")
-        val channelId= ConnectionManager.infoConfig
+        val userConfig = UserData(player).getConfig()
+        val name = userConfig.getString(
+            "user.connection.${platforms.name.lowercase()}.display"
+        )
+        val id = ConnectionManager.infoConfig
             .getString(player.uniqueId.toString()) ?: "UNKNOWN"
-        return if (platforms==Platforms.CHZZK) {
-            channelName ?: OnAir.chzzkClient.fetchChannel(channelId).channelName
-        } else channelName ?:  "UNKNOWN"
+        return when (platforms) {
+            Platforms.CHZZK -> name ?: OnAir.chzzkClient.fetchChannel(id).channelName
+            else -> name ?: "UNKNOWN"
+        }
     }
 
-    private fun getPlatformName(): String {
-        return platforms.generate()
+    private inline fun safely(player:Player, block: () -> Unit) {
+        try {
+            block()
+        } catch (e: Exception) {
+            player.sendMessage(translate("system.boom"), true)
+            e.printStackTrace()
+        }
     }
 }
