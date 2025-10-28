@@ -44,12 +44,9 @@ object ConnectionManager {
     fun isConnected(player: Player, platforms: Platforms): Boolean {
         val userData= UserData(player)
         val config=userData.getConfig()
-        return when(platforms) {
-            Platforms.CHZZK -> config.getBoolean("user.connection.chzzk.isConnected", false)
-            Platforms.YOUTUBE -> config.getBoolean("user.connection.youtube.isConnected", false)
-            Platforms.TOONATION -> config.getBoolean("user.connection.toonation.isConnected", false)
-            else-> false
-        }
+        return config.getBoolean("user.connection.${
+            platforms.name.lowercase()
+        }.isConnected", false)
     }
 
     class Manager(private val player:Player) {
@@ -57,34 +54,19 @@ object ConnectionManager {
         private val userData=UserData(player)
 
         fun connect(platforms: Platforms, channelName:String, id:String) {
+            userData.getConfig().apply {
+                set("user.connection.${platforms.name.lowercase()}.display", channelName)
+            }.save(userData.getFile())
             when(platforms) {
-                Platforms.CHZZK -> {
-                    userData.getConfig().apply {
-                        set("user.connection.chzzk.display", channelName)
-                    }.save(userData.getFile())
-                    ChkConnect.connect(player, id)
-                }
-                Platforms.YOUTUBE -> {
-                    userData.getConfig().apply {
-                        set("user.connection.youtube.display", channelName)
-                    }.save(userData.getFile())
-                    YtConnect.connect(player, id)
-                }
-                Platforms.TOONATION -> {
-                    userData.getConfig().apply {
-                        set("user.connection.toonation.display", channelName)
-                    }.save(userData.getFile())
-                    TnConnect.connect(player, id, channelName)
-                }
-                Platforms.SOOP -> {
-                    userData.getConfig().apply {
-                        set("user.connection.toonation.display", channelName)
-                    }.save(userData.getFile())
-                    SpConnect.connect(player, id)
-                }
+                Platforms.CHZZK -> ChkConnect.connect(player, id)
+                Platforms.YOUTUBE -> YtConnect.connect(player, id)
+                Platforms.TOONATION -> TnConnect.connect(player, id, channelName)
+                Platforms.SOOP -> SpConnect.connect(player, id)
                 else-> return
             }
-            val suc= PlayerStreamingConnectionEvent(player, platforms, id, channelName).callEvent()
+            val suc= PlayerStreamingConnectionEvent(
+                player, platforms, id, channelName
+            ).callEvent()
             if (!suc) plugin.log.warning(translate(
                 "system.boom",
                 mapOf("err" to "calling event failure (PlayerStreamingConnectionEvent)")

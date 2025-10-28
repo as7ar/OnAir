@@ -35,7 +35,7 @@ class EventManager(private val platforms: Platforms) {
                 val userData = UserData(player)
                 if (
                     !userData.getChat()
-                    || !userData.isPlatformConnected(platforms)
+                    || !ConnectionManager.isConnected(player, platforms)
                 ) return@asynchronously
 
                 val formatted = formatMessage(
@@ -64,7 +64,7 @@ class EventManager(private val platforms: Platforms) {
                 val userData = UserData(player)
                 if (
                     !userData.getDonate()
-                    || !userData.isPlatformConnected(platforms)
+                    || !ConnectionManager.isConnected(player, platforms)
                 ) return@asynchronously
 
                 val formatted = formatMessage(
@@ -93,12 +93,6 @@ class EventManager(private val platforms: Platforms) {
 
             callDonateEvent(player, donate)
         }
-    }
-
-    private fun UserData.isPlatformConnected(platform: Platforms): Boolean {
-        return getConfig().getBoolean(
-            "user.connection.${platform.name.lowercase()}.isConnected"
-        )
     }
 
     private fun formatMessage(

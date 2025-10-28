@@ -92,4 +92,5 @@ tasks.shadowJar {
         include(dependency("net.wesjd:anvilgui:1.10.6-SNAPSHOT"))
         include(dependency(files("libs/chzzk4j-0.1.1.jar")))
     }
+    relocate("xyz.r2turntrue.chzzk4j", "kr.apo2073.chzzk4j")
 }

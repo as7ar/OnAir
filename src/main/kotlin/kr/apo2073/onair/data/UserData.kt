@@ -86,4 +86,31 @@ class UserData(private val player: OfflinePlayer) {
             set(path, value)
         }.save(getFile())
     }
+
+    fun connect(platform: Platforms, id: String, display: String? = null) {
+        val path = "user.connection.${platform.name.lowercase()}"
+        getConfig().apply {
+            set("$path.first", false)
+            set("$path.isConnected", true)
+            set("$path.id", id)
+            if (display != null) set("$path.display", display)
+        }.save(getFile())
+
+        ConnectionManager.setConfigValue(id, player.uniqueId.toString())
+        ConnectionManager.setConfigValue("${player.uniqueId}.$path", id)
+        addConnection(platform)
+    }
+
+    fun disconnect(platform: Platforms, id: String) {
+        val path = "user.connection.${platform.name.lowercase()}"
+        ConnectionManager.setConfigValue("${player.uniqueId}.$path", null)
+        ConnectionManager.setConfigValue(id, null)
+        getConfig().apply {
+            set("$path.first", null)
+            set("$path.isConnected", null)
+            set("$path.id", null)
+            set("$path.display", null)
+        }.save(getFile())
+        removeConnection(platform)
+    }
 }
