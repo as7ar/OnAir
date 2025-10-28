@@ -1,13 +1,10 @@
 package kr.apo2073.onair.data
 
 import kr.apo2073.onair.OnAir
+import kr.apo2073.onair.connector.platforms.*
 import kr.apo2073.onair.enums.Platforms
 import kr.apo2073.onair.events.PlayerStreamingConnectionEvent
 import kr.apo2073.onair.events.PlayerStreamingDisconnectionEvent
-import kr.apo2073.onair.stream.ChkConnect
-import kr.apo2073.onair.stream.SpConnect
-import kr.apo2073.onair.stream.TnConnect
-import kr.apo2073.onair.stream.YtConnect
 import kr.apo2073.onair.utils.Utils.sendMessage
 import kr.apo2073.onair.utils.Utils.translate
 import org.bukkit.configuration.file.YamlConfiguration
@@ -58,10 +55,11 @@ object ConnectionManager {
                 set("user.connection.${platforms.name.lowercase()}.display", channelName)
             }.save(userData.getFile())
             when(platforms) {
-                Platforms.CHZZK -> ChkConnect.connect(player, id)
-                Platforms.YOUTUBE -> YtConnect.connect(player, id)
-                Platforms.TOONATION -> TnConnect.connect(player, id, channelName)
-                Platforms.SOOP -> SpConnect.connect(player, id)
+                Platforms.CHZZK -> ChkConnector().connect(player, id)
+                Platforms.YOUTUBE -> YtConnector().connect(player, id)
+                Platforms.TOONATION -> TnConnector(channelName).connect(player, id)
+                Platforms.SOOP -> SpConnector().connect(player, id)
+                Platforms.TWITCH -> TwConnector().connect(player, id)
                 else-> return
             }
             val suc= PlayerStreamingConnectionEvent(
@@ -75,10 +73,11 @@ object ConnectionManager {
 
         fun disconnect(platforms: Platforms) {
             when(platforms) {
-                Platforms.CHZZK -> ChkConnect.disconnect(player)
-                Platforms.YOUTUBE -> YtConnect.disconnect(player)
-                Platforms.TOONATION -> TnConnect.disconnect(player)
-                Platforms.SOOP -> SpConnect.disconnect(player)
+                Platforms.CHZZK -> ChkConnector().disconnect(player)
+                Platforms.YOUTUBE -> YtConnector().disconnect(player)
+                Platforms.TOONATION -> TnConnector("").disconnect(player)
+                Platforms.SOOP -> SpConnector().disconnect(player)
+                Platforms.TWITCH -> TwConnector().disconnect(player)
                 else-> return
             }
             val suc= PlayerStreamingDisconnectionEvent(player, platforms).callEvent()

@@ -50,7 +50,7 @@ class TnConnector(
                         return@runTask
                     }
 
-                    user.connect(Platforms.TOONATION, id, channel)
+                    user.connect(platform, id, channel)
 
                     player.sendMessage(translate(
                         "alert.connection.toonation", mapOf(
@@ -72,7 +72,7 @@ class TnConnector(
         OnAir.tn[player.uniqueId]?.close()
         OnAir.tn.remove(player.uniqueId)
 
-        UserData(player).disconnect(Platforms.TOONATION, id)
+        UserData(player).disconnect(platform, id)
         player.sendMessage(translate("alert.disconnect"), true)
     }
 }

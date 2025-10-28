@@ -40,7 +40,7 @@ class YtConnector: AbstractConnector(Platforms.YOUTUBE) {
             OnAir.yt[player.uniqueId] = ytInstance
             youtubeInfo = channelInfo
 
-            user.connect(Platforms.YOUTUBE, id)
+            user.connect(platform, id)
 
             player.sendMessage(translate("alert.connection.youtube", mapOf(
                 "name" to channelInfo.channelName,
@@ -56,7 +56,7 @@ class YtConnector: AbstractConnector(Platforms.YOUTUBE) {
         OnAir.yt[player.uniqueId]?.close()
         OnAir.yt.remove(player.uniqueId)
 
-        UserData(player).disconnect(Platforms.YOUTUBE, id)
+        UserData(player).disconnect(platform, id)
         player.sendMessage(translate("alert.disconnect"), true)
     }
 }
