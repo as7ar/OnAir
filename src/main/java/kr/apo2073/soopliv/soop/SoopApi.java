@@ -1,10 +1,10 @@
 package kr.apo2073.soopliv.soop;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import kr.apo2073.soopliv.exception.DoneException;
 import kr.apo2073.soopliv.exception.ExceptionCode;
 import kr.apo2073.soopliv.utilities.Debugger;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -18,6 +18,7 @@ public class SoopApi {
     public static SoopLiveInfo getPlayerLive(String bjid) {
         return getPlayerLive(bjid, false);
     }
+
     public static SoopLiveInfo getPlayerLive(String bjid, boolean isDebug) {
         Debugger debugger = new Debugger();
         debugger.isDebug = isDebug;
@@ -25,65 +26,72 @@ public class SoopApi {
 
         try {
             HttpClient client = HttpClient.newHttpClient();
-            JSONObject bodyJson = new JSONObject();
-            bodyJson.put("bid", bjid);
-            bodyJson.put("type", "live");
-            bodyJson.put("pwd", "");
-            bodyJson.put("player_type", "html5");
-            bodyJson.put("stream_type", "common");
-            bodyJson.put("quality", "HD");
-            bodyJson.put("mode", "landing");
-            bodyJson.put("is_revive", "false");
-            bodyJson.put("from_api", "0");
 
-            debugger.log("Request URL: " + requestURL + "\n" + "Request Body: " + bodyJson.toJSONString());
+            Map<Object, Object> bodyMap = Map.of(
+                    "bid", bjid,
+                    "type", "live",
+                    "pwd", "",
+                    "player_type", "html5",
+                    "stream_type", "common",
+                    "quality", "HD",
+                    "mode", "landing",
+                    "is_revive", "false",
+                    "from_api", "0"
+            );
+
+            debugger.log("Request URL: " + requestURL + "\nRequest Body: " + bodyMap);
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .POST(ofFormData(bodyJson))
                     .uri(URI.create(requestURL))
                     .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
                     .header("Content-Type", "application/x-www-form-urlencoded")
-                    .build(); // HttpRequest 생성
-
+                    .POST(ofFormData(bodyMap))
+                    .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200) {
-                JSONParser parser = new JSONParser();
-                JSONObject jsonObject = (JSONObject) parser.parse(response.body());
-                JSONObject channel = (JSONObject) jsonObject.get("CHANNEL");
-                SoopLiveInfo soopLiveInfo = new SoopLiveInfo(
-                        channel.get("CHDOMAIN").toString(),
-                        channel.get("CHATNO").toString(),
-                        channel.get("FTK").toString(),
-                        channel.get("TITLE").toString(),
-                        channel.get("BJID").toString(),
-                        channel.get("BNO").toString(),
-                        channel.get("CHIP").toString(),
-                        String.valueOf(Integer.parseInt(channel.get("CHPT").toString()) + 1),
-                        channel.get("CTIP").toString(),
-                        channel.get("CTPT").toString(),
-                        channel.get("GWIP").toString(),
-                        channel.get("GWPT").toString()
-                );
-
-                debugger.log(soopLiveInfo.toString());
-
-                return soopLiveInfo;
-            } else {
+            if (response.statusCode() != 200) {
                 throw new DoneException(ExceptionCode.API_CHAT_CHANNEL_ID_ERROR);
             }
+
+            JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
+            JsonObject channel = jsonObject.getAsJsonObject("CHANNEL");
+
+            if (channel == null) {
+                throw new DoneException(ExceptionCode.API_CHAT_CHANNEL_ID_ERROR);
+            }
+
+            SoopLiveInfo soopLiveInfo = new SoopLiveInfo(
+                    channel.get("CHDOMAIN").getAsString(),
+                    channel.get("CHATNO").getAsString(),
+                    channel.get("FTK").getAsString(),
+                    channel.get("TITLE").getAsString(),
+                    channel.get("BJID").getAsString(),
+                    channel.get("BNO").getAsString(),
+                    channel.get("CHIP").getAsString(),
+                    String.valueOf(Integer.parseInt(channel.get("CHPT").getAsString()) + 1),
+                    channel.get("CTIP").getAsString(),
+                    channel.get("CTPT").getAsString(),
+                    channel.get("GWIP").getAsString(),
+                    channel.get("GWPT").getAsString()
+            );
+
+            debugger.log(soopLiveInfo.toString());
+            return soopLiveInfo;
+
+        } catch (DoneException e) {
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     public static HttpRequest.BodyPublisher ofFormData(Map<Object, Object> data) {
-        var builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
         for (Map.Entry<Object, Object> entry : data.entrySet()) {
-            if (!builder.isEmpty()) builder.append("&");
+            if (builder.length() > 0) builder.append("&");
 
             builder.append(URLEncoder.encode(entry.getKey().toString(), StandardCharsets.UTF_8));
             builder.append("=");
