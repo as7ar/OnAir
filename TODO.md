@@ -1,18 +1,6 @@
-- [x] start
-
-
-- [x] chzzk
-- [x] youtube
-- [x] toonation
-- [ ] twitch
-- [ ] soop
-
-
-- [x] commands
-- [x] listeners
-
-- [x] Skript
-- [x] PlaceholderAPI
+[ ] tab-complete ~ config custom
+[ ] command's config split
+[ ] twitch listener, connector
 
 
 | Version | description |
