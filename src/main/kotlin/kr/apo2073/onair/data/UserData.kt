@@ -97,13 +97,13 @@ class UserData(private val player: OfflinePlayer) {
         }.save(getFile())
 
         ConnectionManager.setConfigValue(id, player.uniqueId.toString())
-        ConnectionManager.setConfigValue("${player.uniqueId}.$path", id)
+        ConnectionManager.setConfigValue("${player.uniqueId}.${platform.name}", id)
         addConnection(platform)
     }
 
     fun disconnect(platform: Platforms, id: String) {
         val path = "user.connection.${platform.name.lowercase()}"
-        ConnectionManager.setConfigValue("${player.uniqueId}.$path", null)
+        ConnectionManager.setConfigValue("${player.uniqueId}.${platform.name}", null)
         ConnectionManager.setConfigValue(id, null)
         getConfig().apply {
             set("$path.first", null)
