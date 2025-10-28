@@ -110,7 +110,7 @@ class OAdminCommand: Command(
                     tab.add("명령어")
                 }
                 args[1] == "채널이름" -> {
-                    tab.addAll(arrayOf("치지직","유튜브","투네이션"))
+                    tab.addAll(arrayOf("치지직","유튜브","투네이션","숲", "트위치"))
                 }
                 args[1] == "채팅알림" || args[1] == "후원알림" -> {
                     tab.addAll(arrayOf("켜기", "끄기"))

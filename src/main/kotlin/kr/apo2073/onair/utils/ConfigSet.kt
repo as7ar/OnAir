@@ -21,9 +21,22 @@ object ConfigSet {
         }
     }
 
+    object TabComplete {
+        object oa {
+            val args_1= config.getStringList("tab-complete.oa.1")
+            val args_2= config.getStringList("tab-complete.oa.2")
+            val args_3= config.getStringList("tab-complete.oa.3")
+            val args_4= config.getStringList("tab-complete.oa.4")
+            val args_5= config.getString("tab-complete.oa.5") ?: "채널명"
+            val args_6= config.getString("tab-complete.oa.6") ?: "ID"
+            val args_7= config.getString("tab-complete.oa.7") ?: "새채널이름"
+        }
+    }
+
     val chatFormat= config.getString("채팅.형식")
     val emoticon= config.getString("채팅.이모티콘") ?: "&7(이모티콘)&f"
     val anon= config.getString("채팅.익명") ?: "(익명)"
+    val plats= config.getStringList("platforms")
 
     object donation {
         val donationFormat= config.getString("후원.형식")

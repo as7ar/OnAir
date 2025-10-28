@@ -1,6 +1,5 @@
 package kr.apo2073.onair.cmds
 
-import kr.apo2073.onair.OnAir
 import kr.apo2073.onair.cmds.oa.OAHandler
 import kr.apo2073.onair.data.UserData
 import kr.apo2073.onair.player.Streamer
@@ -17,7 +16,6 @@ class OACommand: Command(
     ConfigSet.Command.oa.description,
     "apo.oa.channel"
 ) {
-    private val plugin= OnAir.plugin
 
     override fun execute(
         sender: CommandSender,
@@ -30,87 +28,78 @@ class OACommand: Command(
             sender.sendMessage(translate("command.oa.permission.no"), true)
             return true
         }
-        if (args.isEmpty() || args[0]=="도움말") {
+        if (args.isEmpty()) {
             handler.help()
             return true
         }
+
         val userData= UserData(sender)
+        val action = args[0] // 등록 / 등록해제 / 정보 / 설정 / 도움말
 
-        if (args[0]=="정보") {
-            handler.viewConnection(userData)
-            return true
-        }
-
-        if (args[0]=="설정") {
-            if (args.size<3) {
-                handler.help()
-                return true
+        when(action) {
+            "등록" -> {
+                if(args.size < 4) { handler.help(); return true }
+                val plat = args[1].toPlatform()
+                val channelName = args[2]
+                val id = args[3]
+                steamer.connect(plat, channelName, id)
             }
-            val setting=args[1]
-            val value=args[2]
-            var value1="none"
-            if (args.size>=4) value1= args[3]
-            handler.setSetting(setting, value, value1)
-            return true
-        }
 
-        if (
-            arrayOf("치지직","유튜브","투네이션","숲","트위치").contains(args[0])
-            && args.size>=2
-        ) {
-            val plat=args[0].toPlatform()
-            val type=args[1] // ( 등록 / 등록해제 )
-
-            when (type) {
-                "등록"  -> {
-                    if (args.size >= 4) {
-                        val channelName = args[2]
-                        val id = args[3]
-                        steamer.connect(plat, channelName, id)
-                    }
-                }
-                "등록해제" -> steamer.disconnect(plat)
-                else -> handler.help()
+            "등록해제" -> {
+                if(args.size < 2) { handler.help(); return true }
+                val plat = args[1].toPlatform()
+                steamer.disconnect(plat)
             }
-            return true
+
+            "정보" -> handler.viewConnection(userData)
+
+            "설정" -> {
+                if(args.size < 3) { handler.help(); return true }
+                val setting = args[1]
+                val value = args[2]
+                val value1 = if(args.size >=4) args[3] else "none"
+                handler.setSetting(setting, value, value1)
+            }
+
+            "도움말" -> handler.help()
+            else -> handler.help()
         }
-        handler.help()
+
         return true
     }
 
     override fun tabComplete(
         sender: CommandSender,
         args: Array<out String>
-    ): List<String> {
+    ): List<String> { //todo: YEA
         val tab = mutableListOf<String>()
-        if (args.size == 1) {
-            tab.addAll(arrayOf("치지직","유튜브","투네이션"/*, "숲"*/, "정보", "설정", "도움말"))
-        }
+        val plats=ConfigSet.plats
+        val args1=arrayOf("등록","등록해제","정보","설정","도움말")
+        val args2=arrayOf("채팅알림", "후원알림", "메세지대상", "채널이름")
+        val args3=arrayOf("켜기", "끄기")
+        val args4=arrayOf("스트리머만", "전체")
 
-        if (args.size == 2) {
-            if (args[0] == "설정") {
-                tab.addAll(arrayOf("채팅알림", "후원알림", "메세지대상", "채널이름"))
-            } else {
-                tab.addAll(arrayOf("등록", "등록해제"))
+        if(args.size == 1) tab.addAll(args1)
+        if(args.size == 2) {
+            when(args[0]) {
+                args1[0],args1[1] -> tab.addAll(plats)
+                args1[3] -> tab.addAll(args2)
             }
         }
-
-        if (args.size == 3) {
-            if (args[0] == "설정") {
-                when (args[1]) {
-                    "채널이름" -> tab.addAll(arrayOf("치지직","유튜브","투네이션"))
-                    "채팅알림", "후원알림" -> tab.addAll(arrayOf("켜기", "끄기"))
-                    "메세지대상" -> tab.addAll(arrayOf("스트리머만", "전체"))
+        if(args.size == 3) {
+            if(args[0] == args1[0]) tab.add("채널명")
+            if(args[0] == args1[3]) {
+                when(args[1]) {
+                    "채널이름" -> tab.addAll(plats)
+                    "채팅알림", "후원알림" -> tab.addAll(args3)
+                    "메세지대상" -> tab.addAll(args4)
                     else -> tab.add("값")
                 }
-            } else {
-                tab.add("채널이름")
             }
         }
-
-        if (args.size == 4) {
-            if (args[1] == "채널이름") tab.add("새채널이름")
-            else tab.add("채널ID")
+        if(args.size == 4) {
+            if(args[0] == "등록") tab.add("ID")
+            if(args[1] == "채널이름") tab.add("새채널이름")
         }
         return tab
     }
