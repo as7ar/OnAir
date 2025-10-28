@@ -19,5 +19,5 @@ on streaming disconnection:
 ### 기본 정보
 - `%onair_connection%` - 연동된 플랫폼 목록
 - `%onair_check_connection_<id>%` - 특정 연동 상태 확인
-  - `<id>`: CHZZK, YOUTUBE, TOONATION
+  - `<id>`: CHZZK, YOUTUBE, TOONATION, TWITCH, SOOP
 - `%onair_<id>_(display|id)%` - 플레이어 연동 채널 확인
