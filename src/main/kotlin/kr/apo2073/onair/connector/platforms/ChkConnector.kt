@@ -36,7 +36,7 @@ class ChkConnector: AbstractConnector(Platforms.CHZZK) {
             val name = channel.channelName
             val fol = channel.followerCount.toString()
 
-            user.connect(platform, id, name)
+            user.connect(platform, id)
             player.sendMessage(translate("alert.connection.chzzk", mapOf(
                 "name" to name,
                 "fol" to fol

@@ -12,6 +12,7 @@ import kr.apo2073.utubeLiv.YouTubeBuilder
 import kr.apo2073.utubeLiv.YouTubeInfo
 import org.bukkit.entity.Player
 
+@Deprecated(replaceWith = ReplaceWith("YtConnector"), message = "use connector")
 class YtConnect {
     companion object {
         lateinit var youtubeInfo: YouTubeInfo

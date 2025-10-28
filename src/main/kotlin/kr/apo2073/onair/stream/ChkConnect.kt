@@ -1,6 +1,7 @@
 package kr.apo2073.onair.stream
 
 import kr.apo2073.onair.OnAir
+import kr.apo2073.onair.connector.platforms.ChkConnector
 import kr.apo2073.onair.data.ConnectionManager
 import kr.apo2073.onair.data.UserData
 import kr.apo2073.onair.enums.Platforms
@@ -17,6 +18,7 @@ import xyz.r2turntrue.chzzk4j.chat.event.MissionDonationEvent
 import xyz.r2turntrue.chzzk4j.chat.event.NormalDonationEvent
 import xyz.r2turntrue.chzzk4j.exception.ChannelNotExistsException
 
+@Deprecated(replaceWith = ReplaceWith("ChkConnector"), message = "use connector")
 class ChkConnect {
     companion object {
         private val plugin= OnAir.plugin

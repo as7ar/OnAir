@@ -14,6 +14,7 @@ import kr.apo2073.toonLiv.exception.TokenNotFound
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
+@Deprecated(replaceWith = ReplaceWith("TnConnector"), message = "use connector")
 class TnConnect {
     companion object {
         private val plugin= OnAir.plugin

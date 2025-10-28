@@ -172,4 +172,7 @@ public class Youtube {
         return YouTubeInfo.from(this.videoID, this.api);
     }
 
+    public void close() {
+
+    }
 }
