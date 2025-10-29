@@ -36,8 +36,10 @@ class OACommand: Command(
         val userData= UserData(sender)
         val action = args[0] // 등록 / 등록해제 / 정보 / 설정 / 도움말
 
+        val args1=ConfigSet.TabComplete.oa.args_1
+
         when(action) {
-            "등록" -> {
+            args1[0] -> {
                 if(args.size < 4) { handler.help(); return true }
                 val plat = args[1].toPlatform()
                 val channelName = args[2]
@@ -45,15 +47,15 @@ class OACommand: Command(
                 steamer.connect(plat, channelName, id)
             }
 
-            "등록해제" -> {
+            args1[1] -> {
                 if(args.size < 2) { handler.help(); return true }
                 val plat = args[1].toPlatform()
                 steamer.disconnect(plat)
             }
 
-            "정보" -> handler.viewConnection(userData)
+            args1[2] -> handler.viewConnection(userData)
 
-            "설정" -> {
+            args1[3] -> {
                 if(args.size < 3) { handler.help(); return true }
                 val setting = args[1]
                 val value = args[2]
@@ -61,7 +63,7 @@ class OACommand: Command(
                 handler.setSetting(setting, value, value1)
             }
 
-            "도움말" -> handler.help()
+            args1[4] -> handler.help()
             else -> handler.help()
         }
 
@@ -74,10 +76,10 @@ class OACommand: Command(
     ): List<String> { //todo: YEA
         val tab = mutableListOf<String>()
         val plats=ConfigSet.plats
-        val args1=arrayOf("등록","등록해제","정보","설정","도움말")
-        val args2=arrayOf("채팅알림", "후원알림", "메세지대상", "채널이름")
-        val args3=arrayOf("켜기", "끄기")
-        val args4=arrayOf("스트리머만", "전체")
+        val args1=ConfigSet.TabComplete.oa.args_1
+        val args2=ConfigSet.TabComplete.oa.args_2
+        val args3=ConfigSet.TabComplete.oa.args_3
+        val args4=ConfigSet.TabComplete.oa.args_4
 
         if(args.size == 1) tab.addAll(args1)
         if(args.size == 2) {
@@ -87,19 +89,19 @@ class OACommand: Command(
             }
         }
         if(args.size == 3) {
-            if(args[0] == args1[0]) tab.add("채널명")
+            if(args[0] == args1[0]) tab.add(ConfigSet.TabComplete.oa.args_5)
             if(args[0] == args1[3]) {
                 when(args[1]) {
-                    "채널이름" -> tab.addAll(plats)
-                    "채팅알림", "후원알림" -> tab.addAll(args3)
-                    "메세지대상" -> tab.addAll(args4)
-                    else -> tab.add("값")
+                    args2[3] -> tab.addAll(plats)
+                    args2[0], args2[1] -> tab.addAll(args3)
+                    args2[2] -> tab.addAll(args4)
+                    else -> tab.add(ConfigSet.TabComplete.oa.args_8)
                 }
             }
         }
         if(args.size == 4) {
-            if(args[0] == "등록") tab.add("ID")
-            if(args[1] == "채널이름") tab.add("새채널이름")
+            if(args[0] == args1[0]) tab.add(ConfigSet.TabComplete.oa.args_6)
+            if(args[1] == args2[3]) tab.add(ConfigSet.TabComplete.oa.args_7)
         }
         return tab
     }

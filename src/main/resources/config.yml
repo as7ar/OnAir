@@ -43,47 +43,6 @@
 
 #  ========================[ Plugin ]===================================
 
-# 명령어 접두사
-prefix: '<b><gradient:#E7B0B0:#BA4242>[ OnAir ]</gradient></b> '
-
-# 명령어 설정
-command:
-  oa:
-    name: 'oa'
-    aliases:
-      - 'onair'
-      - '방송'
-    description: 'OnAir 메인 명령어'
-  oadmin:
-    name: 'oadmin'
-    aliases:
-      - 'oad'
-      - '방송관리'
-    description: 'OnAir 관리자 명령어'
-
-tab-complete:
-  oa:
-    '1':
-      - 등록
-      - 등록해제
-      - 정보
-      - 설정
-      - 도움말
-    '2':
-      - 채팅알림
-      - 후원알림
-      - 메세지대상
-      - 채널이름
-    '3':
-      - 켜기
-      - 끄기
-    '4':
-      - 스트리머만
-      - 전체
-    '5': 채널명
-    '6': ID
-    '7': 새채널이름
-
 platforms:
   - 치지직
   - 유튜브

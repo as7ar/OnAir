@@ -1,35 +1,41 @@
 package kr.apo2073.onair.utils
 
 import kr.apo2073.onair.OnAir
+import org.bukkit.configuration.file.YamlConfiguration
+import java.io.File
 
 object ConfigSet {
     private val plugin = OnAir.plugin
-    private val config= plugin.config
+    private val config = plugin.config
+    private val commandFile = File(plugin.dataFolder, "command.yml")
+    private val cConfig
+        get() = YamlConfiguration.loadConfiguration(commandFile)
 
-    val prefix= config.getString("prefix") ?: "<b><gradient:#E7B0B0:#BA4242>[ OnAir ]</gradient></b> "
+    val prefix= cConfig.getString("prefix") ?: "<b><gradient:#E7B0B0:#BA4242>[ OnAir ]</gradient></b> "
     object Command {
         object oa {
-            val name = config.getString("command.oa.name") ?: "oa"
-            val aliases = config.getStringList("command.oa.aliases")
-            val description = config.getString("command.oa.description") ?: "OnAir 메인 명령어"
+            val name = cConfig.getString("command.oa.name") ?: "oa"
+            val aliases = cConfig.getStringList("command.oa.aliases")
+            val description = cConfig.getString("command.oa.description") ?: "OnAir 메인 명령어"
         }
 
         object oadmin {
-            val name = config.getString("command.oadmin.name") ?: "oadmin"
-            val aliases = config.getStringList("command.oadmin.aliases")
-            val description = config.getString("command.oadmin.description") ?: "OnAir 관리자 명령어"
+            val name = cConfig.getString("command.oadmin.name") ?: "oadmin"
+            val aliases = cConfig.getStringList("command.oadmin.aliases")
+            val description = cConfig.getString("command.oadmin.description") ?: "OnAir 관리자 명령어"
         }
     }
 
     object TabComplete {
         object oa {
-            val args_1= config.getStringList("tab-complete.oa.1")
-            val args_2= config.getStringList("tab-complete.oa.2")
-            val args_3= config.getStringList("tab-complete.oa.3")
-            val args_4= config.getStringList("tab-complete.oa.4")
-            val args_5= config.getString("tab-complete.oa.5") ?: "채널명"
-            val args_6= config.getString("tab-complete.oa.6") ?: "ID"
-            val args_7= config.getString("tab-complete.oa.7") ?: "새채널이름"
+            val args_1= cConfig.getStringList("tab-complete.oa.1")
+            val args_2= cConfig.getStringList("tab-complete.oa.2")
+            val args_3= cConfig.getStringList("tab-complete.oa.3")
+            val args_4= cConfig.getStringList("tab-complete.oa.4")
+            val args_5= cConfig.getString("tab-complete.oa.5") ?: "채널명"
+            val args_6= cConfig.getString("tab-complete.oa.6") ?: "ID"
+            val args_7= cConfig.getString("tab-complete.oa.7") ?: "새채널이름"
+            val args_8= cConfig.getString("tab-complete.oa.8") ?: "값"
         }
     }
 
