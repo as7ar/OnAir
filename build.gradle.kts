@@ -68,8 +68,7 @@ tasks.build {
 
 tasks.processResources {
     val props = mapOf(
-        "version" to version,
-        "kotlin_version" to kotlinVersion
+        "version" to version
     )
     inputs.properties(props)
     filteringCharset = "UTF-8"
