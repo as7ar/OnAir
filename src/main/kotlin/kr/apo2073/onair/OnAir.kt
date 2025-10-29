@@ -22,6 +22,7 @@ import kr.apo2073.toonLiv.Toonation
 import kr.apo2073.twitchLiv.Twitch
 import kr.apo2073.utubeLiv.Youtube
 import okio.FileNotFoundException
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
 import xyz.r2turntrue.chzzk4j.ChzzkClient
 import xyz.r2turntrue.chzzk4j.ChzzkClientBuilder
@@ -29,6 +30,8 @@ import xyz.r2turntrue.chzzk4j.auth.ChzzkLegacyLoginAdapter
 import xyz.r2turntrue.chzzk4j.auth.ChzzkSimpleUserLoginAdapter
 import xyz.r2turntrue.chzzk4j.chat.ChzzkChat
 import xyz.r2turntrue.chzzk4j.naver.NaverAutologinAdapter
+import java.io.File
+import java.io.InputStreamReader
 import java.util.*
 
 class OnAir : JavaPlugin() {
@@ -57,7 +60,8 @@ class OnAir : JavaPlugin() {
 
         Debugger.debug("saving default file")
         saveDefaultConfig()
-        saveResource("lang/ko.json", true)
+        loadFile("lang/ko.json")
+        loadFile("command.yml")
 
         cht = mutableMapOf()
         tn = mutableMapOf()
@@ -160,6 +164,26 @@ class OnAir : JavaPlugin() {
             "<gradient:#E7B0B0:#BA4242>${it}</gradient>".toMiniMessage()
         ) }
     }
+
+    fun loadFile(name:String): YamlConfiguration {
+        val file = File(dataFolder, name)
+
+        if (!file.exists()) saveResource(name, false)
+
+        val userConfig = YamlConfiguration.loadConfiguration(file)
+
+        val defaultConfigStream = getResource(name) ?: return userConfig
+        val defaultConfig = YamlConfiguration.loadConfiguration(
+            InputStreamReader(defaultConfigStream, Charsets.UTF_8)
+        )
+
+        userConfig.options().copyDefaults(true)
+        userConfig.setDefaults(defaultConfig)
+        userConfig.save(file)
+
+        return userConfig
+    }
+
 
     override fun onDisable() {
         try {
