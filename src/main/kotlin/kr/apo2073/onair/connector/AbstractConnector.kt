@@ -71,6 +71,7 @@ abstract class AbstractConnector(
             }
             Platforms.CHZZK -> {
                 OnAir.cht[player.uniqueId]?.closeBlocking()
+                OnAir.cht[player.uniqueId]?.closeAsync()
 
                 OnAir.cht.remove(player.uniqueId)
             }

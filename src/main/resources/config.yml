@@ -72,8 +72,8 @@ youtube:
 
 twitch:
   client:
-    id: ''
-    secret: ''
+    id: '6gshnlmyln3571aff1ou65tt6m9u6j'
+    secret: 'cgckgjb6pltz77qz4mauj14drzvfcn'
   token: ''
 
 soop:

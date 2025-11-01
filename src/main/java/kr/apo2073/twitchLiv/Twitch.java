@@ -53,10 +53,13 @@ public class Twitch {
             OAuth2Credential credential = new OAuth2Credential("twitch", builder.TOKEN);
 
             TwitchClientBuilder clientBuilder = TwitchClientBuilder.builder()
+                    .withDefaultAuthToken(new OAuth2Credential("twitch", ""))
                     .withEnableChat(builder.enableChat)
                     .withEnableHelix(builder.enableHelix)
                     .withEnablePubSub(builder.enablePubsub)
                     .withChatAccount(credential);
+
+
 
             client = clientBuilder.build();
 

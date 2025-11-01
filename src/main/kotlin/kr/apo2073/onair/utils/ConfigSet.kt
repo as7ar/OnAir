@@ -46,6 +46,12 @@ object ConfigSet {
     val en = plugin.config.getBoolean("플렛폼.영어")
     val balloon= plugin.config.getBoolean("soop.donation-balloon", false)
 
+    object twitch {
+        val TOKEN= plugin.config.getString("twitch.token") ?: ""
+        val CLIENT_ID= plugin.config.getString("twitch.client.id") ?: ""
+        val CLIENT_SECRET= plugin.config.getString("twitch.client.secret") ?: ""
+    }
+
     private fun getStringCompat(vararg keys: String): String? {
         for (key in keys) {
             val value = config.getString(key)
