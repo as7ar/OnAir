@@ -36,8 +36,6 @@ class OACommand: Command(
         val userData= UserData(sender)
         val action = args[0] // 등록 / 등록해제 / 정보 / 설정 / 도움말
 
-        val args1=ConfigSet.TabComplete.oa.args_1
-
         when(action) {
             "등록" -> {
                 if(args.size < 4) { handler.help(); return true }
