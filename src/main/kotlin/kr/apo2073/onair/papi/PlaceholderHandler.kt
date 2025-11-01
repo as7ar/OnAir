@@ -28,12 +28,13 @@ class PlaceholderHandler: PlaceholderExpansion() {
             return ConnectionManager.infoConfig.getString(id) ?: "false"
         }
 
-        if (params.matches(Regex("(youtube|toonation|chzzk|twitch|soop)_id"))) {
+        val plats="(youtube|toonation|chzzk|twitch|soop)"
+        if (params.matches(Regex("${plats}_id"))) {
             val platform = params.replace("_key", "").toPlatform()
             return userData.getChannelData(platform).id
         }
 
-        if (params.matches(Regex("(youtube|toonation|chzzk|twitch|soop)_display"))) {
+        if (params.matches(Regex("${plats}_display"))) {
             val platform = params.replace("_key", "").toPlatform()
             return userData.getChannelData(platform).display
         }
