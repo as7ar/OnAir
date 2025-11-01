@@ -27,19 +27,6 @@ object ConfigSet {
         }
     }
 
-    object TabComplete {
-        object oa {
-            val args_1= cConfig.getStringList("tab-complete.oa.1")
-            val args_2= cConfig.getStringList("tab-complete.oa.2")
-            val args_3= cConfig.getStringList("tab-complete.oa.3")
-            val args_4= cConfig.getStringList("tab-complete.oa.4")
-            val args_5= cConfig.getString("tab-complete.oa.5") ?: "채널명"
-            val args_6= cConfig.getString("tab-complete.oa.6") ?: "ID"
-            val args_7= cConfig.getString("tab-complete.oa.7") ?: "새채널이름"
-            val args_8= cConfig.getString("tab-complete.oa.8") ?: "값"
-        }
-    }
-
     val chatFormat = getStringCompat("채팅.형식", "chat.format")
     val emoticon= getStringCompat("채팅.이모티콘", "chat.emoticon") ?: "&7(이모티콘)&f"
     val anon= getStringCompat("채팅.익명", "chat.anon") ?: "(익명)"
