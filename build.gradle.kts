@@ -83,7 +83,7 @@ tasks.shadowJar {
     }
     archiveFileName.set("onAir-${version}.jar")
     archiveClassifier.set("all")
-//    destinationDirectory = file("C:\\Users\\PC\\Desktop\\Test_Server\\21.1\\plugins")
+    destinationDirectory = file("C:\\Users\\PC\\Desktop\\Test_Server\\21.8\\plugins")
 //    destinationDirectory= file("C:\\Users\\이태수\\Desktop\\server\\plugins")
 //    destinationDirectory=file("C:\\Users\\PC\\Desktop\\projects\\OnAir\\run\\plugins")
     mergeServiceFiles()

@@ -41,10 +41,11 @@ class SoopListener: SoopEventListener() {
     }
 
     override fun onChat(chat: Chat) {
+//        println(chat.streamerTag)
         val player= getPlayer(chat.streamerTag) ?: return
         runTask {
             eventManager.onChat(ChatContent(
-                player, chat.nickname, chat.message
+                player, chat.user.nickname, chat.message
             ))
         }
     }
@@ -53,7 +54,7 @@ class SoopListener: SoopEventListener() {
         val player= getPlayer(donate.streamerTag) ?: return
         runTask {
             eventManager.onDonate(DonateContent(
-                player, donate.donorNickname,
+                player, donate.donator.nickname,
                 donate.amount.toDouble(), donate.message
             ))
         }

@@ -60,13 +60,14 @@ class OnAir : JavaPlugin() {
 
         Debugger.debug("saving default file")
         saveDefaultConfig()
-        loadFile("lang/ko.json")
+        saveResource("lang/ko.json", true)
         loadFile("command.yml")
 
         cht = mutableMapOf()
         tn = mutableMapOf()
         yt = mutableMapOf()
         tw = mutableMapOf()
+        sp = mutableMapOf()
     }
 
     override fun onEnable() {

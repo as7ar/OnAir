@@ -6,6 +6,7 @@ import kr.apo2073.onair.connector.EventBinder
 import kr.apo2073.onair.data.ConnectionManager
 import kr.apo2073.onair.data.UserData
 import kr.apo2073.onair.enums.Platforms
+import kr.apo2073.onair.utils.Debugger
 import kr.apo2073.onair.utils.Utils.sendMessage
 import kr.apo2073.onair.utils.Utils.translate
 import org.bukkit.entity.Player
@@ -40,7 +41,7 @@ class ChkConnector: AbstractConnector(Platforms.CHZZK) {
             player.sendMessage(translate("alert.connection.chzzk", mapOf(
                 "name" to name,
                 "fol" to fol
-            )))
+            )), true)
         } } catch (e: ChannelNotExistsException) {
             player.sendMessage(translate("alert.not.exist.channel",mapOf(
                 "err" to (e.message ?: "0")
@@ -48,12 +49,5 @@ class ChkConnector: AbstractConnector(Platforms.CHZZK) {
         }
     }
 
-    override fun disconnect(player: Player) = safeRun(player) {
-        val id = ConnectionManager.infoConfig
-            .getString("${player.uniqueId}.chzzk") ?: return@safeRun
-        OnAir.cht[player.uniqueId]?.closeBlocking()
-        OnAir.cht.remove(player.uniqueId)
-        UserData(player).disconnect(platform, id)
-        player.sendMessage(translate("alert.disconnect"))
-    }
+    override fun disconnect(player: Player) = disconnect(player, platform)
 }

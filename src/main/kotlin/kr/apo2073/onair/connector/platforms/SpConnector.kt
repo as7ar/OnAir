@@ -7,6 +7,7 @@ import kr.apo2073.onair.data.UserData
 import kr.apo2073.onair.enums.Platforms
 import kr.apo2073.onair.listeners.platforms.SoopListener
 import kr.apo2073.onair.utils.ConfigSet
+import kr.apo2073.onair.utils.Debugger
 import kr.apo2073.onair.utils.Utils.sendMessage
 import kr.apo2073.onair.utils.Utils.translate
 import kr.apo2073.soopliv.SoopBuilder
@@ -20,7 +21,7 @@ class SpConnector: AbstractConnector(Platforms.SOOP) {
 
             val first = config.getBoolean("user.connection.soop.first", true)
 
-            val liveInfo = SoopApi.getPlayerLive(id) ?: run {
+            val liveInfo = SoopApi.getPlayerLive(id, ConfigSet.debug) ?: run {
                 player.sendMessage(translate("alert.not.exist.channel"), true)
                 return@withUserData
             }
@@ -38,19 +39,12 @@ class SpConnector: AbstractConnector(Platforms.SOOP) {
 
             user.connect(platform, id)
 
-            player.sendMessage(
-                translate("alert.connection.soop", mapOf("name" to liveInfo.BJID)),
-                true
-            )
+            player.sendMessage(translate("alert.connection.soop", mapOf(
+                "name" to liveInfo.BJNICK,
+                "fol" to ""
+            )), true)
         }
     }
 
-    override fun disconnect(player: Player) = safeRun(player) {
-        val id = ConnectionManager.infoConfig
-            .getString("${player.uniqueId}.soop") ?: return@safeRun
-        OnAir.sp[player.uniqueId]?.close()
-        OnAir.sp.remove(player.uniqueId)
-        UserData(player).disconnect(platform, id)
-        player.sendMessage(translate("alert.disconnect"), true)
-    }
+    override fun disconnect(player: Player) = disconnect(player, platform)
 }

@@ -49,8 +49,9 @@ object Utils {
         plugin.reloadConfig()
         val lang=plugin.config.getString("language") ?: "ko"
         val json= File("${plugin.dataFolder}/lang", "${lang}.json")
-        return Gson().fromJson(json.readText(), JsonObject::class.java)
-            .get(string)?.asString?.replace("{plugin}", plugin.pluginMeta.name) ?: string
+        Debugger.debug(json.toString())
+        return Gson().fromJson(json.readText(), JsonObject::class.java).get(string)?.asString
+            ?.replace("{plugin}", plugin.pluginMeta.name) ?: string
     }
 
     fun translate(key: String, placeholders: Map<String, String>): String {

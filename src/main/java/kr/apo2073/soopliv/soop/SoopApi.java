@@ -59,6 +59,9 @@ public class SoopApi {
 
             if (channel == null) {
                 throw new DoneException(ExceptionCode.API_CHAT_CHANNEL_ID_ERROR);
+            } else {
+                debugger.log("Response Body: " + response.body());
+                debugger.log("Channel: " + channel);
             }
 
             SoopLiveInfo soopLiveInfo = new SoopLiveInfo(
@@ -67,6 +70,7 @@ public class SoopApi {
                     channel.get("FTK").getAsString(),
                     channel.get("TITLE").getAsString(),
                     channel.get("BJID").getAsString(),
+                    channel.get("BJNICK").getAsString(),
                     channel.get("BNO").getAsString(),
                     channel.get("CHIP").getAsString(),
                     String.valueOf(Integer.parseInt(channel.get("CHPT").getAsString()) + 1),
@@ -91,7 +95,7 @@ public class SoopApi {
         StringBuilder builder = new StringBuilder();
 
         for (Map.Entry<Object, Object> entry : data.entrySet()) {
-            if (builder.length() > 0) builder.append("&");
+            if (!builder.isEmpty()) builder.append("&");
 
             builder.append(URLEncoder.encode(entry.getKey().toString(), StandardCharsets.UTF_8));
             builder.append("=");

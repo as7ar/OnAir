@@ -7,6 +7,7 @@ import kr.apo2073.onair.data.UserData
 import kr.apo2073.onair.enums.Platforms
 import kr.apo2073.onair.listeners.platforms.ToonationListener
 import kr.apo2073.onair.utils.ConfigSet
+import kr.apo2073.onair.utils.Debugger
 import kr.apo2073.onair.utils.Temp
 import kr.apo2073.onair.utils.Utils.asynchronously
 import kr.apo2073.onair.utils.Utils.runTask
@@ -65,14 +66,5 @@ class TnConnector(
         return@safeRun
     } }
 
-    override fun disconnect(player: Player) = safeRun(player) {
-        val id= ConnectionManager.infoConfig
-            .getString("${player.uniqueId}.toonation") ?: return@safeRun
-
-        OnAir.tn[player.uniqueId]?.close()
-        OnAir.tn.remove(player.uniqueId)
-
-        UserData(player).disconnect(platform, id)
-        player.sendMessage(translate("alert.disconnect"), true)
-    }
+    override fun disconnect(player: Player) = disconnect(player, platform)
 }

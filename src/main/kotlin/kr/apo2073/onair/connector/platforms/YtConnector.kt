@@ -6,6 +6,7 @@ import kr.apo2073.onair.data.ConnectionManager
 import kr.apo2073.onair.data.UserData
 import kr.apo2073.onair.enums.Platforms
 import kr.apo2073.onair.listeners.platforms.YoutubeListener
+import kr.apo2073.onair.utils.Debugger
 import kr.apo2073.onair.utils.Utils.sendMessage
 import kr.apo2073.onair.utils.Utils.translate
 import kr.apo2073.utubeLiv.YouTubeBuilder
@@ -49,14 +50,5 @@ class YtConnector: AbstractConnector(Platforms.YOUTUBE) {
         }
     }
 
-    override fun disconnect(player: Player) = safeRun(player) {
-        val id = ConnectionManager.infoConfig
-            .getString("${player.uniqueId}.youtube") ?: return@safeRun
-
-        OnAir.yt[player.uniqueId]?.close()
-        OnAir.yt.remove(player.uniqueId)
-
-        UserData(player).disconnect(platform, id)
-        player.sendMessage(translate("alert.disconnect"), true)
-    }
+    override fun disconnect(player: Player) = disconnect(player, platform)
 }

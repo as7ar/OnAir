@@ -3,6 +3,7 @@ package kr.apo2073.soopliv.soop;
 import kr.apo2073.soopliv.SSLUtils;
 import kr.apo2073.soopliv.data.Chat;
 import kr.apo2073.soopliv.data.Donate;
+import kr.apo2073.soopliv.data.User;
 import kr.apo2073.soopliv.soop.listener.SoopEventListener;
 import kr.apo2073.soopliv.utilities.Debugger;
 import lombok.Getter;
@@ -56,7 +57,15 @@ public class SoopWebSocket extends WebSocketClient {
 
     private final Map<String, SoopPacket> packetMap = new HashMap<>();
 
-    public SoopWebSocket(String serverUri, Draft_6455 draft6455, SoopLiveInfo liveInfo, Map<String, String> soopUser, boolean genBalloon, boolean isDebug , SoopEventListener listener) {
+    public SoopWebSocket(
+            String serverUri,
+            Draft_6455 draft6455,
+            SoopLiveInfo liveInfo,
+            Map<String, String> soopUser,
+            boolean genBalloon,
+            boolean isDebug ,
+            SoopEventListener listener
+    ) {
         super(URI.create(serverUri), draft6455);
         this.setConnectionLostTimeout(0);
         this.setSocketFactory(SSLUtils.createSSLSocketFactory());
@@ -105,7 +114,7 @@ public class SoopWebSocket extends WebSocketClient {
 
     @Override
     public void onMessage(ByteBuffer bytes) {
-        debugger.log("[" + soopUser.get("nickname") + "] onMessage: " + new String(bytes.array(), StandardCharsets.UTF_8));
+//        debugger.log("[" + soopUser.get("nickname") + "] onMessage: " + new String(bytes.array(), StandardCharsets.UTF_8));
 
         String message = new String(bytes.array(), StandardCharsets.UTF_8);
 
@@ -136,6 +145,8 @@ public class SoopWebSocket extends WebSocketClient {
 
             if (cmd.equals(COMMAND_DONE)) {
                 String nickname = dataList.get(2);
+                User user = new User(dataList.get(1), dataList.get(5));
+
                 synchronized (packetMap) {
                     packetMap.put(nickname, packet);
                 }
@@ -151,45 +162,48 @@ public class SoopWebSocket extends WebSocketClient {
 
                         int tempPayAmount = Integer.parseInt(dataList.get(3));
                         int payAmount = poong ? tempPayAmount : tempPayAmount * 100;
-                        handleDone(nickname, payAmount, "");
+                        handleDone(user, payAmount, "");
                     } catch (InterruptedException e) {
                         debugger.log("[" + soopUser.get("nickname") + "] 숲 패킷 타임아웃 중 오류가 발생했습니다.");
                         debugger.log(e.getMessage());
                     }
                 });
             } else if (cmd.equals(COMMAND_CHAT)) {
+                // id: [1]; nick: [5]; msg: [0]
                 String nick = dataList.get(5);
 
                 SoopPacket donePacket;
                 synchronized (packetMap) {
                     donePacket = packetMap.remove(nick);
                     if (donePacket == null) {
-                        String nickname = dataList.get(2);
+                        User user = new User(dataList.get(1), dataList.get(5));
+
                         String msg = dataList.get(0);
-                        handleChat(nickname, msg);
+                        handleChat(user, msg);
                         return;
                     }
                 }
 
-                String nickname = donePacket.getDataList().get(2);
+                User user = new User(donePacket.getDataList().get(1), donePacket.getDataList().get(5));
+
                 String msg = dataList.getFirst();
                 int tempPayAmount = Integer.parseInt(donePacket.getDataList().get(3));
                 int payAmount = poong ? tempPayAmount : tempPayAmount * 100;
-                handleDone(nickname, payAmount, msg);
+                handleDone(user, payAmount, msg);
             }
         } catch (Exception e) {
-            debugger.log("[" + soopUser.get("nickname") + "] 숲 메시지 파싱 중 오류가 발생했습니다.");
+            debugger.log("[" + soopUser.get("nickname") + "-" + liveInfo.BJID() + "] 숲 메시지 파싱 중 오류가 발생했습니다.");
             debugger.log(e.getMessage());
         }
     }
 
-    private void handleDone(String nickname, int payAmount, String msg) {
-        listener.onDonation(new Donate(soopUser.get("tag"), nickname, payAmount, msg));
+    private void handleDone(User user, int payAmount, String msg) {
+        listener.onDonation(new Donate(liveInfo.BJID(), user, payAmount, msg));
     }
 
-    private void handleChat(String nickname, String msg) {
+    private void handleChat(User user, String msg) {
         if (listener == null) return;
-        listener.onChat(new Chat(soopUser.get("tag"), nickname, msg));
+        listener.onChat(new Chat(liveInfo.BJID(), user, msg));
     }
 
 
@@ -220,4 +234,50 @@ public class SoopWebSocket extends WebSocketClient {
     private static String makeLengthPacket(String data) {
         return String.format("%06d00", data.length());
     }
+
+    public void kill() {
+        try {
+            isAlive = false;
+
+            if (pingThread != null && pingThread.isAlive()) {
+                pingThread.interrupt();
+                pingThread = null;
+            }
+
+            try {
+                stopConnectionLostTimer();
+            } catch (Exception ignored) {}
+
+            try {
+                if (getConnection() != null) {
+                    getConnection().closeConnection(1000, "Killed");
+                }
+            } catch (Exception ignored) {}
+
+            try {
+                if (getSocket() != null && !getSocket().isClosed()) {
+                    getSocket().shutdownInput();
+                    getSocket().shutdownOutput();
+                    getSocket().close();
+                }
+            } catch (Exception ignored) {}
+
+            try {
+                Thread t = new Thread(() -> {
+                    try {
+                        super.closeBlocking();
+                    } catch (Exception ignored2) {}
+                });
+                t.setDaemon(true);
+                t.start();
+                t.join(1000);
+                t.interrupt();
+            } catch (Exception ignored) {}
+
+            debugger.log("[" + soopUser.get("nickname") + "] 숲 웹소켓 강제 Kill 완료.");
+        } catch (Exception e) {
+            debugger.log("[" + soopUser.get("nickname") + "] kill() 오류: " + e.getMessage());
+        }
+    }
+
 }

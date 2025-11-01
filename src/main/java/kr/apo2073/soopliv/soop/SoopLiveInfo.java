@@ -6,6 +6,7 @@ public record SoopLiveInfo(
         String FTK,
         String TITLE,
         String BJID,
+        String BJNICK,
         String BNO,
         String CHIP,
         String CHPT,
