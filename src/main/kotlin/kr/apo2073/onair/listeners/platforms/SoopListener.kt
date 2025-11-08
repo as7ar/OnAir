@@ -9,9 +9,9 @@ import kr.apo2073.onair.listeners.EventManager
 import kr.apo2073.onair.utils.Utils.runTask
 import kr.apo2073.onair.utils.Utils.toUUID
 import kr.apo2073.onair.utils.Utils.translate
-import kr.apo2073.soopliv.data.Chat
-import kr.apo2073.soopliv.data.Donate
-import kr.apo2073.soopliv.soop.listener.SoopEventListener
+import kr.apo2073.api.soopliv.data.Chat
+import kr.apo2073.api.soopliv.data.Donate
+import kr.apo2073.api.soopliv.soop.listener.SoopEventListener
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 

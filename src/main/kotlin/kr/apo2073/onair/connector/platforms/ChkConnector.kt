@@ -1,17 +1,15 @@
 package kr.apo2073.onair.connector.platforms
 
+import kr.apo2073.api.chzzk4j.chat.ChzzkChatBuilder
+import kr.apo2073.api.chzzk4j.exception.ChannelNotExistsException
 import kr.apo2073.onair.OnAir
 import kr.apo2073.onair.connector.AbstractConnector
 import kr.apo2073.onair.connector.EventBinder
 import kr.apo2073.onair.data.ConnectionManager
-import kr.apo2073.onair.data.UserData
 import kr.apo2073.onair.enums.Platforms
-import kr.apo2073.onair.utils.Debugger
 import kr.apo2073.onair.utils.Utils.sendMessage
 import kr.apo2073.onair.utils.Utils.translate
 import org.bukkit.entity.Player
-import xyz.r2turntrue.chzzk4j.chat.ChzzkChatBuilder
-import xyz.r2turntrue.chzzk4j.exception.ChannelNotExistsException
 
 class ChkConnector: AbstractConnector(Platforms.CHZZK) {
     override fun connect(player: Player, id: String) = safeRun(player) { try {
@@ -34,8 +32,8 @@ class ChkConnector: AbstractConnector(Platforms.CHZZK) {
                 else cht
 
             val channel = OnAir.chzzkClient.fetchChannel(id)
-            val name = channel.channelName
-            val fol = channel.followerCount.toString()
+            val name = channel?.get()?.channelName ?: throw ChannelNotExistsException("Cant find channel")
+            val fol = channel.get()?.followerCount.toString()
 
             user.connect(platform, id)
             player.sendMessage(translate("alert.connection.chzzk", mapOf(

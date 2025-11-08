@@ -2,6 +2,12 @@ package kr.apo2073.onair
 
 import ch.njol.skript.Skript
 import ch.njol.skript.SkriptAddon
+import kr.apo2073.api.chzzk4j.ChzzkClient
+import kr.apo2073.api.chzzk4j.ChzzkClientBuilder
+import kr.apo2073.api.chzzk4j.auth.ChzzkLegacyLoginAdapter
+import kr.apo2073.api.chzzk4j.auth.ChzzkSimpleUserLoginAdapter
+import kr.apo2073.api.chzzk4j.chat.ChzzkChat
+import kr.apo2073.api.chzzk4j.naver.NaverAutologinAdapter
 import kr.apo2073.onair.cmds.OACommand
 import kr.apo2073.onair.cmds.OAdminCommand
 import kr.apo2073.onair.data.ConnectionManager
@@ -17,19 +23,13 @@ import kr.apo2073.onair.utils.Utils.sendMessage
 import kr.apo2073.onair.utils.Utils.translate
 import kr.apo2073.onair.utils.chzzk.ChzzkData
 import kr.apo2073.onair.utils.toMiniMessage
-import kr.apo2073.soopliv.soop.SoopWebSocket
-import kr.apo2073.toonLiv.Toonation
-import kr.apo2073.twitchLiv.Twitch
-import kr.apo2073.utubeLiv.Youtube
+import kr.apo2073.api.soopliv.soop.SoopWebSocket
+import kr.apo2073.api.toonLiv.Toonation
+import kr.apo2073.api.twitchLiv.Twitch
+import kr.apo2073.api.utubeLiv.Youtube
 import okio.FileNotFoundException
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
-import xyz.r2turntrue.chzzk4j.ChzzkClient
-import xyz.r2turntrue.chzzk4j.ChzzkClientBuilder
-import xyz.r2turntrue.chzzk4j.auth.ChzzkLegacyLoginAdapter
-import xyz.r2turntrue.chzzk4j.auth.ChzzkSimpleUserLoginAdapter
-import xyz.r2turntrue.chzzk4j.chat.ChzzkChat
-import xyz.r2turntrue.chzzk4j.naver.NaverAutologinAdapter
 import java.io.File
 import java.io.InputStreamReader
 import java.util.*

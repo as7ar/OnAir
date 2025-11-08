@@ -1,6 +1,6 @@
 package kr.apo2073.onair.utils.chzzk
 
-import xyz.r2turntrue.chzzk4j.auth.ChzzkLoginAdapter
+import kr.apo2073.api.chzzk4j.auth.ChzzkLoginAdapter
 
 class ChzzkData {
     private var clientID: ClientID?=null

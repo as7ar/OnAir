@@ -3,15 +3,13 @@ package kr.apo2073.onair.connector.platforms
 import kr.apo2073.onair.OnAir
 import kr.apo2073.onair.connector.AbstractConnector
 import kr.apo2073.onair.data.ConnectionManager
-import kr.apo2073.onair.data.UserData
 import kr.apo2073.onair.enums.Platforms
 import kr.apo2073.onair.listeners.platforms.SoopListener
 import kr.apo2073.onair.utils.ConfigSet
-import kr.apo2073.onair.utils.Debugger
 import kr.apo2073.onair.utils.Utils.sendMessage
 import kr.apo2073.onair.utils.Utils.translate
-import kr.apo2073.soopliv.SoopBuilder
-import kr.apo2073.soopliv.soop.SoopApi
+import kr.apo2073.api.soopliv.SoopBuilder
+import kr.apo2073.api.soopliv.soop.SoopApi
 import org.bukkit.entity.Player
 
 class SpConnector: AbstractConnector(Platforms.SOOP) {

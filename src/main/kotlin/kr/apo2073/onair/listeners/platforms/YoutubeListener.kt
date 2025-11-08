@@ -10,9 +10,9 @@ import kr.apo2073.onair.utils.Debugger
 import kr.apo2073.onair.utils.Utils.runTask
 import kr.apo2073.onair.utils.Utils.toUUID
 import kr.apo2073.onair.utils.Utils.translate
-import kr.apo2073.utubeLiv.data.Chatting
-import kr.apo2073.utubeLiv.data.SuperChat
-import kr.apo2073.utubeLiv.listener.YouTubeEventListener
+import kr.apo2073.api.utubeLiv.data.Chatting
+import kr.apo2073.api.utubeLiv.data.SuperChat
+import kr.apo2073.api.utubeLiv.listener.YouTubeEventListener
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 

@@ -3,21 +3,18 @@ package kr.apo2073.onair.connector.platforms
 import kr.apo2073.onair.OnAir
 import kr.apo2073.onair.connector.AbstractConnector
 import kr.apo2073.onair.data.ConnectionManager
-import kr.apo2073.onair.data.UserData
 import kr.apo2073.onair.enums.Platforms
 import kr.apo2073.onair.listeners.platforms.ToonationListener
 import kr.apo2073.onair.utils.ConfigSet
-import kr.apo2073.onair.utils.Debugger
 import kr.apo2073.onair.utils.Temp
 import kr.apo2073.onair.utils.Utils.asynchronously
 import kr.apo2073.onair.utils.Utils.runTask
 import kr.apo2073.onair.utils.Utils.sendMessage
 import kr.apo2073.onair.utils.Utils.translate
-import kr.apo2073.toonLiv.Toonation
-import kr.apo2073.toonLiv.ToonationBuilder
-import kr.apo2073.toonLiv.exception.TokenNotFound
+import kr.apo2073.api.toonLiv.Toonation
+import kr.apo2073.api.toonLiv.ToonationBuilder
+import kr.apo2073.api.toonLiv.exception.TokenNotFound
 import org.bukkit.entity.Player
-import java.util.concurrent.CompletableFuture
 
 class TnConnector(
     private val display:String

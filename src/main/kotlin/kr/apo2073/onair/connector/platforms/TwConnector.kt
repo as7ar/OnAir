@@ -8,8 +8,7 @@ import kr.apo2073.onair.listeners.platforms.TwitchListener
 import kr.apo2073.onair.utils.ConfigSet
 import kr.apo2073.onair.utils.Utils.sendMessage
 import kr.apo2073.onair.utils.Utils.translate
-import kr.apo2073.twitchLiv.Twitch
-import kr.apo2073.twitchLiv.TwitchBuilder
+import kr.apo2073.api.twitchLiv.TwitchBuilder
 import org.bukkit.entity.Player
 
 class TwConnector: AbstractConnector(Platforms.TWITCH) {

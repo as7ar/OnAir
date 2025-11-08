@@ -3,14 +3,12 @@ package kr.apo2073.onair.connector.platforms
 import kr.apo2073.onair.OnAir
 import kr.apo2073.onair.connector.AbstractConnector
 import kr.apo2073.onair.data.ConnectionManager
-import kr.apo2073.onair.data.UserData
 import kr.apo2073.onair.enums.Platforms
 import kr.apo2073.onair.listeners.platforms.YoutubeListener
-import kr.apo2073.onair.utils.Debugger
 import kr.apo2073.onair.utils.Utils.sendMessage
 import kr.apo2073.onair.utils.Utils.translate
-import kr.apo2073.utubeLiv.YouTubeBuilder
-import kr.apo2073.utubeLiv.YouTubeInfo
+import kr.apo2073.api.utubeLiv.YouTubeBuilder
+import kr.apo2073.api.utubeLiv.YouTubeInfo
 import org.bukkit.entity.Player
 
 class YtConnector: AbstractConnector(Platforms.YOUTUBE) {

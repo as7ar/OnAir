@@ -1,12 +1,12 @@
 package kr.apo2073.onair.events
 
+import kr.apo2073.api.chzzk4j.chat.ChatMessage
+import kr.apo2073.api.chzzk4j.chat.ChzzkChat
+import kr.apo2073.api.chzzk4j.chat.DonationMessage
+import kr.apo2073.api.chzzk4j.chat.MissionDonationMessage
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
-import xyz.r2turntrue.chzzk4j.chat.ChatMessage
-import xyz.r2turntrue.chzzk4j.chat.ChzzkChat
-import xyz.r2turntrue.chzzk4j.chat.DonationMessage
-import xyz.r2turntrue.chzzk4j.chat.MissionDonationMessage
 
 data class ChzzkChatEvent(val message: ChatMessage, val chat:ChzzkChat, val player: Player?): Event() {
     override fun getEventName() = "ChzzkChatEvent"

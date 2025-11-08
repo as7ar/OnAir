@@ -5,8 +5,8 @@ import kr.apo2073.onair.data.ConnectionManager
 import kr.apo2073.onair.data.UserData
 import kr.apo2073.onair.enums.Platforms
 import kr.apo2073.onair.utils.Debugger
-import kr.apo2073.onair.utils.Utils.translate
 import kr.apo2073.onair.utils.Utils.sendMessage
+import kr.apo2073.onair.utils.Utils.translate
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.entity.Player
 

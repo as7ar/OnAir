@@ -148,7 +148,7 @@ class EventManager(private val platforms: Platforms) {
         val id = ConnectionManager.infoConfig
             .getString(player.uniqueId.toString()) ?: "UNKNOWN"
         return when (platforms) {
-            Platforms.CHZZK -> name ?: OnAir.chzzkClient.fetchChannel(id).channelName
+            Platforms.CHZZK -> name ?: OnAir.chzzkClient.fetchChannel(id)?.get()?.channelName ?: "UNKNOWN"
             else -> name ?: "UNKNOWN"
         }
     }

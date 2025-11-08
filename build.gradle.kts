@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "kr.apo2073"
-version = "1.2.1-b7"
+version = "1.2.1-b8"
 
 repositories {
     mavenCentral()
@@ -22,7 +22,10 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT") {
+        exclude("com.google.code.gson", "gson")
+        exclude("org.slf4j", "slf4j-api")
+    }
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     compileOnly("net.wesjd:anvilgui:1.10.6-SNAPSHOT")
@@ -30,10 +33,9 @@ dependencies {
     compileOnly("com.github.SkriptLang:Skript:2.12.1")
     compileOnly("me.clip:placeholderapi:2.11.6")
 
-    implementation(files("libs/chzzk4j-0.1.1.jar"))
     implementation("com.github.twitch4j:twitch4j:1.25.0")
 
-    implementation("org.slf4j:slf4j-api:2.0.7")
+    implementation("org.slf4j:slf4j-api:2.0.17")
 
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
@@ -45,16 +47,15 @@ dependencies {
     implementation("io.github.bonigarcia:webdrivermanager:6.2.0")
     implementation("org.java-websocket:Java-WebSocket:1.5.5")
 
-    implementation("com.google.code.gson:gson:2.11.0")
-    implementation("com.googlecode.json-simple:json-simple:1.1.1")
+    implementation("com.google.code.gson:gson:2.13.1")
     implementation("com.google.api-client:google-api-client:1.33.0")
     implementation("com.google.oauth-client:google-oauth-client-jetty:1.23.0")
     implementation("com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0")
     implementation("com.google.http-client:google-http-client-jackson2:1.39.2")
 
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 
 val targetJavaVersion = 21
@@ -89,7 +90,5 @@ tasks.shadowJar {
     mergeServiceFiles()
     dependencies {
         include(dependency("net.wesjd:anvilgui:1.10.6-SNAPSHOT"))
-        include(dependency(files("libs/chzzk4j-0.1.1.jar")))
     }
-    relocate("xyz.r2turntrue.chzzk4j", "kr.apo2073.chzzk4j")
 }
