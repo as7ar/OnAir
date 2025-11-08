@@ -1,12 +1,14 @@
 package kr.apo2073.onair.utils
 
-import kr.apo2073.onair.utils.Utils.prefix
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
 
 class OALogger {
     private fun format(color: String, message: String): Component {
-        return prefix.append("<#E06B80>></#E06B80> <$color>$message</$color>".toMiniMessage())
+        return MiniMessage.miniMessage().deserialize(
+            ConfigSet.prefix.replace(Regex("[|]"), "")
+        ).append("<#E06B80>></#E06B80> <$color>$message</$color>".toMiniMessage())
     }
 
     fun info(string: String) = send("white", string)

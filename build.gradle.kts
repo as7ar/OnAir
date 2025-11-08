@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "kr.apo2073"
-version = "1.2.1-b8"
+version = "1.2.1-b9"
 
 repositories {
     mavenCentral()
