@@ -112,14 +112,20 @@ class EventManager(private val platforms: Platforms) {
 
     private fun executeCommand(player: Player, donate: DonateContent) {
         val command = ConfigSet.donation.command(donate.payAmount.toInt()) ?: return
+        val isConsole=command.startsWith("$")
         val parsed = command
             .replace("{player}", player.name)
             .replace("{nick}", donate.nickname ?: ConfigSet.anon)
             .replace("{paid}", donate.payAmount.toString())
             .replace("{msg}", donate.content ?: "")
+            .replace("$", "")
 
         Debugger.debug("Executing donation command: $parsed")
-        player.performCommandAsOP(parsed)
+        if (isConsole) Bukkit.dispatchCommand(
+            Bukkit.getServer().consoleSender,
+            parsed
+        )
+        else player.performCommandAsOP(parsed)
     }
 
     private fun callChatEvent(player: Player, chat: ChatContent) {
