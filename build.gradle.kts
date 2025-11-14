@@ -7,8 +7,8 @@ plugins {
     `java-library`
 }
 
-group = "kr.apo2073"
-version = "1.2.1-b9"
+group = "kr.astar"
+version = "1.2.1-b10"
 
 repositories {
     mavenCentral()
@@ -80,7 +80,7 @@ tasks.processResources {
 
 tasks.shadowJar {
     minimize {
-        exclude("kr.apo2073.*")
+        exclude("kr.astar.*")
     }
     archiveFileName.set("onAir-${version}.jar")
     archiveClassifier.set("all")

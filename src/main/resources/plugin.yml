@@ -1,8 +1,8 @@
 name: OnAir
 version: ${version}
-main: kr.apo2073.onair.OnAir
+main: kr.astar.onair.OnAir
 api-version: '1.20'
-authors: [ APO2073 ]
+authors: [ AS7AR ]
 soft-depend: [
   Skript,
   Placeholder
@@ -23,15 +23,15 @@ libraries:
   - com.github.twitch4j:twitch4j:1.25.0
 
 permissions:
-  apo.oa.*:
+  astar.oa.*:
     children:
-      apo.oa.channel: true
-      apo.oa.donation: true
-      apo.oa.admin: true
+      astar.oa.channel: true
+      astar.oa.donation: true
+      astar.oa.admin: true
 
-    apo.oa.channel:
+    astar.oa.channel:
       default: op
-    apo.oa.donation:
+    astar.oa.donation:
       default: op
-    apo.oa.admin:
+    astar.oa.admin:
       default: op
