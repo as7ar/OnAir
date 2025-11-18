@@ -32,7 +32,7 @@ kotlin {
     jvmToolchain(targetJavaVersion)
 }
 
-val templateSource = file("src/main/templates")
+val templateSource = file("src/main/java/templates")
 val templateDest = layout.buildDirectory.dir("generated/sources/templates")
 val generateTemplates = tasks.register<Copy>("generateTemplates") {
     val props = mapOf("version" to project.version)

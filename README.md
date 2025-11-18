@@ -1,5 +1,8 @@
 # 📺 OnAir
 
+## Change Log
+[CHANGELOG](./ChangeLog.md)
+
 ## 📃 Skript
 ```scss
 on streaming chat:

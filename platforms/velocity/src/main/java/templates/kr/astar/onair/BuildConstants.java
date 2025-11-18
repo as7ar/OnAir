@@ -1,4 +1,4 @@
-package kr.astar.onair;
+package templates.kr.astar.onair;
 
 // The constants are replaced before compilation
 public class BuildConstants {
