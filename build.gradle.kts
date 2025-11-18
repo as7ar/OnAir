@@ -2,13 +2,17 @@ val kotlinVersion : String by project
 
 plugins {
     kotlin("jvm") version "2.2.21"
+    kotlin("kapt") version "2.2.21"
     id("com.gradleup.shadow") version "8.3.0"
     id("java")
     `java-library`
+    id("eclipse")
+    id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.8"
+
 }
 
 group = "kr.astar"
-version = "1.2.1-b10"
+version = "1.2.1-b11"
 
 repositories {
     mavenCentral()

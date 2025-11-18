@@ -27,8 +27,8 @@ dependencies {
 
     compileOnly("net.wesjd:anvilgui:1.10.6-SNAPSHOT")
     compileOnly("org.bstats","bstats-bukkit","3.1.0")
-    compileOnly("com.github.SkriptLang:Skript:2.12.1")
-    compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("com.github.SkriptLang:Skript:2.13.1")
+    compileOnly("me.clip:placeholderapi:2.11.7")
 }
 
 kotlin {

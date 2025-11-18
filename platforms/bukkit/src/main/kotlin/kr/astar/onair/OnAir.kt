@@ -108,7 +108,7 @@ class OnAir : JavaPlugin() {
         if (server.pluginManager.getPlugin("Skript")!=null) {
             addon = Skript.registerAddon(this)
 
-            addon.loadClasses("kr.astar.onAir.events.skript")
+            addon.loadClasses("kr.astar.onair.events.skript")
 
             Debugger.debug("Succeed to register Skript Addon")
         } else Debugger.debug("Failed to register Skript Addon")
