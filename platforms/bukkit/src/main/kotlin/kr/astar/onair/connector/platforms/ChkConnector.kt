@@ -1,14 +1,14 @@
 package kr.astar.onair.connector.platforms
 
-import kr.astar.api.chzzk4j.chat.ChzzkChatBuilder
-import kr.astar.api.chzzk4j.exception.ChannelNotExistsException
+import xyz.r2turntrue.chzzk4j.chat.ChzzkChatBuilder
+import xyz.r2turntrue.chzzk4j.exception.ChannelNotExistsException
 import kr.astar.onair.OnAir
 import kr.astar.onair.connector.AbstractConnector
 import kr.astar.onair.connector.EventBinder
 import kr.astar.onair.data.ConnectionManager
 import kr.astar.onair.enums.Platforms
-import kr.astar.onair.utils.Utils.translate
 import kr.astar.onair.utils.Utils.sendMessage
+import kr.astar.onair.utils.Utils.translate
 import org.bukkit.entity.Player
 
 class ChkConnector: AbstractConnector(Platforms.CHZZK) {

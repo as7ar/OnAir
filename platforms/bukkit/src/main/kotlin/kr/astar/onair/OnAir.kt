@@ -2,12 +2,12 @@ package kr.astar.onair
 
 import ch.njol.skript.Skript
 import ch.njol.skript.SkriptAddon
-import kr.astar.api.chzzk4j.ChzzkClient
-import kr.astar.api.chzzk4j.ChzzkClientBuilder
-import kr.astar.api.chzzk4j.auth.ChzzkLegacyLoginAdapter
-import kr.astar.api.chzzk4j.auth.ChzzkSimpleUserLoginAdapter
-import kr.astar.api.chzzk4j.chat.ChzzkChat
-import kr.astar.api.chzzk4j.naver.NaverAutologinAdapter
+import xyz.r2turntrue.chzzk4j.ChzzkClient
+import xyz.r2turntrue.chzzk4j.ChzzkClientBuilder
+import xyz.r2turntrue.chzzk4j.auth.ChzzkLegacyLoginAdapter
+import xyz.r2turntrue.chzzk4j.auth.ChzzkSimpleUserLoginAdapter
+import xyz.r2turntrue.chzzk4j.chat.ChzzkChat
+import xyz.r2turntrue.chzzk4j.naver.NaverAutologinAdapter
 import kr.astar.onair.cmds.OACommand
 import kr.astar.onair.data.ConnectionManager
 import kr.astar.onair.data.UserData

@@ -1,9 +1,9 @@
 package kr.astar.onair.connector
 
-import kr.astar.api.chzzk4j.chat.ChzzkChat
-import kr.astar.api.chzzk4j.chat.event.ChatMessageEvent
-import kr.astar.api.chzzk4j.chat.event.MissionDonationEvent
-import kr.astar.api.chzzk4j.chat.event.NormalDonationEvent
+import xyz.r2turntrue.chzzk4j.chat.ChzzkChat
+import xyz.r2turntrue.chzzk4j.chat.event.ChatMessageEvent
+import xyz.r2turntrue.chzzk4j.chat.event.MissionDonationEvent
+import xyz.r2turntrue.chzzk4j.chat.event.NormalDonationEvent
 import kr.astar.onair.events.ChzzkChatEvent
 import kr.astar.onair.events.ChzzkDonationEvent
 import kr.astar.onair.events.ChzzkMissionDonationEvent

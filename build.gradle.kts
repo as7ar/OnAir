@@ -29,6 +29,9 @@ subprojects {
     apply(plugin = "java-library")
     apply(plugin = "com.gradleup.shadow")
     apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.kotlin.kapt")
+    apply(plugin = "eclipse")
+    apply(plugin = "org.jetbrains.gradle.plugin.idea-ext")
 
     repositories {
         mavenCentral()
@@ -48,6 +51,7 @@ subprojects {
         }
 
         implementation("com.github.twitch4j:twitch4j:1.25.0")
+        implementation("io.github.r2turntrue:chzzk4j:0.1.3")
 
         implementation("org.slf4j:slf4j-api:2.0.17")
 

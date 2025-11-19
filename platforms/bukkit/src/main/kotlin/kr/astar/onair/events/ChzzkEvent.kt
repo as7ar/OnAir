@@ -1,9 +1,9 @@
 package kr.astar.onair.events
 
-import kr.astar.api.chzzk4j.chat.ChatMessage
-import kr.astar.api.chzzk4j.chat.ChzzkChat
-import kr.astar.api.chzzk4j.chat.DonationMessage
-import kr.astar.api.chzzk4j.chat.MissionDonationMessage
+import xyz.r2turntrue.chzzk4j.chat.ChatMessage
+import xyz.r2turntrue.chzzk4j.chat.ChzzkChat
+import xyz.r2turntrue.chzzk4j.chat.DonationMessage
+import xyz.r2turntrue.chzzk4j.chat.MissionDonationMessage
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
