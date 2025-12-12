@@ -30,10 +30,12 @@ class Streamer(private val player: Player) {
     }
 
     fun loadTemp() {
-        val data= Temp.getTemp("${player.uniqueId}", String::class) ?: return
-        val l= data.split("|").map { it.toChannelData() }
-        l.forEach {
-            ConnectionManager.Manager(player).connect(it.platforms, it.display, it.id)
-        }
+        try {
+            val data= Temp.getTemp("${player.uniqueId}", String::class) ?: return
+            val l= data.split("|").map { it.toChannelData() }
+            l.forEach {
+                ConnectionManager.Manager(player).connect(it.platforms, it.display, it.id)
+            }
+        } catch (_: NullPointerException) {}
     }
 }
