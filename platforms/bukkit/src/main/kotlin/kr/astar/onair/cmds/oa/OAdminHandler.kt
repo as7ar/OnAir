@@ -3,10 +3,8 @@ package kr.astar.onair.cmds.oa
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kr.astar.onair.OnAir
-import kr.astar.onair.data.ConnectionManager
-import kr.astar.onair.data.UserData
-import kr.astar.onair.enums.Platforms
 import kr.astar.onair.utils.Utils.performCommandAsOP
+import kr.astar.onair.utils.Utils.reset
 import kr.astar.onair.utils.Utils.sendMessage
 import kr.astar.onair.utils.Utils.translate
 import kr.astar.onair.utils.toComponent
@@ -97,26 +95,18 @@ class OAdminHandler(private val player: Player) {
             translate("command.oadmin.reset.check").toComponent()
                 .append(translate("command.check.yes").toComponent()
                     .clickEvent(ClickEvent.callback { aud: Audience ->
-                        plugin.server.onlinePlayers.forEach { player->
-                            player.sendMessage(translate("system.disabled.player"), true)
-                            val userData= UserData(player)
-                            for (platforms in Platforms.entries) {
-                                ConnectionManager.Manager(player).disconnect(platforms)
-                            }
-                            userData.getFile().delete()
-                            ConnectionManager.infoFile.delete()
-                        }
+                        plugin.reset(false)
 
                         fun deleteRecursively(file: File) {
                             if (file.isDirectory) file.listFiles()?.forEach { deleteRecursively(it) }
                             file.delete()
                         }
-                        val done_message=translate("command.oadmin.reset.done")
+                        val doneMessage=translate("command.oadmin.reset.done")
 
                         val file= plugin.dataFolder
                         deleteRecursively(file)
 
-                        player.sendMessage(done_message, true)
+                        player.sendMessage(doneMessage, true)
                         plugin.server.pluginManager.disablePlugin(plugin)
                     }))
                 .append(translate("command.check.no").toComponent()

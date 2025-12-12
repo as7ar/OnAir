@@ -3,9 +3,12 @@ package kr.astar.onair.utils
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kr.astar.onair.OnAir
+import kr.astar.onair.data.ConnectionManager
+import kr.astar.onair.data.UserData
 import kr.astar.onair.enums.Platforms
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
+import okio.FileNotFoundException
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.io.File
@@ -14,6 +17,31 @@ import java.util.*
 object Utils {
     private val plugin= OnAir.plugin
     val prefix = MiniMessage.miniMessage().deserialize(ConfigSet.prefix)
+
+    fun OnAir.reset(disable: Boolean) {
+        try {
+            log.warning("Disabling OnAir Plugin...")
+            server.onlinePlayers.forEach { player ->
+                Debugger.debug("Trying to disable plugin from Player: ${player.name}")
+                player.sendMessage(translate("system.disabled.player"), true)
+                val userData= UserData(player)
+                for (platforms in Platforms.entries) {
+                    Debugger.debug("Disconnecting Platform: ${platforms.name}")
+                    ConnectionManager.Manager(player).disconnect(platforms)
+                }
+//                userData.getFile().delete()
+                ConnectionManager.infoFile.run {
+                    this.renameTo(File("connection.old") )
+                    this.createNewFile()
+                }
+                ConnectionManager.infoFile.delete()
+            }
+        } catch (_: FileNotFoundException) {
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     fun Player.sendMessage(string: String, boolean: Boolean=true) {
         this.sendMessage(
             if (boolean) prefix.append(

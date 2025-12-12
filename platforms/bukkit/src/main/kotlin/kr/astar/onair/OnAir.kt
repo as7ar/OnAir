@@ -26,6 +26,7 @@ import kr.astar.api.soopliv.soop.SoopWebSocket
 import kr.astar.api.toonLiv.Toonation
 import kr.astar.api.twitchLiv.Twitch
 import kr.astar.api.utubeLiv.Youtube
+import kr.astar.onair.utils.Utils.reset
 import okio.FileNotFoundException
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
@@ -192,22 +193,6 @@ class OnAir : JavaPlugin() {
 
 
     override fun onDisable() {
-        try {
-            log.warning("Disabling OnAir Plugin...")
-            server.onlinePlayers.forEach { player->
-                Debugger.debug("Trying to disable plugin from Player: ${player.name}")
-                player.sendMessage(translate("system.disabled.player"), true)
-                val userData= UserData(player)
-                for (platforms in Platforms.entries) {
-                    Debugger.debug("Disconnecting Platform: ${platforms.name}")
-                    ConnectionManager.Manager(player).disconnect(platforms)
-                }
-                userData.getFile().delete()
-                ConnectionManager.infoFile.delete()
-            }
-        } catch (_: FileNotFoundException) {
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        this.reset(true)
     }
 }
