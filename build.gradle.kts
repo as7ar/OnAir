@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "kr.astar"
-version = "1.2.1-b11"
+version = "1.2.1-b12"
 
 repositories {
     mavenCentral()
