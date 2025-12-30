@@ -1,0 +1,35 @@
+name: Build OnAir
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Verify Java version
+        run: java -version
+
+      - name: Grant execute permission for Gradle
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew clean shadowJar
+
+      - name: Upload all build outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: onair-build
+          path: |
+            **/build/libs/*.jar
