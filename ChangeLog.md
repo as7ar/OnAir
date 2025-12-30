@@ -1,11 +1,16 @@
+# 📑 1.2.1-b13 (hotfix)
+ * Fixed ERROR when performing commands via Donation Event
+ * Changed Repository URL of PlaceholderAPI
+ * Updated PlaceholderAPI version to 2.11.7
+
 # 📑 1.2.1-b12
- * fixed auto connection when player joins server
+ * Fixed auto connection when Player joins server
 
 # 📑 1.2.1-b11
- * update Skript version (2.12.1 -> 2.13.1)
- * add Velocity module (todo: velocity support)
- * fixed Skript registering events
- * changed console command symbol from "$" to "console:"
+ * Update Skript version (2.12.1 -> 2.13.1)
+ * Add Velocity module (todo: velocity support)
+ * Fixed Skript registering events
+ * Changed console command symbol from "$" to "console:"
 
 # 📑 1.2.1-b10
- * add Donation event command to execute as console command, if command starts with "$"
+ * Add Donation event command to execute as console command, if command starts with "$"

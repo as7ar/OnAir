@@ -6,17 +6,6 @@ plugins {
 group = rootProject.group
 version = rootProject.version
 
-repositories {
-    mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://oss.sonatype.org/content/groups/public/")
-    maven("https://jitpack.io")
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    maven("https://repo.codemc.io/repository/maven-snapshots/")
-    maven("https://repo.skriptlang.org/releases")
-    maven { url = uri("https://repo.gradle.org/gradle/repo") }
-}
-
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT") {
         exclude("com.google.code.gson", "gson")
@@ -28,7 +17,7 @@ dependencies {
     compileOnly("net.wesjd:anvilgui:1.10.6-SNAPSHOT")
     compileOnly("org.bstats","bstats-bukkit","3.1.0")
     compileOnly("com.github.SkriptLang:Skript:2.13.1")
-    compileOnly("me.clip:placeholderapi:2.11.6")
+    implementation("me.clip:placeholderapi:2.11.7")
 }
 
 kotlin {
@@ -50,7 +39,7 @@ tasks.shadowJar {
     minimize {
         exclude("kr.astar.*")
     }
-    archiveFileName.set("onAir-${version}.jar")
+    archiveFileName.set("OnAir-${version}.jar")
     archiveClassifier.set("all")
 //    destinationDirectory = file("C:\\Users\\PC\\Desktop\\Test_Server\\21.8\\plugins")
 //    destinationDirectory= file("C:\\Users\\이태수\\Desktop\\server\\plugins")

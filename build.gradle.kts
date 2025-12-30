@@ -12,18 +12,7 @@ plugins {
 }
 
 group = "kr.astar"
-version = "1.2.1-b12"
-
-repositories {
-    mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://oss.sonatype.org/content/groups/public/")
-    maven("https://jitpack.io")
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    maven("https://repo.codemc.io/repository/maven-snapshots/")
-    maven("https://repo.skriptlang.org/releases")
-    maven { url = uri("https://repo.gradle.org/gradle/repo") }
-}
+version = "1.2.1-b13"
 
 subprojects {
     apply(plugin = "java-library")
@@ -33,23 +22,7 @@ subprojects {
     apply(plugin = "eclipse")
     apply(plugin = "org.jetbrains.gradle.plugin.idea-ext")
 
-    repositories {
-        mavenCentral()
-        maven("https://repo.papermc.io/repository/maven-public/")
-        maven("https://oss.sonatype.org/content/groups/public/")
-        maven("https://jitpack.io")
-        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-        maven("https://repo.codemc.io/repository/maven-snapshots/")
-        maven("https://repo.skriptlang.org/releases")
-        maven { url = uri("https://repo.gradle.org/gradle/repo") }
-    }
-
     dependencies {
-        compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT") {
-            exclude("com.google.code.gson", "gson")
-            exclude("org.slf4j", "slf4j-api")
-        }
-
         implementation("com.github.twitch4j:twitch4j:1.25.0")
         implementation("io.github.r2turntrue:chzzk4j:0.1.3")
 
@@ -74,6 +47,15 @@ subprojects {
         implementation("com.squareup.retrofit2:retrofit:2.11.0")
         implementation("com.squareup.retrofit2:converter-gson:2.11.0")
         implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    }
+}
+
+project(":platforms:bukkit") {
+    dependencies {
+        compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT") {
+            exclude("com.google.code.gson", "gson")
+            exclude("org.slf4j", "slf4j-api")
+        }
     }
 }
 
