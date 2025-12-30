@@ -56,6 +56,7 @@ project(":platforms:bukkit") {
             exclude("com.google.code.gson", "gson")
             exclude("org.slf4j", "slf4j-api")
         }
+        compileOnly(files("libs/PlaceholderAPI-2.11.7.jar"))
     }
 }
 
