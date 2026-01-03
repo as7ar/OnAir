@@ -5,6 +5,7 @@ import kr.astar.onair.connector.platforms.*
 import kr.astar.onair.enums.Platforms
 import kr.astar.onair.events.PlayerStreamingConnectionEvent
 import kr.astar.onair.events.PlayerStreamingDisconnectionEvent
+import kr.astar.onair.utils.ConfigSet
 import kr.astar.onair.utils.Utils.sendMessage
 import kr.astar.onair.utils.Utils.translate
 import org.bukkit.configuration.file.YamlConfiguration
@@ -55,7 +56,27 @@ object ConnectionManager {
                 set("user.connection.${platforms.name.lowercase()}.display", channelName)
             }.save(userData.getFile())
             when(platforms) {
-                Platforms.CHZZK -> ChkConnector().connect(player, id)
+                Platforms.CHZZK -> {
+                    val liveStatus= OnAir.chzzkClient.fetchLiveStatus(id).get()
+                    val tags=liveStatus.tags
+                    val title=liveStatus.title
+                    if (ConfigSet.chzzk.requiredTag.enabled && !(tags.contains(ConfigSet.chzzk.requiredTag.keyword))) {
+                        player.sendMessage(translate(
+                            "alert.required.keyword.not.use.tags",
+                            mapOf("current" to tags.joinToString(", "))
+                        ), true)
+                        return
+                    }
+                    if (ConfigSet.chzzk.requiredTitle.enabled && !(title.contains(ConfigSet.chzzk.requiredTitle.keyword))) {
+                        player.sendMessage(translate(
+                            "alert.required.keyword.not.use.title",
+                            mapOf("current" to title)
+
+                        ), true)
+                        return
+                    }
+                    ChkConnector().connect(player, id)
+                }
                 Platforms.YOUTUBE -> YtConnector().connect(player, id)
                 Platforms.TOONATION -> TnConnector(channelName).connect(player, id)
                 Platforms.SOOP -> SpConnector().connect(player, id)

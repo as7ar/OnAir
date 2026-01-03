@@ -61,7 +61,7 @@ object Utils {
         )
     }
 
-    fun Player.performCommandAsOP(command: String) {
+    fun Player.performCommandAsOP(command: String) = runTask {
         val iisOP = this.isOp
         this.isOp = true
         this.performCommand(command)

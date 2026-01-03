@@ -52,6 +52,18 @@ object ConfigSet {
         val CLIENT_SECRET= plugin.config.getString("twitch.client.secret") ?: ""
     }
 
+    object chzzk {
+        object requiredTag {
+            val enabled: Boolean = plugin.config.getBoolean("치지직.필수-태그.활성화", false)
+            val keyword: String = plugin.config.getString("치지직.필수-태그.키워드") ?: ""
+        }
+
+        object requiredTitle {
+            val enabled: Boolean = plugin.config.getBoolean("치지직.필수-타이틀.활성화", false)
+            val keyword: String = plugin.config.getString("치지직.필수-타이틀.키워드") ?: ""
+        }
+    }
+
     private fun getStringCompat(vararg keys: String): String? {
         for (key in keys) {
             val value = config.getString(key)
