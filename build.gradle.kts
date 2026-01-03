@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "kr.astar"
-version = "1.2.1-b13"
+version = "1.2.1-b14"
 
 subprojects {
     apply(plugin = "java-library")
