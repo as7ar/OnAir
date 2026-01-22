@@ -63,8 +63,6 @@ abstract class AbstractConnector(
                 OnAir.yt.remove(player.uniqueId)
             }
             Platforms.SOOP -> {
-                OnAir.sp[player.uniqueId]?.close()
-                OnAir.sp[player.uniqueId]?.closeBlocking()
                 OnAir.sp[player.uniqueId]?.kill()
 
                 OnAir.sp.remove(player.uniqueId)
@@ -78,6 +76,9 @@ abstract class AbstractConnector(
             Platforms.TWITCH -> {
                 OnAir.tw[player.uniqueId]?.shutdown()
                 OnAir.tw.remove(player.uniqueId)
+            }
+            Platforms.WEFLAB -> {
+
             }
             Platforms.UNKNOWN -> {
                 player.sendMessage(translate("alert.not.connected"), true)

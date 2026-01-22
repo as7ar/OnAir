@@ -6,5 +6,6 @@ enum class Platforms {
     TOONATION,
     TWITCH,
     SOOP,
+    WEFLAB,
     UNKNOWN
 }

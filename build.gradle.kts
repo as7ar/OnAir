@@ -3,7 +3,7 @@ val kotlinVersion : String by project
 plugins {
     kotlin("jvm") version "2.2.21"
     kotlin("kapt") version "2.2.21"
-    id("com.gradleup.shadow") version "8.3.0"
+    id("com.gradleup.shadow") version "9.2.2"
     id("java")
     `java-library`
     id("eclipse")
@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "kr.astar"
-version = "1.2.1-b14"
+version = "1.2.1"
 
 subprojects {
     apply(plugin = "java-library")
@@ -31,12 +31,10 @@ subprojects {
         compileOnly("org.projectlombok:lombok:1.18.32")
         annotationProcessor("org.projectlombok:lombok:1.18.32")
 
-        implementation("io.socket:socket.io-client:2.1.1")
         implementation("io.reactivex.rxjava3:rxjava:3.1.10")
         implementation("org.jsoup:jsoup:1.15.3")
         implementation("org.seleniumhq.selenium:selenium-java:4.34.0")
         implementation("io.github.bonigarcia:webdrivermanager:6.2.0")
-        implementation("org.java-websocket:Java-WebSocket:1.5.5")
 
         implementation("com.google.code.gson:gson:2.13.1")
         implementation("com.google.api-client:google-api-client:1.33.0")
@@ -44,8 +42,6 @@ subprojects {
         implementation("com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0")
         implementation("com.google.http-client:google-http-client-jackson2:1.39.2")
 
-        implementation("com.squareup.retrofit2:retrofit:2.11.0")
-        implementation("com.squareup.retrofit2:converter-gson:2.11.0")
         implementation("com.squareup.okhttp3:okhttp:4.12.0")
     }
 }

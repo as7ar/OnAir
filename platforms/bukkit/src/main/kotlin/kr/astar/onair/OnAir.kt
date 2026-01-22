@@ -26,6 +26,7 @@ import kr.astar.api.soopliv.soop.SoopWebSocket
 import kr.astar.api.toonLiv.Toonation
 import kr.astar.api.twitchLiv.Twitch
 import kr.astar.api.utubeLiv.Youtube
+import kr.astar.api.weflabLiv.Weflab
 import kr.astar.onair.utils.Utils.reset
 import okio.FileNotFoundException
 import org.bukkit.configuration.file.YamlConfiguration
@@ -47,6 +48,7 @@ class OnAir : JavaPlugin() {
         lateinit var yt:MutableMap<UUID, Youtube>
         lateinit var tw: MutableMap<UUID, Twitch>
         lateinit var sp: MutableMap<UUID, SoopWebSocket>
+        lateinit var wf: MutableMap<UUID, Weflab>
     }
 
     private lateinit var addon: SkriptAddon
@@ -68,6 +70,7 @@ class OnAir : JavaPlugin() {
         yt = mutableMapOf()
         tw = mutableMapOf()
         sp = mutableMapOf()
+        wf = mutableMapOf()
     }
 
     override fun onEnable() {
