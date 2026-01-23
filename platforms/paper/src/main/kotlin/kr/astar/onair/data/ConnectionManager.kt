@@ -81,6 +81,7 @@ object ConnectionManager {
                 Platforms.TOONATION -> TnConnector(channelName).connect(player, id)
                 Platforms.SOOP -> SpConnector().connect(player, id)
                 Platforms.TWITCH -> TwConnector().connect(player, id)
+                Platforms.WEFLAB -> WfConnector().connect(player, id)
                 else-> return
             }
             val suc= PlayerStreamingConnectionEvent(
@@ -99,6 +100,7 @@ object ConnectionManager {
                 Platforms.TOONATION -> TnConnector("").disconnect(player)
                 Platforms.SOOP -> SpConnector().disconnect(player)
                 Platforms.TWITCH -> TwConnector().disconnect(player)
+                Platforms.WEFLAB -> WfConnector().disconnect(player)
                 else-> return
             }
             val suc= PlayerStreamingDisconnectionEvent(player, platforms).callEvent()

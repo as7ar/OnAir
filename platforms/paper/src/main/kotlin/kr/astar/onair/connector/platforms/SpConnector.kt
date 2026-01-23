@@ -32,7 +32,6 @@ class SpConnector: AbstractConnector(Platforms.SOOP) {
                 builder.setListener(SoopListener()).build(ConfigSet.debug)
             } else { builder.build(ConfigSet.debug) }
 
-            ws.connect()
             OnAir.sp[player.uniqueId] = ws
 
             user.connect(platform, id)

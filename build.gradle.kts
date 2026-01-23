@@ -46,7 +46,7 @@ subprojects {
     }
 }
 
-project(":platforms:bukkit") {
+project(":platforms:paper") {
     dependencies {
         compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT") {
             exclude("com.google.code.gson", "gson")

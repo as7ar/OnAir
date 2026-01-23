@@ -11,6 +11,7 @@
   "alert.connection.youtube": "채널 &a{name}&f( {sub} 구독자 )에 연결했습니다",
   "alert.connection.toonation": "크리에이터 &a{name}&f에 연결했습니다",
   "alert.connection.soop": "스트리머 &a{name}&f( {fol} 애청자 )에 연결했습니다",
+  "alert.connection.weflab": "스트리머 &a{name}&f에 연결했습니다",
   "alert.replaced.emoji": "&7(이모티콘)&f",
 
   "alert.required.keyword.not.use.title": "&c방송 타이틀에 필수 키워드가 존재하지 않습니다: {current}",

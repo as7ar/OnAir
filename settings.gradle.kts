@@ -4,7 +4,7 @@ rootProject.name = "OnAir"
 
 include(
     "API",
-    "platforms:bukkit",
+    "platforms:paper",
 //    "platforms:velocity"
 )
 

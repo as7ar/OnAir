@@ -112,6 +112,10 @@ object Utils {
                 val platform = if (ConfigSet.en) "Soop" else "숲"
                 return if (ConfigSet.colored) "§9$platform§r" else platform
             }
+            Platforms.WEFLAB -> {
+                val platform = if (ConfigSet.en) "Weflab" else "위플랩"
+                return if (ConfigSet.colored) "§9$platform§r" else platform
+            }
             else-> return "알 수 없음"
         }
     }
@@ -122,6 +126,7 @@ object Utils {
         if (this.uppercase().contains("TOONATION") || this.contains("투네이션")) return Platforms.TOONATION
         if (this.uppercase().contains("TWITCH") || this.contains("트위치")) return Platforms.TWITCH
         if (this.uppercase().contains("SOOP") || this.contains("숲")) return Platforms.SOOP
+        if (this.uppercase().contains("WEFLAB") || this.contains("위플랩")) return Platforms.WEFLAB
         return Platforms.UNKNOWN
     }
 

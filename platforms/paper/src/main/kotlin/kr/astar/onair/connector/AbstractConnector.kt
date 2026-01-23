@@ -78,7 +78,8 @@ abstract class AbstractConnector(
                 OnAir.tw.remove(player.uniqueId)
             }
             Platforms.WEFLAB -> {
-
+                OnAir.wf[player.uniqueId]?.close()
+                OnAir.wf.remove(player.uniqueId)
             }
             Platforms.UNKNOWN -> {
                 player.sendMessage(translate("alert.not.connected"), true)
