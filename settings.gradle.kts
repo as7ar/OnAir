@@ -1,10 +1,10 @@
-import org.gradle.kotlin.dsl.maven
-
 rootProject.name = "OnAir"
 
 include(
     "API",
     "platforms:paper",
+    "platforms:spigot",
+    "plugin"
 //    "platforms:velocity"
 )
 
@@ -12,7 +12,7 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         gradlePluginPortal()
-
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://oss.sonatype.org/content/groups/public/")
         maven("https://jitpack.io")

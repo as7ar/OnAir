@@ -119,3 +119,6 @@ runs/
 !gradle-wrapper.jar
 !libs/**.jar
 !libs/*.jar
+
+# Build output directory
+/target/

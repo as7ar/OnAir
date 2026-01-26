@@ -4,12 +4,8 @@ plugins {
     id("java")
 }
 
-group = rootProject.group
+group = "kr.astar.onair.api"
 version = rootProject.version
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

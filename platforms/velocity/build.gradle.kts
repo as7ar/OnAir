@@ -9,7 +9,7 @@ plugins {
     id("org.jetbrains.gradle.plugin.idea-ext")
 }
 
-group = rootProject.group
+group = "kr.astar.onair.velocity"
 version = rootProject.version
 
 repositories {

@@ -11,8 +11,8 @@ plugins {
 
 }
 
-group = "kr.astar"
-version = "1.2.1"
+group = "kr.astar.onair"
+version = "${rootProject.properties["projectVersion"]}"
 
 subprojects {
     apply(plugin = "java-library")
@@ -43,24 +43,14 @@ subprojects {
         implementation("com.google.http-client:google-http-client-jackson2:1.39.2")
 
         implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    }
-}
 
-project(":platforms:paper") {
-    dependencies {
-        compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT") {
-            exclude("com.google.code.gson", "gson")
-            exclude("org.slf4j", "slf4j-api")
-        }
-        // compileOnly(files("libs/PlaceholderAPI-2.11.7.jar"))
+        implementation("net.kyori:adventure-api:${rootProject.properties["adventureVersion"]}")
+        implementation("net.kyori:adventure-text-minimessage:${rootProject.properties["adventureVersion"]}")
+        implementation("net.kyori:adventure-platform-bukkit:4.4.1")
     }
 }
 
 val targetJavaVersion = 21
 kotlin {
     jvmToolchain(targetJavaVersion)
-}
-
-tasks.build {
-    dependsOn("shadowJar")
 }
