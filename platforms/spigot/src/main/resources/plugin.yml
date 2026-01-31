@@ -1,7 +1,7 @@
 name: OnAir
 version: ${version}
-main:
-api-version: '1.21'
+main: kr.astar.onair.OnAir
+api-version: '1.20'
 authors: [AS7AR]
 website: https://grassproject.github.io
 soft-depend: [
@@ -15,7 +15,6 @@ libraries:
   - io.github.r2turntrue:chzzk4j:0.1.3
   - com.squareup.okhttp3:okhttp:4.12.0
   - org.jsoup:jsoup:1.15.3
-  - io.reactivex.rxjava3:rxjava:3.1.10
   - org.seleniumhq.selenium:selenium-java:4.34.0
   - io.github.bonigarcia:webdrivermanager:6.2.0
   - com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0
