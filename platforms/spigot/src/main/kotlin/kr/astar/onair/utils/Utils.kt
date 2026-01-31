@@ -54,10 +54,10 @@ object Utils {
             else string.toComponent()
         )
     }
-    fun Player.sendMessage(component: Component, boolean: Boolean=true) {
-        this.sendMessage(
-            if (boolean) prefix.append(component)
-            else component
+    fun Player.sendMessage(component: Component, boolean: Boolean = true) {
+        sendMessage(
+            if (boolean) prefix.append(component).toLegacyString() // why prefix are double???
+            else component.toLegacyString()
         )
     }
 
