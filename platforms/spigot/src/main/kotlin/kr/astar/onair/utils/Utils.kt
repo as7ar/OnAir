@@ -55,10 +55,7 @@ object Utils {
         )
     }
     fun Player.sendMessage(component: Component, boolean: Boolean = true) {
-        sendMessage(
-            if (boolean) prefix.append(component).toLegacyString() // why prefix are double???
-            else component.toLegacyString()
-        )
+        sendMessage(component.toLegacyString())
     }
 
     fun Player.performCommandAsOP(command: String) = runTask {

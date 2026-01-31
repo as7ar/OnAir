@@ -1,6 +1,4 @@
-[ ] tab-complete ~ config custom
-[ ] command's config split
-[ ] twitch listener, connector
+ [ ] spigot, paper 공통 모듈 추가
 
 
 | Version | description |
