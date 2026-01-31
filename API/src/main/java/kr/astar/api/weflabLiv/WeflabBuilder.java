@@ -1,16 +1,13 @@
 package kr.astar.api.weflabLiv;
 
 import kr.astar.api.weflabLiv.listener.WeflabListener;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WeflabBuilder {
-    @Getter
     private final String key;
-    @Getter
-    private List<WeflabListener> listeners;
+    private final List<WeflabListener> listeners;
 
     public WeflabBuilder(String key) {
         this.key = key;
@@ -24,5 +21,13 @@ public class WeflabBuilder {
 
     public Weflab build() {
         return new Weflab(this);
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public List<WeflabListener> getListeners() {
+        return listeners;
     }
 }

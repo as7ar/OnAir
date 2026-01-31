@@ -2,9 +2,6 @@ package kr.astar.api.toonLiv;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import io.reactivex.rxjava3.subjects.PublishSubject;
-import io.reactivex.rxjava3.subjects.Subject;
-import kr.astar.api.toonLiv.data.Chatting;
 import kr.astar.api.toonLiv.data.Donation;
 import kr.astar.api.toonLiv.exception.TokenNotFound;
 import kr.astar.api.toonLiv.listener.ToonationEventListener;
@@ -14,7 +11,6 @@ import okhttp3.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -36,15 +32,14 @@ import java.util.stream.Collectors;
 import static io.github.bonigarcia.wdm.WebDriverManager.chromedriver;
 
 public class Toonation extends WebSocketListener {
+
     private final String key;
     private boolean timeout;
     private final Debugger debugger;
     private final String payload;
     private WebSocket socket;
     private final List<ToonationEventListener> listeners;
-    private final Subject<Donation> donationSubject;
-    private final Subject<Chatting> chattingSubject;
-    private volatile boolean closed=false;
+    private volatile boolean closed = false;
 
     private static final ExecutorService seleniumExecutor = Executors.newSingleThreadExecutor();
 
@@ -55,20 +50,18 @@ public class Toonation extends WebSocketListener {
     public static Streamer getStreamer(String id) {
         chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        options.addArguments("--disable-gpu");
-        WebDriver driver = new ChromeDriver(options);
+        options.addArguments("--headless", "--disable-gpu");
 
+        WebDriver driver = new ChromeDriver(options);
         try {
             driver.get("https://toon.at/donate/" + id);
-
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
             WebElement el = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class*='DisplayCreatorName']"))
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.cssSelector("[class*='DisplayCreatorName']")
+                    )
             );
-
-            String nickname = el.getText();
-            return new Streamer(id, nickname);
+            return new Streamer(id, el.getText());
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -78,75 +71,77 @@ public class Toonation extends WebSocketListener {
     }
 
     public Toonation(ToonationBuilder builder) {
-        this.key=builder.key;
-        this.timeout= builder.timeout;
-        this.listeners=builder.listeners;
-        this.debugger=new Debugger(builder.debug);
+        this.key = builder.key;
+        this.timeout = builder.timeout;
+        this.listeners = builder.listeners;
+        this.debugger = new Debugger(builder.debug);
 
+        this.payload = loadPayload();
+        if (payload == null)
+            throw new RuntimeException(new TokenNotFound());
+
+        connect();
+    }
+
+    private String loadPayload() {
         try {
-            Document document= Jsoup
-                    .connect("https://toon.at/widget/alertbox/"+key)
-                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+            Document document = Jsoup
+                    .connect("https://toon.at/widget/alertbox/" + key)
+                    .userAgent("Mozilla/5.0")
                     .ignoreHttpErrors(true)
                     .ignoreContentType(true)
                     .get();
-            Elements el=document.getElementsByTag("script");
-            String script=el.stream().filter(e-> !e.hasAttr("src"))
-                    .map(Element::toString).collect(Collectors.joining());
-            String payload=parsePayload(script);
-            if (payload==null) throw new TokenNotFound();
-            this.payload=payload;
-//            System.out.println(payload);
-            OkHttpClient client=new OkHttpClient().newBuilder()
-                    .pingInterval(12, TimeUnit.SECONDS)
-                    .connectTimeout(30, TimeUnit.SECONDS)
-                    .writeTimeout(30, TimeUnit.SECONDS)
-                    .readTimeout(0, TimeUnit.MILLISECONDS)
-                    .build();
-            Request request=new Request.Builder()
-                    .url("wss://ws.toon.at/"+payload)
-                    .build();
-            socket =client.newWebSocket(request, this);
 
-            donationSubject= PublishSubject.create();
-            chattingSubject= PublishSubject.create();
+            String script = document.getElementsByTag("script").stream()
+                    .filter(e -> !e.hasAttr("src"))
+                    .map(Element::toString)
+                    .collect(Collectors.joining());
+
+            return parsePayload(script);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return null;
         }
+    }
+
+    private void connect() {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .pingInterval(12, TimeUnit.SECONDS)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(0, TimeUnit.MILLISECONDS)
+                .build();
+
+        Request request = new Request.Builder()
+                .url("wss://ws.toon.at/" + payload)
+                .build();
+
+        socket = client.newWebSocket(request, this);
+    }
+
+    private String parsePayload(String script) {
+        Matcher m = Pattern
+                .compile("\\\\u0022payload\\\\u0022:\\\\u0022(.*?)\\\\u0022,")
+                .matcher(script);
+        return m.find() ? m.group(1) : null;
+    }
+
+    @Override
+    public void onOpen(WebSocket webSocket, Response response) {
+        if (!timeout) {
+            Debugger.debug("투네이션에 연결되었습니다");
+            listeners.forEach(ToonationEventListener::onConnect);
+        }
+        timeout = false;
     }
 
     @Override
     public void onMessage(WebSocket webSocket, String text) {
         try {
-            JsonObject json= new Gson().fromJson(text, JsonObject.class);
-//            System.out.println(text);
-            Donation donation=getDonation(json);
-            if (donation!=null) {
-                for (ToonationEventListener listener: listeners)
-                    listener.onDonation(donation);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+            JsonObject json = new Gson().fromJson(text, JsonObject.class);
+            Donation donation = getDonation(json);
+            if (donation == null) return;
 
-    private String parsePayload(String script) {
-        Pattern p = Pattern.compile("\\\\u0022payload\\\\u0022:\\\\u0022(.*?)\\\\u0022,");
-        Matcher m = p.matcher(script);
-        if (m.find()) return m.group(1);
-        return null;
-    }
-
-
-    @Override
-    public void onOpen(WebSocket webSocket, Response response) {
-        try {
-            if(!timeout) {
-                debugger.debug("투네이션에 연결되었습니다");
-                for (ToonationEventListener listener : listeners) {
-                    listener.onConnect();
-                }
-            } else {timeout=false;}
+            listeners.forEach(l -> l.onDonation(donation));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -155,88 +150,45 @@ public class Toonation extends WebSocketListener {
     @Override
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
         if (closed) return;
+
+        timeout = true;
+        Debugger.debug("WebSocket 오류: " + t.getMessage());
+
         try {
-            timeout = true;
+            webSocket.close(1000, null);
+        } catch (Exception ignored) {}
 
-            try {
-                webSocket.close(1000, null);
-            } catch (Exception closeEx) {
-                closeEx.printStackTrace();
-            }
-
-            debugger.debug("WebSocket connection failed: " + t.getMessage());
-            t.printStackTrace();
-
-            if (response != null) {
-                debugger.debug("HTTP code: " + response.code());
-                debugger.debug("HTTP message: " + response.message());
-            } else {
-                debugger.debug("No HTTP response received. Likely a network or handshake failure.");
-            }
-
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .pingInterval(12, TimeUnit.SECONDS)
-                    .connectTimeout(30, TimeUnit.SECONDS)
-                    .writeTimeout(30, TimeUnit.SECONDS)
-                    .readTimeout(0, TimeUnit.MILLISECONDS)
-                    .build();
-            Request request = new Request.Builder()
-                    .url("wss://ws.toon.at/" + payload)
-                    .build();
-            socket = client.newWebSocket(request, this);
-
-            for (ToonationEventListener listener : listeners) {
-                listener.onFail();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        connect();
+        listeners.forEach(ToonationEventListener::onFail);
     }
-
 
     @Override
     public void onClosed(WebSocket webSocket, int code, String reason) {
-        debugger.debug("연결이 종료되었습니다");
-        for (ToonationEventListener listener : listeners) {
-            listener.onDisconnect();
-        }
+        Debugger.debug("연결이 종료되었습니다");
+        listeners.forEach(ToonationEventListener::onDisconnect);
     }
-
 
     public void close() {
         try {
-            if (donationSubject != null && !donationSubject.hasComplete()) {
-                donationSubject.onComplete();
-            }
-            if (chattingSubject != null && !chattingSubject.hasComplete()) {
-                chattingSubject.onComplete();
-            }
-            if (socket != null) {
-                socket.close(1000, "Client closing");
-                socket = null;
-            }
-            closed=true;
-            debugger.debug("모든 연결이 정상적으로 종료되었습니다.");
+            closed = true;
+            if (socket != null) socket.close(1000, "Client closing");
+            Debugger.debug("모든 연결이 정상적으로 종료되었습니다.");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private Donation getDonation(JsonObject json) {
-        try {
-            if (!json.has("content")) return null;
-            json= json.get("content").getAsJsonObject();
-            return new Donation(
-                    json.get("account").toString(),
-                    json.get("name").toString(),
-                    json.get("message").toString(),
-                    json.get("amount").getAsLong(),
-                    this.key
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        if (!json.has("content")) return null;
+        JsonObject c = json.getAsJsonObject("content");
+
+        return new Donation(
+                c.get("account").getAsString(),
+                c.get("name").getAsString(),
+                c.get("message").getAsString(),
+                c.get("amount").getAsLong(),
+                key
+        );
     }
 
     public String getKey() {

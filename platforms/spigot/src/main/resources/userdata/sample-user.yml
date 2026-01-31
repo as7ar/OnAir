@@ -1,0 +1,33 @@
+user:
+  uuid: xxx
+  name: xxx
+
+  alert:
+    chat: true
+    donate: true
+    target: STREAMER
+
+  connection:
+    list:
+      - chzzk
+      - youtube
+      - toonation
+
+    chzzk:
+      first: true
+      isConnected: false
+      id: xxxxx
+      display: xxxx
+    youtube:
+      first: true
+      isConnected: false
+      id: xxxxx
+      display: xxxx
+    toonation:
+      first: true
+      isConnected: false
+      id: xxxxx
+      display: xxxx
+
+  donators:
+    anon: 1000

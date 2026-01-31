@@ -1,0 +1,39 @@
+package kr.astar.onair.cmds
+
+import org.bukkit.Bukkit
+import org.bukkit.command.CommandMap
+import org.bukkit.command.CommandSender
+import org.bukkit.command.defaults.BukkitCommand
+
+abstract class Command(
+    name: String,
+    aliases: List<String>,
+    description: String,
+    permission: String
+) : BukkitCommand(name) {
+    init {
+        this.aliases = aliases
+        this.setDescription(description)
+        this.permission=permission
+
+        try {
+            val server = Bukkit.getServer()
+            val field = server.javaClass.getDeclaredField("commandMap")
+            field.isAccessible = true
+            val commandMap = field.get(server) as CommandMap
+            commandMap.register(name, this)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun execute(sender: CommandSender, label: String, args: Array<out String>): Boolean {
+        return execute(sender, args)
+    }
+    abstract fun execute(sender: CommandSender, args: Array<out String>): Boolean
+
+    override fun tabComplete(sender: CommandSender, alias: String, args: Array<out String>): List<String?> {
+        return tabComplete(sender, args)
+    }
+    abstract fun tabComplete(sender: CommandSender, args: Array<out String>): List<String?>
+}

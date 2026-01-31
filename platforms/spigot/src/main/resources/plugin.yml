@@ -1,0 +1,38 @@
+name: OnAir
+version: ${version}
+main:
+api-version: '1.21'
+authors: [AS7AR]
+website: https://grassproject.github.io
+soft-depend: [
+  Skript,
+  Placeholder
+]
+
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21
+  - net.kyori:adventure-text-minimessage:4.26.1
+  - io.github.r2turntrue:chzzk4j:0.1.3
+  - com.squareup.okhttp3:okhttp:4.12.0
+  - org.jsoup:jsoup:1.15.3
+  - io.reactivex.rxjava3:rxjava:3.1.10
+  - org.seleniumhq.selenium:selenium-java:4.34.0
+  - io.github.bonigarcia:webdrivermanager:6.2.0
+  - com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0
+  - com.google.http-client:google-http-client-jackson2:1.39.2
+  - com.google.api-client:google-api-client:1.33.0
+  - com.github.twitch4j:twitch4j:1.25.0
+
+permissions:
+  astar.oa.*:
+    children:
+      astar.oa.channel: true
+      astar.oa.donation: true
+      astar.oa.admin: true
+
+    astar.oa.channel:
+      default: op
+    astar.oa.donation:
+      default: op
+    astar.oa.admin:
+      default: op

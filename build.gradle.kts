@@ -28,10 +28,6 @@ subprojects {
 
         implementation("org.slf4j:slf4j-api:2.0.17")
 
-        compileOnly("org.projectlombok:lombok:1.18.32")
-        annotationProcessor("org.projectlombok:lombok:1.18.32")
-
-        implementation("io.reactivex.rxjava3:rxjava:3.1.10")
         implementation("org.jsoup:jsoup:1.15.3")
         implementation("org.seleniumhq.selenium:selenium-java:4.34.0")
         implementation("io.github.bonigarcia:webdrivermanager:6.2.0")

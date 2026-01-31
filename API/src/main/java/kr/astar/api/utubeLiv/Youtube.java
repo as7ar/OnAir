@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package kr.astar.api.utubeLiv;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -22,7 +17,6 @@ import kr.astar.api.utubeLiv.exception.InvalidApiKeyException;
 import kr.astar.api.utubeLiv.exception.NullLiveChatId;
 import kr.astar.api.utubeLiv.listener.YouTubeEventListener;
 import kr.astar.api.utubeLiv.utilities.Debugger;
-import lombok.Getter;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -30,16 +24,17 @@ import java.time.Instant;
 import java.util.List;
 
 public class Youtube {
+
     private final String api;
     private final String videoID;
     private final List<YouTubeEventListener> listeners;
     private final long pollingInterval;
-    @Getter
     private final boolean isDebug;
+
     private int chat_length = 0;
-    private Debugger debugger = new Debugger();
+    private final Debugger debugger = new Debugger();
     private final YouTube youtube;
-    @Getter
+
     private boolean isRunning = false;
     private Thread chatThread;
 
@@ -50,129 +45,167 @@ public class Youtube {
         this.isDebug = builder.isDebug;
         this.pollingInterval = builder.pollingInterval;
         this.chat_length = builder.chat_length;
-        this.youtube = (new YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), (HttpRequestInitializer)null)).setApplicationName("YouTubeLiv").build();
-        this.debugger.log("new youtube listener created");
-        this.validateApiKey();
-        if (!this.isRunning) {
-            this.isRunning = true;
-            this.chatThread = new Thread(this::runChat);
-            this.chatThread.start();
-            this.debugger.log("new youtube listener started");
+
+        this.youtube = new YouTube.Builder(
+                GoogleNetHttpTransport.newTrustedTransport(),
+                JacksonFactory.getDefaultInstance(),
+                (HttpRequestInitializer) null
+        ).setApplicationName("YouTubeLiv").build();
+
+        debugger.log("new youtube listener created");
+        validateApiKey();
+
+        if (!isRunning) {
+            isRunning = true;
+            chatThread = new Thread(this::runChat);
+            chatThread.start();
+            debugger.log("new youtube listener started");
         }
     }
 
     private void validateApiKey() throws IOException {
-        this.debugger.log("validate API key");
-
+        debugger.log("validate API key");
         try {
-            YouTube.Videos.List request = this.youtube.videos().list(List.of("snippet")).setKey(this.api).setId(List.of("dQw4w9WgXcQ"));
-            request.execute();
-            this.debugger.log("validate successes");
+            youtube.videos()
+                    .list(List.of("snippet"))
+                    .setKey(api)
+                    .setId(List.of("dQw4w9WgXcQ"))
+                    .execute();
+            debugger.log("validate successes");
         } catch (GoogleJsonResponseException e) {
-            if (e.getStatusCode() != 400 && e.getStatusCode() != 403) {
-                throw e;
-            } else {
-                this.debugger.log("validate fail");
+            if (e.getStatusCode() == 400 || e.getStatusCode() == 403) {
+                debugger.log("validate fail");
                 throw new InvalidApiKeyException();
             }
+            throw e;
         }
     }
 
     public String getVideoId() {
-        return this.videoID;
+        return videoID;
+    }
+
+    public boolean isDebug() {
+        return isDebug;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
     }
 
     public void stop() {
-        this.debugger.log("youtube listener stopped");
-        this.isRunning = false;
-        if (this.chatThread != null) {
-            this.chatThread.interrupt();
+        debugger.log("youtube listener stopped");
+        isRunning = false;
+        if (chatThread != null) {
+            chatThread.interrupt();
         }
     }
 
     private void runChat() {
         try {
-            String liveChatId = this.getListChatID();
-            if (liveChatId == null) {
+            String liveChatId = getListChatID();
+            if (liveChatId == null)
                 throw new NullLiveChatId();
-            }
 
             String lastMessageTimestamp = Instant.now().toString();
             String pageToken = null;
 
-            while(this.isRunning) {
+            while (isRunning) {
                 try {
-                    YouTube.LiveChatMessages.List liveChatRequest = this.youtube.liveChatMessages().list(liveChatId, List.of("snippet", "authorDetails")).setKey(this.api).setPageToken(pageToken);
-                    LiveChatMessageListResponse liveChatResponse = (LiveChatMessageListResponse)liveChatRequest.execute();
+                    YouTube.LiveChatMessages.List request =
+                            youtube.liveChatMessages()
+                                    .list(liveChatId, List.of("snippet", "authorDetails"))
+                                    .setKey(api)
+                                    .setPageToken(pageToken);
 
-                    for(LiveChatMessage message : liveChatResponse.getItems()) {
-                        if (message.getSnippet().getPublishedAt().toString().compareTo(lastMessageTimestamp) > this.chat_length) {
-                            this.processMessage(message);
+                    LiveChatMessageListResponse response = request.execute();
+
+                    for (LiveChatMessage message : response.getItems()) {
+                        if (message.getSnippet()
+                                .getPublishedAt()
+                                .toString()
+                                .compareTo(lastMessageTimestamp) > chat_length) {
+                            processMessage(message);
                         }
                     }
 
-                    pageToken = liveChatResponse.getNextPageToken();
-                    Thread.sleep(liveChatResponse.getPollingIntervalMillis());
+                    pageToken = response.getNextPageToken();
+                    Thread.sleep(response.getPollingIntervalMillis());
                 } catch (Exception e) {
-                    this.processError(e);
-                    Thread.sleep(this.pollingInterval);
+                    processError(e);
+                    Thread.sleep(pollingInterval);
                     break;
                 }
             }
         } catch (Exception e) {
-            this.processError(e);
+            processError(e);
         }
-
     }
 
     private String getListChatID() throws IOException {
-        YouTube.Videos.List request = this.youtube.videos().list(List.of("liveStreamingDetails")).setKey(this.api).setId(List.of(this.videoID));
-        VideoListResponse response = (VideoListResponse)request.execute();
-        return response.getItems() != null && ((Video)response.getItems().get(0)).getLiveStreamingDetails() != null ? ((Video)response.getItems().get(0)).getLiveStreamingDetails().getActiveLiveChatId() : null;
+        VideoListResponse response = youtube.videos()
+                .list(List.of("liveStreamingDetails"))
+                .setKey(api)
+                .setId(List.of(videoID))
+                .execute();
+
+        if (response.getItems() == null) return null;
+
+        Video video = response.getItems().get(0);
+        return video.getLiveStreamingDetails() != null
+                ? video.getLiveStreamingDetails().getActiveLiveChatId()
+                : null;
     }
 
     private void processMessage(LiveChatMessage message) {
-        if (this.isRunning) {
-            if (message.getSnippet().getType().equals(MessageType.SUPER_CHAT_MESSAGE.getType())) {
-                this.debugger.log("new super chat process");
-                SuperChat superChat = new SuperChat(message.getAuthorDetails().getDisplayName(), message.getSnippet().getSuperChatDetails().getAmountDisplayString(), message.getSnippet().getSuperChatDetails().getUserComment(), this.videoID, message.getSnippet().getPublishedAt().toString(), message);
+        if (!isRunning) return;
 
-                for(YouTubeEventListener listener : this.listeners) {
-                    listener.onSuperChat(superChat);
-                }
-            } else if (message.getSnippet().getType().equals(MessageType.SUPER_STICKER_MESSAGE.getType())) {
-                this.debugger.log("new super sticker process");
-                SuperSticker superSticker = new SuperSticker(message.getAuthorDetails().getDisplayName(), message.getSnippet().getSuperStickerDetails().getAmountDisplayString(), message.getSnippet().getSuperStickerDetails().getSuperStickerMetadata().getStickerId(), this.videoID, message.getSnippet().getPublishedAt().toString(), message);
+        String type = message.getSnippet().getType();
 
-                for(YouTubeEventListener listener : this.listeners) {
-                    listener.onSuperSticker(superSticker);
-                }
-            } else if (message.getSnippet().getType().equals(MessageType.TEXT_MESSAGE.getType())) {
-                this.debugger.log("new message process");
-                String contents = message.getSnippet().getDisplayMessage();
+        if (type.equals(MessageType.SUPER_CHAT_MESSAGE.getType())) {
+            SuperChat superChat = new SuperChat(
+                    message.getAuthorDetails().getDisplayName(),
+                    message.getSnippet().getSuperChatDetails().getAmountDisplayString(),
+                    message.getSnippet().getSuperChatDetails().getUserComment(),
+                    videoID,
+                    message.getSnippet().getPublishedAt().toString(),
+                    message
+            );
+            listeners.forEach(l -> l.onSuperChat(superChat));
 
-                for(YouTubeEventListener listener : this.listeners) {
-                    listener.onChat(new Chatting(message.getAuthorDetails().getDisplayName(), contents, this.videoID, message));
-                }
-            }
+        } else if (type.equals(MessageType.SUPER_STICKER_MESSAGE.getType())) {
+            SuperSticker superSticker = new SuperSticker(
+                    message.getAuthorDetails().getDisplayName(),
+                    message.getSnippet().getSuperStickerDetails().getAmountDisplayString(),
+                    message.getSnippet().getSuperStickerDetails()
+                            .getSuperStickerMetadata().getStickerId(),
+                    videoID,
+                    message.getSnippet().getPublishedAt().toString(),
+                    message
+            );
+            listeners.forEach(l -> l.onSuperSticker(superSticker));
 
+        } else if (type.equals(MessageType.TEXT_MESSAGE.getType())) {
+            Chatting chat = new Chatting(
+                    message.getAuthorDetails().getDisplayName(),
+                    message.getSnippet().getDisplayMessage(),
+                    videoID,
+                    message
+            );
+            listeners.forEach(l -> l.onChat(chat));
         }
     }
 
     private void processError(Exception e) {
-        this.debugger.log("process error");
-
-        for(YouTubeEventListener listener : this.listeners) {
-            listener.onError(e);
-        }
-
+        debugger.log("process error");
+        listeners.forEach(l -> l.onError(e));
     }
 
     public YouTubeInfo channelInfo() {
-        return YouTubeInfo.from(this.videoID, this.api);
+        return YouTubeInfo.from(videoID, api);
     }
 
     public void close() {
-
+        stop();
     }
 }

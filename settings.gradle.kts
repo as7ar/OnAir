@@ -5,6 +5,7 @@ rootProject.name = "OnAir"
 include(
     "API",
     "platforms:paper",
+    "platforms:spigot"
 //    "platforms:velocity"
 )
 
@@ -21,5 +22,6 @@ dependencyResolutionManagement {
         maven("https://repo.codemc.io/repository/maven-snapshots/")
         maven("https://repo.skriptlang.org/releases")
         maven { url = uri("https://repo.gradle.org/gradle/repo") }
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     }
 }

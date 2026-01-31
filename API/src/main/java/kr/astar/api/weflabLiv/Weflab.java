@@ -10,14 +10,13 @@ import kr.astar.api.weflabLiv.data.alert.PlatformData;
 import kr.astar.api.weflabLiv.data.alert.User;
 import kr.astar.api.weflabLiv.data.streamer.StreamerData;
 import kr.astar.api.weflabLiv.listener.WeflabListener;
-import lombok.Getter;
-import lombok.NonNull;
 import okhttp3.*;
 import org.jetbrains.annotations.Nullable;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Map;
@@ -31,13 +30,11 @@ public class Weflab extends WebSocketListener {
     private final String key;
     private final List<WeflabListener> listeners;
 
-    @Getter
     private String idx;
 
     private WebSocket socket;
     private boolean closed=true;
 
-    @Getter
     private StreamerData streamerData;
 
     public Weflab(WeflabBuilder weflabBuilder) {
@@ -206,16 +203,24 @@ public class Weflab extends WebSocketListener {
     }
 
     @Override
-    public void onClosing(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
+    public void onClosing(WebSocket webSocket, int code, String reason) {
         for (WeflabListener listener: listeners)
             listener.onDisconnect(code, reason);
     }
 
     @Override
-    public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t, @Nullable Response response) {
+    public void onFailure(WebSocket webSocket, Throwable t, @Nullable Response response) {
         if (closed) return;
         webSocket.close(1000, "Error occurred");
         for (WeflabListener listener: listeners)
             listener.onFail(t, response);
+    }
+
+    public StreamerData getStreamerData() {
+        return streamerData;
+    }
+
+    public String getIdx() {
+        return idx;
     }
 }

@@ -1,0 +1,19 @@
+#  ========================[ Command ]===================================
+
+# 명령어 접두사
+prefix: '<b><gradient:#E7B0B0:#BA4242>[ OnAir ]</gradient></b> '
+
+# 명령어 설정
+command:
+  oa:
+    name: 'oa'
+    aliases:
+      - 'onair'
+      - '방송'
+    description: 'OnAir 메인 명령어'
+  oadmin:
+    name: 'oadmin'
+    aliases:
+      - 'oad'
+      - '방송관리'
+    description: 'OnAir 관리자 명령어'
