@@ -2,35 +2,30 @@ package kr.astar.onair
 
 import ch.njol.skript.Skript
 import ch.njol.skript.SkriptAddon
-import xyz.r2turntrue.chzzk4j.ChzzkClient
-import xyz.r2turntrue.chzzk4j.ChzzkClientBuilder
-import xyz.r2turntrue.chzzk4j.auth.ChzzkLegacyLoginAdapter
-import xyz.r2turntrue.chzzk4j.auth.ChzzkSimpleUserLoginAdapter
-import xyz.r2turntrue.chzzk4j.chat.ChzzkChat
-import xyz.r2turntrue.chzzk4j.naver.NaverAutologinAdapter
+import kr.astar.api.soopliv.soop.SoopWebSocket
+import kr.astar.api.toonLiv.Toonation
+import kr.astar.api.twitchLiv.Twitch
+import kr.astar.api.utubeLiv.Youtube
+import kr.astar.api.weflabLiv.Weflab
 import kr.astar.onair.cmds.OACommand
-import kr.astar.onair.data.ConnectionManager
-import kr.astar.onair.data.UserData
-import kr.astar.onair.enums.Platforms
 import kr.astar.onair.listeners.BukkitListener
 import kr.astar.onair.listeners.platforms.ChzzkListener
 import kr.astar.onair.papi.PlaceholderHandler
 import kr.astar.onair.utils.Debugger
 import kr.astar.onair.utils.OALogger
 import kr.astar.onair.utils.Utils.bannerGenerator
-import kr.astar.onair.utils.Utils.translate
-import kr.astar.onair.utils.Utils.sendMessage
+import kr.astar.onair.utils.Utils.reset
 import kr.astar.onair.utils.chzzk.ChzzkData
 import kr.astar.onair.utils.toMiniMessage
-import kr.astar.api.soopliv.soop.SoopWebSocket
-import kr.astar.api.toonLiv.Toonation
-import kr.astar.api.twitchLiv.Twitch
-import kr.astar.api.utubeLiv.Youtube
-import kr.astar.api.weflabLiv.Weflab
-import kr.astar.onair.utils.Utils.reset
-import okio.FileNotFoundException
+import kr.astar.onair.velocity.VeloChannel
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
+import xyz.r2turntrue.chzzk4j.ChzzkClient
+import xyz.r2turntrue.chzzk4j.ChzzkClientBuilder
+import xyz.r2turntrue.chzzk4j.auth.ChzzkLegacyLoginAdapter
+import xyz.r2turntrue.chzzk4j.auth.ChzzkSimpleUserLoginAdapter
+import xyz.r2turntrue.chzzk4j.chat.ChzzkChat
+import xyz.r2turntrue.chzzk4j.naver.NaverAutologinAdapter
 import java.io.File
 import java.io.InputStreamReader
 import java.util.*
@@ -99,6 +94,10 @@ class OnAir : JavaPlugin() {
         Debugger.debug("Registering Events")
         server.pluginManager.registerEvents(ChzzkListener(), this)
         server.pluginManager.registerEvents(BukkitListener(), this)
+        server.messenger.registerIncomingPluginChannel(
+            this, VeloChannel.CHANNEL,
+            kr.astar.onair.listeners.VelocityManager()
+        )
 
         // ========================[ Command ]=========================
 

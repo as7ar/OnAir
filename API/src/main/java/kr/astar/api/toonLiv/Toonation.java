@@ -11,6 +11,7 @@ import okhttp3.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,10 +22,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -34,14 +32,22 @@ import static io.github.bonigarcia.wdm.WebDriverManager.chromedriver;
 public class Toonation extends WebSocketListener {
 
     private final String key;
-    private boolean timeout;
-    private final Debugger debugger;
+    private volatile boolean timeout;
+//    private final Debugger debugger;
     private final String payload;
-    private WebSocket socket;
+    private volatile WebSocket socket;
     private final List<ToonationEventListener> listeners;
     private volatile boolean closed = false;
 
     private static final ExecutorService seleniumExecutor = Executors.newSingleThreadExecutor();
+    private final ExecutorService wsExecutor = Executors.newSingleThreadExecutor();
+
+    private static final OkHttpClient client = new OkHttpClient.Builder()
+            .pingInterval(12, TimeUnit.SECONDS)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(0, TimeUnit.MILLISECONDS)
+            .build();
 
     public static Future<Streamer> getStreamerAsync(String id) {
         return seleniumExecutor.submit(() -> getStreamer(id));
@@ -63,7 +69,6 @@ public class Toonation extends WebSocketListener {
             );
             return new Streamer(id, el.getText());
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         } finally {
             driver.quit();
@@ -74,13 +79,12 @@ public class Toonation extends WebSocketListener {
         this.key = builder.key;
         this.timeout = builder.timeout;
         this.listeners = builder.listeners;
-        this.debugger = new Debugger(builder.debug);
+//        this.debugger = new Debugger(builder.debug);
 
         this.payload = loadPayload();
-        if (payload == null)
-            throw new RuntimeException(new TokenNotFound());
+        if (payload == null) throw new RuntimeException(new TokenNotFound());
 
-        connect();
+        connectAsync();
     }
 
     private String loadPayload() {
@@ -103,13 +107,19 @@ public class Toonation extends WebSocketListener {
         }
     }
 
+    private String parsePayload(String script) {
+        Matcher m = Pattern
+                .compile("\\\\u0022payload\\\\u0022:\\\\u0022(.*?)\\\\u0022,")
+                .matcher(script);
+        return m.find() ? m.group(1) : null;
+    }
+
+    private void connectAsync() {
+        wsExecutor.execute(this::connect);
+    }
+
     private void connect() {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .pingInterval(12, TimeUnit.SECONDS)
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(0, TimeUnit.MILLISECONDS)
-                .build();
+        if (closed) return;
 
         Request request = new Request.Builder()
                 .url("wss://ws.toon.at/" + payload)
@@ -118,15 +128,8 @@ public class Toonation extends WebSocketListener {
         socket = client.newWebSocket(request, this);
     }
 
-    private String parsePayload(String script) {
-        Matcher m = Pattern
-                .compile("\\\\u0022payload\\\\u0022:\\\\u0022(.*?)\\\\u0022,")
-                .matcher(script);
-        return m.find() ? m.group(1) : null;
-    }
-
     @Override
-    public void onOpen(WebSocket webSocket, Response response) {
+    public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {
         if (!timeout) {
             Debugger.debug("투네이션에 연결되었습니다");
             listeners.forEach(ToonationEventListener::onConnect);
@@ -135,47 +138,59 @@ public class Toonation extends WebSocketListener {
     }
 
     @Override
-    public void onMessage(WebSocket webSocket, String text) {
+    public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
         try {
             JsonObject json = new Gson().fromJson(text, JsonObject.class);
             Donation donation = getDonation(json);
             if (donation == null) return;
 
             listeners.forEach(l -> l.onDonation(donation));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) {}
     }
 
     @Override
-    public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+    public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t, Response response) {
         if (closed) return;
 
         timeout = true;
         Debugger.debug("WebSocket 오류: " + t.getMessage());
 
-        try {
-            webSocket.close(1000, null);
-        } catch (Exception ignored) {}
+        wsExecutor.execute(() -> {
+            try {
+                webSocket.cancel();
+            } catch (Exception ignored) {}
 
-        connect();
+            if (!closed) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ignored) {}
+
+                connect();
+            }
+        });
+
         listeners.forEach(ToonationEventListener::onFail);
     }
 
     @Override
-    public void onClosed(WebSocket webSocket, int code, String reason) {
+    public void onClosed(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
         Debugger.debug("연결이 종료되었습니다");
         listeners.forEach(ToonationEventListener::onDisconnect);
     }
 
     public void close() {
-        try {
-            closed = true;
-            if (socket != null) socket.close(1000, "Client closing");
-            Debugger.debug("모든 연결이 정상적으로 종료되었습니다.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        wsExecutor.execute(() -> {
+            try {
+                closed = true;
+
+                if (socket != null) {
+                    socket.close(1000, "Client closing");
+                    socket.cancel();
+                }
+
+                Debugger.debug("모든 연결이 정상적으로 종료되었습니다.");
+            } catch (Exception ignored) {}
+        });
     }
 
     private Donation getDonation(JsonObject json) {

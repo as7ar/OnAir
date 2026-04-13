@@ -93,3 +93,4 @@ soop:
 
 language: 'ko'
 debug: false
+enable-velocity: false

@@ -4,9 +4,10 @@ rootProject.name = "OnAir"
 
 include(
     "API",
+    "common",
     "platforms:paper",
-    "platforms:spigot"
-//    "platforms:velocity"
+    "platforms:spigot",
+    "platforms:velocity"
 )
 
 dependencyResolutionManagement {

@@ -1,8 +1,8 @@
 val kotlinVersion : String by project
 
 plugins {
-    kotlin("jvm") version "2.2.21"
-    kotlin("kapt") version "2.2.21"
+    kotlin("jvm") version "2.3.0"
+    kotlin("kapt") version "2.3.0"
     id("com.gradleup.shadow") version "9.2.2"
     id("java")
     `java-library`
@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "kr.astar"
-version = "1.2.1"
+version = "1.3.0"
 
 subprojects {
     apply(plugin = "java-library")

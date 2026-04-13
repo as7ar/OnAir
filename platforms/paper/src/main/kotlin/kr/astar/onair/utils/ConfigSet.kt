@@ -64,6 +64,8 @@ object ConfigSet {
         }
     }
 
+    val isVelocity = plugin.config.getBoolean("enable-velocity", false)
+
     private fun getStringCompat(vararg keys: String): String? {
         for (key in keys) {
             val value = config.getString(key)
