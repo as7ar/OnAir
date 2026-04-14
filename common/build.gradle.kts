@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "${rootProject.version}.common"
+group = "${rootProject.group}.common"
 version = rootProject.version
 
 repositories {

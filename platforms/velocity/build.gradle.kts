@@ -20,20 +20,21 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT")
+    implementation(project(":common"))
+
+    compileOnly("com.velocitypowered:velocity-api:3.5.0-SNAPSHOT")
     kapt("com.velocitypowered:velocity-api:3.5.0-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-//    implementation(project(":API"))
-    implementation(project(":common"))
+//    implementation(project(":API"))-
 }
 
-val targetJavaVersion = 21
+val targetJavaVersion = 25
 kotlin {
     jvmToolchain(targetJavaVersion)
 }
 
-val templateSource = file("src/main/java/templates")
+val templateSource = file("src/main/templates")
 val templateDest = layout.buildDirectory.dir("generated/sources/templates")
 val generateTemplates = tasks.register<Copy>("generateTemplates") {
     val props = mapOf("version" to project.version)
@@ -41,6 +42,11 @@ val generateTemplates = tasks.register<Copy>("generateTemplates") {
 
     from(templateSource)
     into(templateDest)
+
+    filteringCharset = "UTF-8"
+
+    inputs.properties(props)
+
     expand(props)
 }
 
@@ -48,3 +54,9 @@ sourceSets.main.configure { java.srcDir(generateTemplates.map { it.outputs }) }
 
 rootProject.idea.project.settings.taskTriggers.afterSync(generateTemplates)
 rootProject.eclipse.synchronizationTasks(generateTemplates)
+//sourceSets.main.configure {
+//    java {
+//        srcDir(generateTemplates.map { it.outputs })
+//        exclude("templates/**")
+//    }
+//}

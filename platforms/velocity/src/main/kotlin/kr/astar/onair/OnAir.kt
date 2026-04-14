@@ -8,10 +8,9 @@ import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier
-import kr.astar.onair.velocity.VeloChannel
 import kr.astar.onair.velocity.VeloChannel.CHANNEL
 import org.slf4j.Logger
-import templates.kr.astar.onair.BuildConstants
+import templates.BuildConstants
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 

@@ -81,6 +81,7 @@ abstract class AbstractConnector(
                 OnAir.wf[player.uniqueId]?.close()
                 OnAir.wf.remove(player.uniqueId)
             }
+            Platforms.CIME-> {}
             Platforms.UNKNOWN -> {
                 player.sendMessage(translate("alert.not.connected"), true)
             }

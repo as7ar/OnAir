@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "kr.astar"
-version = "1.3.0"
+version = "1.3.0-a1"
 
 subprojects {
     apply(plugin = "java-library")
@@ -52,7 +52,7 @@ project(":platforms:paper") {
     }
 }
 
-val targetJavaVersion = 21
+val targetJavaVersion = 25
 kotlin {
     jvmToolchain(targetJavaVersion)
 }

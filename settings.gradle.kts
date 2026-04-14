@@ -1,13 +1,13 @@
 import org.gradle.kotlin.dsl.maven
 
-rootProject.name = "OnAir"
+rootProject.name = "onair"
 
 include(
-    "API",
-    "common",
-    "platforms:paper",
-    "platforms:spigot",
-    "platforms:velocity"
+    ":API",
+    ":common",
+    ":platforms:paper",
+//    "platforms:spigot",
+    ":platforms:velocity"
 )
 
 dependencyResolutionManagement {
