@@ -25,6 +25,7 @@ subprojects {
     dependencies {
         implementation("com.github.twitch4j:twitch4j:1.25.0")
         implementation("io.github.r2turntrue:chzzk4j:0.1.3")
+        implementation("com.github.as7ar:cime4j:1.0-a2")
 
         implementation("org.slf4j:slf4j-api:2.0.17")
 
